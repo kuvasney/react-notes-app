@@ -1,0 +1,85 @@
+[
+  {
+    "id": "note_001",
+    "titulo": "Lista de Compras",
+    "conteudo": "- Leite\n- Pão integral\n- Ovos\n- Frutas (banana, maçã)\n- Arroz\n- Feijão\n- Carne para o almoço de domingo",
+    "dataCriacao": "2024-10-10T08:30:00.000Z",
+    "dataUltimaEdicao": "2024-10-12T14:20:00.000Z",
+    "archived": false,
+    "cor": "#00aaaa",
+    "tags": ["compras", "casa"],
+    "fixada": true,
+    "lembretes": [
+      {
+        "id": "reminder_001",
+        "dataHora": "2024-10-15T08:00:00.000Z",
+        "texto": "Ir ao mercado"
+      }
+    ],
+    "colaboradores": []
+  },
+  {
+    "id": "note_002",
+    "titulo": "Ideias para o Projeto React",
+    "conteudo": "Implementar sistema de notas estilo Google Keep:\n\n• Layout responsivo\n• CRUD completo\n• Filtros por categoria\n• Busca por texto\n• Modo escuro/claro\n• Drag and drop\n• Tags/categorias",
+    "dataCriacao": "2024-10-08T16:45:00.000Z",
+    "dataUltimaEdicao": "2024-10-14T10:15:00.000Z",
+    "archived": false,
+    "cor": "#aecbfa",
+    "tags": ["trabalho", "react", "desenvolvimento"],
+    "fixada": true,
+    "lembretes": [],
+    "colaboradores": ["user_002", "user_003"]
+  },
+  {
+    "id": "note_003",
+    "titulo": "Reunião de Equipe - Pontos Importantes",
+    "conteudo": "Tópicos discutidos:\n\n1. Nova funcionalidade do dashboard\n2. Prazo de entrega: 25/10\n3. Responsabilidades:\n   - João: Backend API\n   - Maria: Frontend\n   - Pedro: Testes\n\nPróxima reunião: Segunda-feira às 9h",
+    "dataCriacao": "2024-10-05T09:00:00.000Z",
+    "dataUltimaEdicao": "2024-10-05T11:30:00.000Z",
+    "archived": true,
+    "cor": "#ccff90",
+    "tags": ["trabalho", "reunião", "equipe"],
+    "fixada": false,
+    "lembretes": [],
+    "colaboradores": ["user_002", "user_004", "user_005"]
+  },
+  {
+    "id": "note_004",
+    "titulo": "Receita de Bolo de Chocolate",
+    "conteudo": "Ingredientes:\n- 3 ovos\n- 1 xícara de açúcar\n- 1 xícara de farinha\n- 1/2 xícara de chocolate em pó\n- 1/2 xícara de óleo\n- 1 xícara de água quente\n- 1 colher de fermento\n\nModo de preparo:\n1. Misture os ingredientes secos\n2. Adicione os líquidos\n3. Asse por 40min a 180°C",
+    "dataCriacao": "2024-09-28T15:20:00.000Z",
+    "dataUltimaEdicao": "2024-09-28T15:45:00.000Z",
+    "archived": false,
+    "cor": "#f28b82",
+    "tags": ["receitas", "doces", "cozinha"],
+    "fixada": false,
+    "lembretes": [
+      {
+        "id": "reminder_002",
+        "dataHora": "2024-10-20T14:00:00.000Z",
+        "texto": "Comprar chocolate em pó"
+      }
+    ],
+    "colaboradores": ["user_006"]
+  },
+  {
+    "id": "note_005",
+    "titulo": "Filmes para Assistir",
+    "conteudo": "🎬 Lista de filmes pendentes:\n\n• Oppenheimer (2023)\n• Barbie (2023) \n• Spider-Man: Across the Spider-Verse\n• John Wick 4\n• The Menu (2022)\n• Everything Everywhere All at Once\n\nPrioridade: Oppenheimer e Spider-Verse",
+    "dataCriacao": "2024-10-01T20:15:00.000Z",
+    "dataUltimaEdicao": "2024-10-13T22:30:00.000Z",
+    "archived": false,
+    "cor": "#d7aefb",
+    "tags": ["entretenimento", "filmes", "lista"],
+    "fixada": false,
+    "lembretes": [
+      {
+        "id": "reminder_003",
+        "dataHora": "2024-10-18T19:30:00.000Z",
+        "texto": "Sessão de cinema com amigos"
+      }
+    ],
+    "colaboradores": ["user_007", "user_008"]
+  }
+]

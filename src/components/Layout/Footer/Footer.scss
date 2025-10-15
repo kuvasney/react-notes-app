@@ -1,0 +1,7 @@
+@use '@styles/variables' as *;
+
+.page-footer {
+    width: 100%;
+    height: $footer-height;
+    background-color: #282c34;
+}

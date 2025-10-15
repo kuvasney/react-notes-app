@@ -1,0 +1,7 @@
+@use '@styles/variables' as *;
+
+.page-header {
+    width: 100%;
+    height: $header-height;
+    background-color: #282c34;
+}

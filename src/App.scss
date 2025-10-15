@@ -1,0 +1,12 @@
+@use '@styles/variables' as *;
+
+.wrapper-content {
+  width: 100%;
+  max-width: 1980px;
+  margin-inline: auto;
+}
+
+.main-content {
+  width: 100%;
+  height: $main-height;
+}
