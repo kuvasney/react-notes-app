@@ -1,8 +1,9 @@
 import { useEffect } from "react";
 import { useNotesStore } from "@/stores/notesStore";
+import type { Note } from "@/types/Note";
 
 export const useNotesApi = () => {
-  const { setNotes, setLoading, setError, loading, initialized } =
+  const { setNotes, addNote, setLoading, setError, loading, initialized } =
     useNotesStore();
 
   const fetchNotes = async () => {
@@ -25,6 +26,29 @@ export const useNotesApi = () => {
     }
   };
 
+  const saveNote = async (newNote: Note) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await fetch("/api/notes", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newNote),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao salvar na API");
+      }
+
+      addNote(newNote);
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Erro desconhecido");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Carregar notas apenas se não foi inicializado e não está carregando
   useEffect(() => {
     const shouldFetch = !initialized && !loading;
@@ -37,6 +61,7 @@ export const useNotesApi = () => {
   return {
     fetchNotes,
     refetch: fetchNotes,
+    saveNote,
     isInitialized: initialized,
   };
 };
