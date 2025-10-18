@@ -3,8 +3,15 @@ import { useNotesStore } from "@/stores/notesStore";
 import type { Note } from "@/types/Note";
 
 export const useNotesApi = () => {
-  const { setNotes, addNote, setLoading, setError, loading, initialized } =
-    useNotesStore();
+  const {
+    setNotes,
+    addNote,
+    updateNote,
+    setLoading,
+    setError,
+    loading,
+    initialized,
+  } = useNotesStore();
 
   const fetchNotes = async () => {
     try {
@@ -49,6 +56,29 @@ export const useNotesApi = () => {
     }
   };
 
+  const editNote = async (newNote: Note) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await fetch(`/api/notes/${newNote.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newNote),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao editar na API");
+      }
+
+      updateNote(newNote.id, newNote);
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Erro desconhecido");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Carregar notas apenas se não foi inicializado e não está carregando
   useEffect(() => {
     const shouldFetch = !initialized && !loading;
@@ -62,6 +92,7 @@ export const useNotesApi = () => {
     fetchNotes,
     refetch: fetchNotes,
     saveNote,
+    editNote,
     isInitialized: initialized,
   };
 };

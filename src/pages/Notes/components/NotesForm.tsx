@@ -1,20 +1,26 @@
 import { useState } from "react";
-import { useNotesStore } from "@/stores/notesStore";
 import { useNotesApi } from "@/hooks/useNotesApi";
 import { Note } from "@/types";
 import "./NotesContent.scss";
 
-export default function NotesForm() {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [color, setColor] = useState("#fff475"); // Cor padrão amarela
+interface NotesFormProps {
+  note?: Note; // Prop opcional para edição
+  onSave?: () => void; // Callback após salvar
+  onCancel?: () => void; // Callback para cancelar
+}
+
+export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
+  const [title, setTitle] = useState(note?.titulo || "");
+  const [content, setContent] = useState(note?.conteudo || "");
+  const [color, setColor] = useState(note?.cor || "#fff475"); // Cor padrão amarela
+  const [tags, setTags] = useState(note?.tags?.join(", ") || "");
   const [error, setError] = useState("");
-  const [tags, setTags] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Acessar a store para adicionar nova nota
-  const { addNote } = useNotesStore();
-  const { saveNote } = useNotesApi();
+  const { saveNote, editNote } = useNotesApi();
+
+  // Detectar se estamos editando ou criando
+  const isEditing = Boolean(note?.id);
 
   // Gerar ID único para a nova nota
   const generateId = () => `note_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
@@ -40,31 +46,40 @@ export default function NotesForm() {
         .map(tag => tag.trim())
         .filter(tag => tag.length > 0);
 
-      // Criar objeto da nota
-      const newNote: Note = {
-        id: generateId(),
+      // Criar/atualizar objeto da nota
+      const noteData: Note = {
+        id: isEditing ? note!.id : generateId(),
         titulo: title.trim(),
         conteudo: content.trim(),
-        dataCriacao: new Date().toISOString(),
+        dataCriacao: isEditing ? note!.dataCriacao : new Date().toISOString(),
         dataUltimaEdicao: new Date().toISOString(),
-        archived: false,
+        archived: isEditing ? note!.archived : false,
         cor: color,
         tags: processedTags,
-        fixada: false,
-        lembretes: [],
-        colaboradores: []
+        fixada: isEditing ? note!.fixada : false,
+        lembretes: isEditing ? note!.lembretes : [],
+        colaboradores: isEditing ? note!.colaboradores : []
       };
 
-      // Simular chamada para API (você pode substituir por fetch real)
-      await saveNote(newNote);
+      // Salvar nota (criar ou atualizar)
+      if (isEditing) {
+        await editNote(noteData);
+      } else {
+        await saveNote(noteData);
+      }
 
-      // Limpar formulário após sucesso
-      setTitle("");
-      setContent("");
-      setColor("#fff475");
-      setTags("");
+      // Se estiver criando uma nova nota, limpar formulário
+      if (!isEditing) {
+        setTitle("");
+        setContent("");
+        setColor("#fff475");
+        setTags("");
+      }
 
-      console.log("Nota criada com sucesso:", newNote);
+      console.log(`Nota ${isEditing ? 'atualizada' : 'criada'} com sucesso:`, noteData);
+
+      // Chamar callback de sucesso se fornecido
+      onSave?.();
 
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro ao salvar nota");
@@ -126,7 +141,12 @@ export default function NotesForm() {
         {error && <div className="error">{error}</div>}
 
         <button type="submit" disabled={isLoading}>
-          {isLoading ? "Saving..." : "Save Note"}
+          {isLoading
+            ? "Saving..."
+            : isEditing
+              ? "Update Note"
+              : "Create Note"
+          }
         </button>
       </form>
     </div>

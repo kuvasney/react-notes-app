@@ -20,7 +20,7 @@ export default function Notes() {
     <div className="content-wrapper">
       <h1>Notes</h1>
       <button className="btn btn-secondary" onClick={refetchNotes}>
-        Reload Notes
+        ⟳ Reload Notes
       </button>
       <section className="notes-list">
         {loading ? (
