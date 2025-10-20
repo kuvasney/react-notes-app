@@ -7,6 +7,7 @@ export const useNotesApi = () => {
     setNotes,
     addNote,
     updateNote,
+    deleteNote,
     setLoading,
     setError,
     loading,
@@ -79,6 +80,27 @@ export const useNotesApi = () => {
     }
   };
 
+  const removeNote = async (noteId: string) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await fetch(`/api/notes/${noteId}`, {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao deletar nota");
+      }
+
+      deleteNote(noteId);
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Erro desconhecido");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   // Carregar notas apenas se não foi inicializado e não está carregando
   useEffect(() => {
     const shouldFetch = !initialized && !loading;
@@ -93,6 +115,7 @@ export const useNotesApi = () => {
     refetch: fetchNotes,
     saveNote,
     editNote,
+    removeNote,
     isInitialized: initialized,
   };
 };

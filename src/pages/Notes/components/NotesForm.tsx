@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useEscapeKey } from "@/hooks/useEscapeKey";
 import { useNotesApi } from "@/hooks/useNotesApi";
 import { Note } from "@/types";
 import "./NotesContent.scss";
@@ -23,7 +24,8 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
   const isEditing = Boolean(note?.id);
 
   // Gerar ID único para a nova nota
-  const generateId = () => `note_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+  const generateId = () =>
+    `note_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -43,8 +45,8 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
       // Processar tags (separadas por vírgula)
       const processedTags = tags
         .split(",")
-        .map(tag => tag.trim())
-        .filter(tag => tag.length > 0);
+        .map((tag) => tag.trim())
+        .filter((tag) => tag.length > 0);
 
       // Criar/atualizar objeto da nota
       const noteData: Note = {
@@ -58,7 +60,7 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
         tags: processedTags,
         fixada: isEditing ? note!.fixada : false,
         lembretes: isEditing ? note!.lembretes : [],
-        colaboradores: isEditing ? note!.colaboradores : []
+        colaboradores: isEditing ? note!.colaboradores : [],
       };
 
       // Salvar nota (criar ou atualizar)
@@ -76,11 +78,13 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
         setTags("");
       }
 
-      console.log(`Nota ${isEditing ? 'atualizada' : 'criada'} com sucesso:`, noteData);
+      console.log(
+        `Nota ${isEditing ? "atualizada" : "criada"} com sucesso:`,
+        noteData
+      );
 
       // Chamar callback de sucesso se fornecido
       onSave?.();
-
     } catch (err) {
       setError(err instanceof Error ? err.message : "Erro ao salvar nota");
     } finally {
@@ -88,8 +92,21 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
     }
   };
 
+  const cancelEdit = () => {
+    onCancel?.();
+  };
+
+  // Detectar tecla Esc
+  useEscapeKey({
+    onEscape: () => onCancel?.(),
+    condition: Boolean(onCancel), // Só ativa se houver callback de cancelar
+  });
+
   return (
     <div className="notes-form">
+      <button className="cancel-button" onClick={cancelEdit}>
+        ✕ Cancel
+      </button>
       <form onSubmit={handleSubmit}>
         <div className="input-container">
           <input
@@ -141,12 +158,7 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
         {error && <div className="error">{error}</div>}
 
         <button type="submit" disabled={isLoading}>
-          {isLoading
-            ? "Saving..."
-            : isEditing
-              ? "Update Note"
-              : "Create Note"
-          }
+          {isLoading ? "Saving..." : isEditing ? "Update Note" : "Create Note"}
         </button>
       </form>
     </div>
