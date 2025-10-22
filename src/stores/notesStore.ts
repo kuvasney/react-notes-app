@@ -15,6 +15,7 @@ interface NotesState {
   addNote: (note: Note) => void;
   updateNote: (id: string, updatedNote: Partial<Note>) => void;
   deleteNote: (id: string) => void;
+  reorderNotes: (reorderedNotes: Note[]) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   reset: () => void;
@@ -60,6 +61,8 @@ export const useNotesStore = create<NotesState>()(
         set((state) => ({
           notes: state.notes.filter((note) => note.id !== id),
         })),
+
+      reorderNotes: (reorderedNotes) => set({ notes: reorderedNotes }),
 
       setLoading: (loading) => set({ loading }),
       setError: (error) => set({ error }),

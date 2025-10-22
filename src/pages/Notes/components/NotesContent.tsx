@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { Note } from "@/types";
 import { renderTextWithBreaks } from "@/utils/utils";
 import "./NotesContent.scss";
@@ -20,7 +20,7 @@ export default function NotesContent({
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
 
-  const { removeNote } = useNotesApi();
+  const { removeNote, reorderNotes } = useNotesApi();
 
   if (loading) return <div>Carregando...</div>;
 
@@ -85,6 +85,69 @@ export default function NotesContent({
     setSearchTerm(search);
   };
 
+  let draggedElement: number | null = null;
+  let draggedOverElement: number | null = null;
+
+  const dragStartHandler = (
+    e: React.DragEvent<HTMLDivElement>,
+    index: number
+  ) => {
+    draggedElement = index;
+    // console.log("element", e, "index", index);
+    // e.dataTransfer.setData("text", e.currentTarget.id);
+    // e.dataTransfer.setData("index", index.toString());
+  };
+
+  const dragoverHandler = (
+    e: React.DragEvent<HTMLDivElement>,
+    index: number
+  ) => {
+    draggedOverElement = index;
+    console.log("index dragoverHandler", index);
+    e.preventDefault();
+  };
+
+  const dropOverHandler = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault();
+
+    if (
+      draggedElement !== null &&
+      draggedOverElement !== null &&
+      draggedElement !== draggedOverElement
+    ) {
+      // Cria uma cópia do array de todas as notas (não apenas filteredNotes)
+      const allNotes = [...notes];
+
+      // Encontra os índices reais no array completo baseado nos IDs das notas filtradas
+      const draggedNoteId = filteredNotes[draggedElement].id;
+      const targetNoteId = filteredNotes[draggedOverElement].id;
+
+      const realDraggedIndex = allNotes.findIndex(
+        (note) => note.id === draggedNoteId
+      );
+      const realTargetIndex = allNotes.findIndex(
+        (note) => note.id === targetNoteId
+      );
+
+      // Remove o elemento da posição original
+      const [draggedNote] = allNotes.splice(realDraggedIndex, 1);
+
+      // Insere o elemento na nova posição
+      allNotes.splice(realTargetIndex, 0, draggedNote);
+
+      console.log(
+        `Movendo nota do índice ${draggedElement} para ${draggedOverElement}`
+      );
+
+      // Atualiza o estado com a nova ordem
+      reorderNotes(allNotes);
+
+      // Reset das variáveis
+      draggedElement = null;
+      draggedOverElement = null;
+    }
+  };
+
   return (
     <>
       {/* Botão para criar nova nota */}
@@ -136,10 +199,15 @@ export default function NotesContent({
                 : "Nenhuma nota disponível"}
             </div>
           ) : (
-            filteredNotes.map((note) => (
+            filteredNotes.map((note, index) => (
               <div
                 key={note.id}
+                id={note.id}
                 className="note"
+                draggable="true"
+                onDragStart={(e) => dragStartHandler(e, index)}
+                onDragOver={(e) => dragoverHandler(e, index)}
+                onDrop={dropOverHandler}
                 style={{ backgroundColor: note.cor || "transparent" }}
               >
                 <h3>{note.titulo}</h3>

@@ -8,6 +8,7 @@ export const useNotesApi = () => {
     addNote,
     updateNote,
     deleteNote,
+    reorderNotes,
     setLoading,
     setError,
     loading,
@@ -116,6 +117,7 @@ export const useNotesApi = () => {
     saveNote,
     editNote,
     removeNote,
+    reorderNotes,
     isInitialized: initialized,
   };
 };
