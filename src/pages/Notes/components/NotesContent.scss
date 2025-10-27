@@ -71,6 +71,14 @@
       }
     }
   }
+  .tag {
+    background-color: #333;
+    color: #fff;
+    border-radius: 3px;
+    padding: 0.2em 0.5em;
+    font-size: 0.9em;
+    cursor: pointer;
+  }
 }
 
 .note-skeleton {

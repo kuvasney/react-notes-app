@@ -19,6 +19,7 @@ export default function NotesContent({
   const [editingNote, setEditingNote] = useState<Note | null>(null);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [filterByTag, setFilterByTag] = useState(false);
 
   const { removeNote, reorderNotes } = useNotesApi();
 
@@ -72,16 +73,31 @@ export default function NotesContent({
     if (!searchTerm) return true;
 
     const searchLower = searchTerm.toLowerCase();
-    return (
-      note.titulo.toLowerCase().includes(searchLower) ||
-      note.conteudo.toLowerCase().includes(searchLower) ||
-      note.tags?.some((tag) => tag.toLowerCase().includes(searchLower))
-    );
+    if (filterByTag) {
+      return note.tags?.some((tag) => tag.toLowerCase().includes(searchLower));
+    } else {
+      return (
+        note.titulo.toLowerCase().includes(searchLower) ||
+        note.conteudo.toLowerCase().includes(searchLower) ||
+        note.tags?.some((tag) => tag.toLowerCase().includes(searchLower))
+      );
+    }
   });
 
   const handleSearchChange = (search: string) => {
-    if (search.length === 0) setSearchTerm("");
-    if (search.length < 3) return;
+    if (search.length === 0) {
+      setSearchTerm("");
+      setFilterByTag(false);
+      return;
+    }
+    // Para busca manual (digitação), exige pelo menos 3 caracteres
+    // Para clique em tags, permite qualquer tamanho
+    setFilterByTag(false);
+    setSearchTerm(search);
+  };
+
+  const handleSearchByTagChange = (search: string) => {
+    setFilterByTag(true);
     setSearchTerm(search);
   };
 
@@ -186,9 +202,11 @@ export default function NotesContent({
       <div className="notes-content">
         {/* Lista de notas */}
         {searchTerm.length > 0 && (
-          <p>
-            Sua busca por: {searchTerm} retornou {filteredNotes.length}{" "}
-            restultados
+          <p className="search-result">
+            {filterByTag ? "Filtro por tag:" : "Sua busca por:"}{" "}
+            <span className={`${filterByTag ? "tag" : ""}`}>{searchTerm}</span>{" "}
+            retornou {filteredNotes.length} resultados{" "}
+            <button onClick={() => handleSearchChange("")}>Limpar busca</button>
           </p>
         )}
         <div className="notes-list">
@@ -214,7 +232,11 @@ export default function NotesContent({
                 <p>{renderTextWithBreaks(note.conteudo)}</p>
                 <div className="tags">
                   {note.tags.map((tag) => (
-                    <span key={tag} className="tag">
+                    <span
+                      key={tag}
+                      className="tag"
+                      onClick={() => handleSearchByTagChange(tag)}
+                    >
                       {tag}
                     </span>
                   ))}
