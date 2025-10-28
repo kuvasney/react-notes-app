@@ -15,11 +15,15 @@ $dark-text-color: #eee;
 $dark-button-color: #333;
 $dark-box-color: #000;
 $dark-border-color: #ccc;
+$dark-border-hover-color: #4caf50;
 $light-bg-color: #eee;
 $light-text-color: #242424;
 $light-button-color: #aaa;
 $light-box-color: #ccc;
 $light-border-color: #242424;
+$light-border-hover-color: #646cff;
+
+@use "sass:map";
 
 $breakpoints: (
   "mobile": 320px,
@@ -30,7 +34,7 @@ $breakpoints: (
 );
 
 @mixin respond-to($breakpoint) {
-  $value: map-get($breakpoints, $breakpoint);
+  $value: map.get($breakpoints, $breakpoint);
 
   @if $value {
     @media (min-width: $value) {

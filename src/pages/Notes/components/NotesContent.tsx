@@ -4,7 +4,9 @@ import { renderTextWithBreaks } from "@/utils/utils";
 import "./NotesContent.scss";
 import NotesForm from "./NotesForm";
 import NotesSearch from "./NotesSearch";
+import { useNotesStore } from "@/stores/notesStore";
 import { useNotesApi } from "@/hooks/useNotesApi";
+import { FiTrash2, FiEdit2 } from "react-icons/fi";
 
 interface NotesContentProps {
   notes: Note[];
@@ -16,8 +18,9 @@ export default function NotesContent({
   loading = false,
 }: NotesContentProps) {
   // Estado para controlar qual nota está sendo editada
-  const [editingNote, setEditingNote] = useState<Note | null>(null);
-  const [showCreateForm, setShowCreateForm] = useState(false);
+  const { showCreateForm, setShowCreateForm, editingNote, setEditingNote } =
+    useNotesStore();
+
   const [searchTerm, setSearchTerm] = useState("");
   const [filterByTag, setFilterByTag] = useState(false);
 
@@ -44,12 +47,6 @@ export default function NotesContent({
   // Função para cancelar edição
   const cancelEdit = () => {
     setEditingNote(null);
-  };
-
-  // Função para mostrar formulário de criação
-  const showCreateNoteForm = () => {
-    setShowCreateForm(true);
-    setEditingNote(null); // Esconder edição se estiver ativa
   };
 
   const handleDelete = async (noteId: string) => {
@@ -165,13 +162,6 @@ export default function NotesContent({
 
   return (
     <>
-      {/* Botão para criar nova nota */}
-      {!showCreateForm && !editingNote && (
-        <button className="create-note-button" onClick={showCreateNoteForm}>
-          ➕ Create New Note
-        </button>
-      )}
-
       {/* Formulário de criação */}
       {showCreateForm && (
         <div className="form-container">
@@ -181,7 +171,6 @@ export default function NotesContent({
           <NotesForm onSave={hideCreateForm} onCancel={hideCreateForm} />
         </div>
       )}
-
       {/* Formulário de edição */}
       {editingNote && (
         <div className="form-container">
@@ -195,9 +184,7 @@ export default function NotesContent({
           />
         </div>
       )}
-
       <NotesSearch onSearchChange={handleSearchChange} />
-
       <div className="notes-content">
         {/* Lista de notas */}
         {searchTerm.length > 0 && (
@@ -246,16 +233,18 @@ export default function NotesContent({
                   <em>Last edited:</em>{" "}
                   {new Date(note.dataUltimaEdicao).toLocaleDateString()}
                 </p>
-                <button className="edit-button" onClick={editNote(note)}>
-                  ✏️
-                </button>
-                <button
-                  onClick={() => handleDelete(note.id)}
-                  className="delete-button"
-                  aria-label="Excluir nota"
-                >
-                  🗑️
-                </button>
+                <div className="wrapper-buttons">
+                  <button className="edit-button" onClick={editNote(note)}>
+                    <FiEdit2 />
+                  </button>
+                  <button
+                    onClick={() => handleDelete(note.id)}
+                    className="delete-button"
+                    aria-label="Excluir nota"
+                  >
+                    <FiTrash2 />
+                  </button>
+                </div>
               </div>
             ))
           )}

@@ -2,7 +2,6 @@ import { useNotesStore } from "@/stores/notesStore";
 import { useNotesApi } from "@/hooks/useNotesApi";
 import NotesContent from "./components/NotesContent";
 import NotesContentSkeleton from "./components/NotesContentSkeleton";
-import { NavLink } from "react-router-dom";
 
 export default function Notes() {
   // Usar a store
@@ -14,14 +13,10 @@ export default function Notes() {
   // Obter notas ativas
   const activeNotes = getActiveNotes();
 
-  const { refetch: refetchNotes } = useNotesApi();
-
   return (
     <div className="content-wrapper">
-      <h1>Notes</h1>
-      <button className="btn btn-secondary" onClick={refetchNotes}>
-        ⟳ Reload Notes
-      </button>
+      <h1 className="hwr">Notes</h1>
+
       <section className="notes-list">
         {loading ? (
           <NotesContentSkeleton />
@@ -29,9 +24,6 @@ export default function Notes() {
           <NotesContent notes={activeNotes} />
         )}
       </section>
-      <NavLink to="/notes/archive" className="btn btn-primary">
-        Archived notes
-      </NavLink>
     </div>
   );
 }

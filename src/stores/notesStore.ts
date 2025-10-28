@@ -8,6 +8,8 @@ interface NotesState {
   loading: boolean;
   error: string | null;
   initialized: boolean;
+  showCreateForm: boolean;
+  editingNote: Note | null;
 
   // Ações
   setNotes: (notes: Note[]) => void;
@@ -18,6 +20,8 @@ interface NotesState {
   reorderNotes: (reorderedNotes: Note[]) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
+  setShowCreateForm: (show: boolean) => void;
+  setEditingNote: (note: Note | null) => void;
   reset: () => void;
 
   // Seletores computados
@@ -34,6 +38,8 @@ export const useNotesStore = create<NotesState>()(
       loading: false,
       error: null,
       initialized: false,
+      showCreateForm: false,
+      editingNote: null,
 
       // Ações
       setNotes: (notes) => set({ notes, initialized: true }),
@@ -66,6 +72,8 @@ export const useNotesStore = create<NotesState>()(
 
       setLoading: (loading) => set({ loading }),
       setError: (error) => set({ error }),
+      setShowCreateForm: (show) => set({ showCreateForm: show }),
+      setEditingNote: (note) => set({ editingNote: note }),
       reset: () =>
         set({
           notes: [],
