@@ -1,4 +1,4 @@
-@use '@styles/variables' as *;
+@use "@styles/variables" as *;
 
 .wrapper-content {
   width: 100%;
@@ -8,5 +8,6 @@
 
 .main-content {
   width: 100%;
-  height: $main-height;
+  min-height: $main-height;
+  padding: 1em;
 }

@@ -1,19 +1,14 @@
 .notes-content {
   .notes-list {
     display: flex;
+    flex-wrap: wrap;
     gap: 1rem;
     padding: 20px;
   }
 
-  .dropIn {
-    width: 20px;
-    height: 20px;
-    border: 1px solid #fff;
-  }
-
   .note {
     border-radius: 5px;
-    border: 2px solid #ccc;
+    border: 2px solid var(--border-color);
     padding: 10px;
     min-width: 250px;
     max-height: 500px;

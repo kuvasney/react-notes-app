@@ -1,7 +1,15 @@
-@use '@styles/variables' as *;
+@use "@styles/variables" as *;
 
 .page-header {
-    width: 100%;
-    height: $header-height;
-    background-color: #282c34;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  height: $header-height;
+  background-color: var(--box-color);
+  padding: 1em;
+
+  h1 {
+    font-size: $larger-text;
+  }
 }

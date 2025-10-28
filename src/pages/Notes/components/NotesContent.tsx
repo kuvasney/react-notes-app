@@ -119,7 +119,6 @@ export default function NotesContent({
     index: number
   ) => {
     draggedOverElement = index;
-    console.log("index dragoverHandler", index);
     e.preventDefault();
   };
 

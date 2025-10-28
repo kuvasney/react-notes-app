@@ -1,3 +1,42 @@
-$header-height: 60px;
+// MEASURES
+$header-height: 80px;
 $footer-height: 40px;
 $main-height: calc(100vh - #{$header-height} - #{$footer-height});
+
+// TEXT SIZE
+$larger-text: 2.5em;
+$large-text: 2em;
+$regular-text: 1em;
+$small-text: 0.7em;
+
+// COLORS
+$dark-bg-color: #242424;
+$dark-text-color: #eee;
+$dark-button-color: #333;
+$dark-box-color: #000;
+$dark-border-color: #ccc;
+$light-bg-color: #eee;
+$light-text-color: #242424;
+$light-button-color: #aaa;
+$light-box-color: #ccc;
+$light-border-color: #242424;
+
+$breakpoints: (
+  "mobile": 320px,
+  "tablet": 768px,
+  "desktop": 1024px,
+  "wide": 1200px,
+  "ultra": 1440px,
+);
+
+@mixin respond-to($breakpoint) {
+  $value: map-get($breakpoints, $breakpoint);
+
+  @if $value {
+    @media (min-width: $value) {
+      @content;
+    }
+  } @else {
+    @warn "Breakpoint `#{$breakpoint}` não encontrado em $breakpoints.";
+  }
+}
