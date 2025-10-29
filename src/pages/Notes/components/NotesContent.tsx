@@ -6,7 +6,7 @@ import NotesForm from "./NotesForm";
 import NotesSearch from "./NotesSearch";
 import { useNotesStore } from "@/stores/notesStore";
 import { useNotesApi } from "@/hooks/useNotesApi";
-import { FiTrash2, FiEdit2 } from "react-icons/fi";
+import { FiTrash2, FiEdit2, FiStar } from "react-icons/fi";
 
 interface NotesContentProps {
   notes: Note[];
@@ -24,7 +24,7 @@ export default function NotesContent({
   const [searchTerm, setSearchTerm] = useState("");
   const [filterByTag, setFilterByTag] = useState(false);
 
-  const { removeNote, reorderNotes } = useNotesApi();
+  const { removeNote, reorderNotes, editNote: updateNoteApi } = useNotesApi();
 
   if (loading) return <div>Carregando...</div>;
 
@@ -160,11 +160,26 @@ export default function NotesContent({
     }
   };
 
+  const setPinned = async (note: Note) => {
+    const updatedNote = {
+      ...note,
+      pinned: !note.pinned,
+      dataUltimaEdicao: new Date().toISOString()
+    };
+
+    try {
+      await updateNoteApi(updatedNote);
+    } catch (error) {
+      console.error("Erro ao alterar status de fixação:", error);
+      alert("Erro ao alterar status de fixação da nota. Tente novamente.");
+    }
+  }
+
   return (
     <>
       {/* Formulário de criação */}
       {showCreateForm && (
-        <div className="form-container">
+        <div>
           <div className="form-header">
             <h3>Create New Note</h3>
           </div>
@@ -173,7 +188,7 @@ export default function NotesContent({
       )}
       {/* Formulário de edição */}
       {editingNote && (
-        <div className="form-container">
+        <div>
           <div className="form-header">
             <h3>Edit Note</h3>
           </div>
@@ -214,6 +229,9 @@ export default function NotesContent({
                 onDrop={dropOverHandler}
                 style={{ backgroundColor: note.cor || "transparent" }}
               >
+                <button className={`pin-icon ${note.pinned ? "active" : ""}`} onClick={() => setPinned(note)}>
+                  <FiStar />
+                </button>
                 <h3>{note.titulo}</h3>
                 <p>{renderTextWithBreaks(note.conteudo)}</p>
                 <div className="tags">

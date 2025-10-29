@@ -1,4 +1,3 @@
-import { useState, useEffect } from "react";
 import { Routes, Route } from "react-router-dom";
 
 import "./App.scss";
@@ -7,6 +6,7 @@ import Notes from "./pages/Notes";
 import Header from "./components/Layout/Header";
 import Footer from "./components/Layout/Footer";
 import Archive from "./pages/Notes/Archive";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 function App() {
   return (
@@ -15,11 +15,24 @@ function App() {
       <main className="main-content">
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/notes" element={<Notes />} />
-          <Route path="/notes/archive" element={<Archive />} />
+          <Route
+            path="/notes"
+            element={
+              <ProtectedRoute>
+                <Notes />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/notes/archive"
+            element={
+              <ProtectedRoute>
+                <Archive />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </main>
-      <Footer />
     </div>
   );
 }

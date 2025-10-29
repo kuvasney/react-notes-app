@@ -58,7 +58,7 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
         archived: isEditing ? note!.archived : false,
         cor: color,
         tags: processedTags,
-        fixada: isEditing ? note!.fixada : false,
+        pinned: isEditing ? note!.pinned : false,
         lembretes: isEditing ? note!.lembretes : [],
         colaboradores: isEditing ? note!.colaboradores : [],
       };
@@ -103,9 +103,9 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
   });
 
   return (
-    <div className="notes-form">
+    <div className="notes-form" style={{ backgroundColor: color }}>
       <button className="cancel-button" onClick={cancelEdit}>
-        ✕ Cancel
+        ✕
       </button>
       <form onSubmit={handleSubmit}>
         <div className="input-container">
@@ -130,7 +130,7 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
         </div>
 
         <div className="input-container">
-          <label>Cor da nota:</label>
+          <label>Note color:</label>
           <select
             value={color}
             onChange={(e) => setColor(e.target.value)}

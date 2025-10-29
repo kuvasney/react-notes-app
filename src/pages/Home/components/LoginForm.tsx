@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useAuth } from '@/hooks/useAuth'
 import './LoginForm.scss'
 
 // Mock de usuários para teste
@@ -14,6 +15,14 @@ export default function LoginForm() {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const navigate = useNavigate()
+  const { login, isLoggedIn } = useAuth()
+
+  // Redireciona se já estiver logado
+  useEffect(() => {
+    if (isLoggedIn) {
+      navigate('/notes', { replace: true })
+    }
+  }, [isLoggedIn, navigate])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -29,10 +38,14 @@ export default function LoginForm() {
     )
 
     if (user) {
-      // Login sucesso - salva no localStorage e redireciona
-      localStorage.setItem('isLoggedIn', 'true')
-      localStorage.setItem('userEmail', email)
-      navigate('/notes')
+      // Login sucesso - usa o hook de autenticação
+      login(email)
+
+      // Verifica se há redirecionamento pendente
+      const redirectPath = sessionStorage.getItem('redirectAfterLogin')
+      sessionStorage.removeItem('redirectAfterLogin')
+
+      navigate(redirectPath || '/notes')
     } else {
       setError('Email ou senha inválidos')
     }

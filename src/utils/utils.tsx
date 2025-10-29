@@ -50,11 +50,22 @@ export const generateId = (): string => {
   return `note_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
 }
 
+// Função utilitária para verificar se o usuário está logado
+export const isUserAuthenticated = (): boolean => {
+  return localStorage.getItem('isLoggedIn') === 'true'
+}
+
+// Função para obter email do usuário logado
+export const getCurrentUserEmail = (): string | null => {
+  return localStorage.getItem('userEmail')
+}
 
 export default {
   renderTextWithBreaks,
   formatDate,
   formatDateTime,
   truncateText,
-  generateId
+  generateId,
+  isUserAuthenticated,
+  getCurrentUserEmail
 }

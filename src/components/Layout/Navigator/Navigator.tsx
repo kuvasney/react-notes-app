@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useNotesStore } from "@/stores/notesStore";
 import { useNotesApi } from "@/hooks/useNotesApi";
+import { useAuth } from "@/hooks/useAuth";
 import { NavLink } from "react-router-dom";
 import {
   FiRefreshCw,
@@ -25,6 +26,7 @@ export default function Navigator() {
   });
 
   const { refetch: refetchNotes } = useNotesApi();
+  const { isLoggedIn, logout: authLogout } = useAuth();
 
   useEffect(() => {
     document.body.classList.remove("light", "dark");
@@ -38,6 +40,7 @@ export default function Navigator() {
   const logout = () => {
     try {
       reset();
+      authLogout(); // Usa o logout do hook de autenticação
       // Navegar usando React Router (sem recarregar a página)
       navigate("/", { replace: true });
     } catch (error) {
@@ -56,18 +59,20 @@ export default function Navigator() {
       >
         {darkMode ? <FiSun /> : <FiMoon />}
       </button>
-      {isNotes ? (
-        <NavLink
-          to="/notes/archive"
-          className="button-link"
-          title="Archived Notes"
-        >
-          <FiArchive />
-        </NavLink>
-      ) : (
-        <NavLink to="/notes" className="button-link" title="Active notes">
-          <FiFileText />
-        </NavLink>
+      {isLoggedIn && (
+        isNotes ? (
+          <NavLink
+            to="/notes/archive"
+            className="button-link"
+            title="Archived Notes"
+          >
+            <FiArchive />
+          </NavLink>
+        ) : (
+          <NavLink to="/notes" className="button-link" title="Active notes">
+            <FiFileText />
+          </NavLink>
+        )
       )}
       {!isHomePage && (
         <>

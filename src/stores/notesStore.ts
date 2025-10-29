@@ -86,7 +86,7 @@ export const useNotesStore = create<NotesState>()(
       getActiveNotes: () => get().notes.filter((note) => !note.archived),
       getArchivedNotes: () => get().notes.filter((note) => note.archived),
       getPinnedNotes: () =>
-        get().notes.filter((note) => note.fixada && !note.archived),
+        get().notes.filter((note) => note.pinned && !note.archived),
     }),
     {
       name: "notes-store", // Nome que aparecerá no DevTools

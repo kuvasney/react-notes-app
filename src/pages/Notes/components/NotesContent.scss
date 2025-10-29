@@ -15,6 +15,36 @@
     overflow: auto;
     line-height: 1.4;
     color: #333;
+    position: relative;
+
+    .pin-icon {
+      position: absolute;
+      top: 0;
+      right: 0;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: var(--text-color);
+      transition: color 0.2s;
+      padding: 0;
+      opacity: 0.4;
+
+
+      &.active {
+        color: #000;
+        opacity: 1;
+
+        svg {
+          fill: #ff9800;
+        }
+      }
+
+      &:hover {
+        color: #ff9800;
+        opacity: 1;
+      }
+    }
 
     h3 {
       margin-bottom: 1em;
@@ -101,6 +131,36 @@
 
   &:hover {
     color: var(--text-color);
+  }
+}
+
+.notes-search {
+  width: 400px;
+  max-width: 100%;
+  position: relative;
+
+  .clear-button {
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translate(-2px, 2px);
+    cursor: pointer;
+  }
+}
+
+.notes-form {
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  padding: 35px;
+  margin-bottom: 20px;
+  width: 400px;
+  max-width: 100%;
+  position: relative;
+
+  .cancel-button {
+    position: absolute;
+    top: 0;
+    right: 0;
   }
 }
 

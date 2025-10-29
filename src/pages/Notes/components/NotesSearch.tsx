@@ -38,7 +38,7 @@ export default function NotesSearch({ onSearchChange }: NotesSearchProps) {
         <div className="input-container">
           <input
             type="text"
-            placeholder="🔍 Buscar nas notas..."
+            placeholder="🔍 Search for a note..."
             value={search}
             onChange={handleInputChange}
           />
@@ -47,7 +47,7 @@ export default function NotesSearch({ onSearchChange }: NotesSearchProps) {
               type="button"
               className="clear-button"
               onClick={clearSearch}
-              aria-label="Limpar busca"
+              aria-label="Clear search"
             >
               ✕
             </button>
