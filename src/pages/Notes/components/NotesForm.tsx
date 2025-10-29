@@ -23,10 +23,6 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
   // Detectar se estamos editando ou criando
   const isEditing = Boolean(note?.id);
 
-  // Gerar ID único para a nova nota
-  const generateId = () =>
-    `note_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
@@ -49,25 +45,42 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
         .filter((tag) => tag.length > 0);
 
       // Criar/atualizar objeto da nota
-      const noteData: Note = {
-        id: isEditing ? note!.id : generateId(),
+      const noteData: Partial<Note> = {
         titulo: title.trim(),
         conteudo: content.trim(),
-        dataCriacao: isEditing ? note!.dataCriacao : new Date().toISOString(),
         dataUltimaEdicao: new Date().toISOString(),
-        archived: isEditing ? note!.archived : false,
         cor: color,
         tags: processedTags,
-        pinned: isEditing ? note!.pinned : false,
-        lembretes: isEditing ? note!.lembretes : [],
-        colaboradores: isEditing ? note!.colaboradores : [],
       };
+
+      if (isEditing) {
+        // Editando: manter todos os campos existentes e ID
+        Object.assign(noteData, {
+          id: note!.id,
+          _id: note!._id,
+          dataCriacao: note!.dataCriacao,
+          archived: note!.archived,
+          pinned: note!.pinned,
+          lembretes: note!.lembretes,
+          colaboradores: note!.colaboradores,
+        });
+      } else {
+        // Criando: definir valores padrão, mas NÃO definir ID
+        Object.assign(noteData, {
+          dataCriacao: new Date().toISOString(),
+          archived: false,
+          pinned: false,
+          lembretes: [],
+          colaboradores: [],
+        });
+        // ID será gerado pelo MongoDB
+      }
 
       // Salvar nota (criar ou atualizar)
       if (isEditing) {
-        await editNote(noteData);
+        await editNote(noteData as Note);
       } else {
-        await saveNote(noteData);
+        await saveNote(noteData as Note);
       }
 
       // Se estiver criando uma nova nota, limpar formulário

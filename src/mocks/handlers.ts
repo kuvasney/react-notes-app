@@ -13,6 +13,8 @@ export const handlers = [
       return new HttpResponse(null, { status: 500 });
     }
 
+    // Retornar no formato da nova API com paginação
+    // mockNotes já tem formato {notes: [...], pagination: {...}}
     return HttpResponse.json(mockNotes);
   }),
 

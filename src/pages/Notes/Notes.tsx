@@ -12,12 +12,14 @@ export default function Notes() {
 
   // Obter notas ativas
   const activeNotes = getActiveNotes();
-  activeNotes.sort((a, b) => {
-    // Notas fixadas primeiro
-    if (a.pinned && !b.pinned) return -1;
-    if (!a.pinned && b.pinned) return 1;
-    return 0;
-  });
+  if (activeNotes.length > 0) {
+    activeNotes.sort((a, b) => {
+      // Notas fixadas primeiro
+      if (a.pinned && !b.pinned) return -1;
+      if (!a.pinned && b.pinned) return 1;
+      return 0;
+    });
+  }
 
   return (
     <div className="content-wrapper">

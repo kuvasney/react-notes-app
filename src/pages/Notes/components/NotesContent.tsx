@@ -28,16 +28,6 @@ export default function NotesContent({
 
   if (loading) return <div>Carregando...</div>;
 
-  if (notes.length === 0) {
-    return (
-      <div className="notes-content">
-        <div className="empty-state">
-          <p>Nenhuma nota encontrada.</p>
-        </div>
-      </div>
-    );
-  }
-
   // Função para iniciar edição de uma nota
   const editNote = (note: Note) => () => {
     setEditingNote(note);
@@ -211,7 +201,11 @@ export default function NotesContent({
           </p>
         )}
         <div className="notes-list">
-          {filteredNotes.length === 0 ? (
+          {notes.length === 0 ? (
+            <div className="empty-state">
+              <p>Nenhuma nota encontrada. Crie sua primeira nota!</p>
+            </div>
+          ) : filteredNotes.length === 0 ? (
             <div className="no-notes">
               {searchTerm
                 ? "Nenhuma nota encontrada"

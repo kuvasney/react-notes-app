@@ -6,6 +6,7 @@ export interface Reminder {
 
 export interface Note {
   id: string;
+  _id?: string; // Para compatibilidade com MongoDB
   titulo: string;
   conteudo: string;
   dataCriacao: string;

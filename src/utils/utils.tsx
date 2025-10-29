@@ -45,10 +45,7 @@ export const truncateText = (text: string, maxLength: number): string => {
   return text.substring(0, maxLength) + '...'
 }
 
-// Função para gerar IDs únicos
-export const generateId = (): string => {
-  return `note_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`
-}
+// Função removida - agora o MongoDB gera os IDs automaticamente
 
 // Função utilitária para verificar se o usuário está logado
 export const isUserAuthenticated = (): boolean => {
@@ -65,7 +62,6 @@ export default {
   formatDate,
   formatDateTime,
   truncateText,
-  generateId,
   isUserAuthenticated,
   getCurrentUserEmail
 }

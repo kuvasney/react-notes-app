@@ -165,8 +165,8 @@ button:focus-visible {
   border-radius: 4px;
   font-size: 1em;
   font-family: inherit;
-  color: var(--text-color);
-  background-color: var(--box-color);
+  color: #000;
+  background-color: rgba(var(--box-color), 1);
   transition: border-color 0.3s ease;
 
   &:focus,
@@ -190,6 +190,11 @@ button:focus-visible {
 
   select {
     @extend .input-style;
+
+  }
+
+  label {
+    color: #000;
   }
 }
 
