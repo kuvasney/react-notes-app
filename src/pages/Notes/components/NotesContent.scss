@@ -18,19 +18,16 @@
     color: #333;
     position: relative;
 
-    .pin-icon {
+    .buttons-wrapper {
       position: absolute;
       top: 0;
       right: 0;
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
+    }
+
+    .no-button {
       color: var(--text-color);
       transition: color 0.2s;
-      padding: 0;
       opacity: 0.4;
-
 
       &.active {
         color: #000;
@@ -157,6 +154,24 @@
   width: 400px;
   max-width: 100%;
   position: relative;
+
+  .note-title {
+    font-weight: bold;
+  }
+
+  label {
+    font-size: 0.8em;
+  }
+
+  input[type="text"],
+  textarea,
+  select {
+    border: 0;
+  }
+
+  textarea {
+    font-family: monospace;
+  }
 
   .cancel-button {
     position: absolute;

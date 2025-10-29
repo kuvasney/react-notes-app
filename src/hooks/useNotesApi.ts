@@ -17,7 +17,6 @@ export const useNotesApi = () => {
     reorderNotes,
     setLoading,
     setError,
-    loading,
     initialized,
   } = useNotesStore();
 
@@ -26,10 +25,18 @@ export const useNotesApi = () => {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(buildApiUrl(API_ENDPOINTS.notes));
+      // Timeout para evitar requests infinitos
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
+
+      const response = await fetch(buildApiUrl(API_ENDPOINTS.notes), {
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
 
       if (!response.ok) {
-        throw new Error("Erro ao carregar notas");
+        throw new Error(`Erro ao carregar notas: ${response.status}`);
       }
 
       const data = await response.json();
@@ -48,7 +55,16 @@ export const useNotesApi = () => {
         notes: transformedNotes,
       });
     } catch (error) {
-      setError(error instanceof Error ? error.message : "Erro desconhecido");
+      console.error("Erro ao buscar notas:", error);
+
+      if (error instanceof Error && error.name === "AbortError") {
+        setError("Timeout na requisição - API não respondeu");
+      } else {
+        setError(error instanceof Error ? error.message : "Erro desconhecido");
+      }
+
+      // Mesmo com erro, marca como inicializado para evitar retry infinito
+      setNotes([]);
     } finally {
       setLoading(false);
     }
@@ -132,14 +148,12 @@ export const useNotesApi = () => {
     }
   };
 
-  // Carregar notas apenas se não foi inicializado e não está carregando
+  // Carregar notas apenas se não foi inicializado
   useEffect(() => {
-    const shouldFetch = !initialized && !loading;
-
-    if (shouldFetch) {
+    if (!initialized) {
       fetchNotes();
     }
-  }, [initialized, loading]);
+  }, [initialized]); // ← Remove 'loading' das dependências
 
   return {
     fetchNotes,

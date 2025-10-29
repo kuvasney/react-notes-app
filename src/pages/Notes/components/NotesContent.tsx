@@ -6,7 +6,7 @@ import NotesForm from "./NotesForm";
 import NotesSearch from "./NotesSearch";
 import { useNotesStore } from "@/stores/notesStore";
 import { useNotesApi } from "@/hooks/useNotesApi";
-import { FiTrash2, FiEdit2, FiStar } from "react-icons/fi";
+import { FiTrash2, FiEdit2, FiStar, FiArchive } from "react-icons/fi";
 
 interface NotesContentProps {
   notes: Note[];
@@ -154,16 +154,29 @@ export default function NotesContent({
     const updatedNote = {
       ...note,
       pinned: !note.pinned,
-      dataUltimaEdicao: new Date().toISOString()
+      dataUltimaEdicao: new Date().toISOString(),
     };
 
     try {
       await updateNoteApi(updatedNote);
     } catch (error) {
       console.error("Erro ao alterar status de fixação:", error);
-      alert("Erro ao alterar status de fixação da nota. Tente novamente.");
     }
-  }
+  };
+
+  const setArchived = async (note: Note) => {
+    const updatedNote = {
+      ...note,
+      archived: !note.archived,
+      dataUltimaEdicao: new Date().toISOString(),
+    };
+
+    try {
+      await updateNoteApi(updatedNote);
+    } catch (error) {
+      console.error("Error archiving note");
+    }
+  };
 
   return (
     <>
@@ -223,9 +236,26 @@ export default function NotesContent({
                 onDrop={dropOverHandler}
                 style={{ backgroundColor: note.cor || "transparent" }}
               >
-                <button className={`pin-icon ${note.pinned ? "active" : ""}`} onClick={() => setPinned(note)}>
-                  <FiStar />
-                </button>
+                <div className="wrapper-buttons">
+                  <button
+                    title="Pin this note"
+                    className={`pin-icon no-button ${
+                      note.pinned ? "active" : ""
+                    }`}
+                    onClick={() => setPinned(note)}
+                  >
+                    <FiStar />
+                  </button>
+                  <button
+                    title="Archive this note"
+                    className={`archive-icon no-button ${
+                      note.archived ? "active" : ""
+                    }`}
+                    onClick={() => setArchived(note)}
+                  >
+                    <FiArchive />
+                  </button>
+                </div>
                 <h3>{note.titulo}</h3>
                 <p>{renderTextWithBreaks(note.conteudo)}</p>
                 <div className="tags">

@@ -158,6 +158,13 @@ button:focus-visible {
   outline-offset: 2px;
 }
 
+.no-button {
+  background-color: transparent;
+  padding: 0;
+  border: 0;
+  cursor: pointer;
+}
+
 .input-style {
   width: 100%;
   padding: 0.5em;
@@ -179,7 +186,7 @@ button:focus-visible {
 .input-container {
   margin-bottom: 1rem;
 
-  input[type=text] {
+  input[type="text"] {
     @extend .input-style;
   }
 
@@ -190,7 +197,6 @@ button:focus-visible {
 
   select {
     @extend .input-style;
-
   }
 
   label {

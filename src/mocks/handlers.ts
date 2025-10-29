@@ -4,7 +4,7 @@ import mockNotes from "./mockNotes.json";
 export const handlers = [
   // GET /api/notes
   // Simular latência e possíveis erros
-  http.get("/api/notes", async () => {
+  http.get("*/api/notes", async () => {
     // Simular delay de rede
     await new Promise((resolve) => setTimeout(resolve, 500));
 
@@ -20,7 +20,7 @@ export const handlers = [
 
   // POST /api/notes
   // Simular latência e possíveis erros
-  http.post("/api/notes", async () => {
+  http.post("*/api/notes", async () => {
     // Simular delay de rede
     await new Promise((resolve) => setTimeout(resolve, 500));
 
@@ -33,7 +33,7 @@ export const handlers = [
   }),
 
   // PUT /api/notes/:id - Atualizar nota específica
-  http.put("/api/notes/:id", async ({ params }) => {
+  http.put("*/api/notes/:id", async ({ params }) => {
     const { id } = params;
 
     // Simular delay de rede
@@ -49,7 +49,7 @@ export const handlers = [
   }),
 
   // DELETE /api/notes/:id - Atualizar nota específica
-  http.delete("/api/notes/:id", async ({ params }) => {
+  http.delete("*/api/notes/:id", async ({ params }) => {
     const { id } = params;
 
     // Simular delay de rede

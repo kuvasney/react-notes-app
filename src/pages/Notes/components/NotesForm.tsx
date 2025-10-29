@@ -125,6 +125,7 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
           <input
             type="text"
             placeholder="Title"
+            className="note-title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
             required
@@ -143,11 +144,12 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
         </div>
 
         <div className="input-container">
-          <label>Note color:</label>
+          <label htmlFor="color-select">Note color:</label>
           <select
             value={color}
             onChange={(e) => setColor(e.target.value)}
             disabled={isLoading}
+            id="color-select"
           >
             <option value="#fff475">🟡 Amarelo (Padrão)</option>
             <option value="#aecbfa">🔵 Azul</option>
@@ -159,12 +161,14 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
         </div>
 
         <div className="input-container">
+          <label htmlFor="tags">Tags:</label>
           <input
             type="text"
             placeholder="Put your tags here separated by commas"
             value={tags}
             onChange={(e) => setTags(e.target.value)}
             disabled={isLoading}
+            id="tags"
           />
         </div>
 
