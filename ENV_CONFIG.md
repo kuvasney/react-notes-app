@@ -34,9 +34,13 @@ Este projeto usa variáveis de ambiente para configurar os apontamentos da API e
 
 ### VITE_NODE_ENV
 
-- **Descrição:** Ambiente de execução
-- **Valores:** `development`, `production`, `test`
+- **Descrição:** Ambiente de execução e controle do MSW
+- **Valores:**
+  - `development` - desenvolvimento com API real
+  - `nodata` - desenvolvimento com dados mockados (MSW ativo)
+  - `production` - produção
 - **Padrão:** `development`
+- **MSW:** Só funciona quando valor é `nodata`
 
 ### VITE_DEBUG_MODE
 
