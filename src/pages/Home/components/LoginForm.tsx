@@ -1,57 +1,58 @@
-import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { useAuth } from '@/hooks/useAuth'
-import './LoginForm.scss'
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "@/hooks/useAuth";
+import { FiAlertCircle, FiCheckCircle } from "react-icons/fi";
+import "./LoginForm.scss";
 
 // Mock de usuários para teste
 const MOCK_USERS = [
-  { email: 'kuvasney@gmail.com', password: '123456' },
-  { email: 'user@teste.com', password: 'senha123' }
-]
+  { email: "kuvasney@gmail.com", password: "123456" },
+  { email: "user@teste.com", password: "senha123" },
+];
 
 export default function LoginForm() {
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
-  const [error, setError] = useState('')
-  const [isLoading, setIsLoading] = useState(false)
-  const navigate = useNavigate()
-  const { login, isLoggedIn } = useAuth()
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
+  const { login, isLoggedIn } = useAuth();
 
   // Redireciona se já estiver logado
   useEffect(() => {
     if (isLoggedIn) {
-      navigate('/notes', { replace: true })
+      navigate("/notes", { replace: true });
     }
-  }, [isLoggedIn, navigate])
+  }, [isLoggedIn, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
-    setIsLoading(true)
+    e.preventDefault();
+    setError("");
+    setIsLoading(true);
 
     // Simula delay de API
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    await new Promise((resolve) => setTimeout(resolve, 1000));
 
     // Verifica credenciais mock
     const user = MOCK_USERS.find(
-      u => u.email === email && u.password === password
-    )
+      (u) => u.email === email && u.password === password
+    );
 
     if (user) {
       // Login sucesso - usa o hook de autenticação
-      login(email)
+      login(email);
 
       // Verifica se há redirecionamento pendente
-      const redirectPath = sessionStorage.getItem('redirectAfterLogin')
-      sessionStorage.removeItem('redirectAfterLogin')
+      const redirectPath = sessionStorage.getItem("redirectAfterLogin");
+      sessionStorage.removeItem("redirectAfterLogin");
 
-      navigate(redirectPath || '/notes')
+      navigate(redirectPath || "/notes");
     } else {
-      setError('Email ou senha inválidos')
+      setError("Email ou senha inválidos");
     }
 
-    setIsLoading(false)
-  }
+    setIsLoading(false);
+  };
 
   return (
     <section className="login">
@@ -77,20 +78,18 @@ export default function LoginForm() {
             disabled={isLoading}
           />
         </div>
-
-        {error && <div className="error">{error}</div>}
+        <div className="input-container">
+          {error && (
+            <div className="error">
+              <FiAlertCircle /> {error}
+            </div>
+          )}
+        </div>
 
         <button type="submit" disabled={isLoading}>
-          {isLoading ? 'Entrando...' : 'Entrar'}
+          {isLoading ? "Entrando..." : "Entrar"}
         </button>
-
-        {/* Credenciais para teste */}
-        <div className="test-credentials">
-          <h4>Credenciais para teste:</h4>
-          <p><strong>Admin:</strong> admin@teste.com / 123456</p>
-          <p><strong>User:</strong> user@teste.com / senha123</p>
-        </div>
       </form>
     </section>
-  )
+  );
 }

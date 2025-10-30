@@ -17,8 +17,9 @@ import {
 export default function Navigator() {
   const location = useLocation();
   const navigate = useNavigate();
-  const isHomePage = location.pathname === "/";
-  const isNotes = location.pathname === "/notes";
+
+  const [isHomePage, setIsHomePage] = useState(location.pathname === "/");
+  const [isNotes, setIsNotes] = useState(location.pathname === "/notes");
 
   const { reset, setShowCreateForm } = useNotesStore();
   const [darkMode, setDarkMode] = useState(() => {
@@ -27,6 +28,24 @@ export default function Navigator() {
 
   const { refetch: refetchNotes } = useNotesApi();
   const { isLoggedIn, logout: authLogout } = useAuth();
+
+  // Verificação extra para garantir sincronização
+  const isAuthenticated =
+    isLoggedIn || localStorage.getItem("isLoggedIn") === "true";
+
+  // Atualizar estados quando a rota mudar
+  useEffect(() => {
+    setIsHomePage(location.pathname === "/");
+    setIsNotes(location.pathname === "/notes");
+
+    // Debug
+    console.log("Navigator - Route changed:", {
+      pathname: location.pathname,
+      isHomePage: location.pathname === "/",
+      isNotes: location.pathname === "/notes",
+      isLoggedIn,
+    });
+  }, [location.pathname, isLoggedIn]);
 
   useEffect(() => {
     document.body.classList.remove("light", "dark");
@@ -59,8 +78,9 @@ export default function Navigator() {
       >
         {darkMode ? <FiSun /> : <FiMoon />}
       </button>
-      {isLoggedIn && (
-        isNotes ? (
+      {isAuthenticated &&
+        !isHomePage &&
+        (isNotes ? (
           <NavLink
             to="/notes/archive"
             className="button-link"
@@ -72,8 +92,7 @@ export default function Navigator() {
           <NavLink to="/notes" className="button-link" title="Active notes">
             <FiFileText />
           </NavLink>
-        )
-      )}
+        ))}
       {!isHomePage && (
         <>
           <button

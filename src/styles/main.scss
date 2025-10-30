@@ -172,7 +172,7 @@ button:focus-visible {
   border-radius: 4px;
   font-size: 1em;
   font-family: inherit;
-  color: #000;
+  color: var(--text-color);
   background-color: rgba(var(--box-color), 1);
   transition: border-color 0.3s ease;
 
@@ -187,6 +187,14 @@ button:focus-visible {
   margin-bottom: 1rem;
 
   input[type="text"] {
+    @extend .input-style;
+  }
+
+  input[type="email"] {
+    @extend .input-style;
+  }
+
+  input[type="password"] {
     @extend .input-style;
   }
 
