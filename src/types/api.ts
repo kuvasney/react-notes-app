@@ -17,6 +17,7 @@ export interface EnvironmentConfig {
 export interface ApiEndpoints {
   notes: string;
   auth: string;
+  register: string;
 }
 
 // Extender o módulo de variáveis de ambiente do Vite

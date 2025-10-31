@@ -2,13 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { FiAlertCircle, FiCheckCircle } from "react-icons/fi";
+import { useUserApi } from "@/hooks/useUserApi";
 import "./LoginForm.scss";
-
-// Mock de usuários para teste
-const MOCK_USERS = [
-  { email: "kuvasney@gmail.com", password: "123456" },
-  { email: "user@teste.com", password: "senha123" },
-];
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -17,6 +12,8 @@ export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const { login, isLoggedIn } = useAuth();
+
+  const { loginUser } = useUserApi();
 
   // Redireciona se já estiver logado
   useEffect(() => {
@@ -30,29 +27,49 @@ export default function LoginForm() {
     setError("");
     setIsLoading(true);
 
-    // Simula delay de API
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    // Verifica credenciais mock
-    const user = MOCK_USERS.find(
-      (u) => u.email === email && u.password === password
-    );
-
-    if (user) {
-      // Login sucesso - usa o hook de autenticação
-      login(email);
-
-      // Verifica se há redirecionamento pendente
-      const redirectPath = sessionStorage.getItem("redirectAfterLogin");
-      sessionStorage.removeItem("redirectAfterLogin");
-
-      navigate(redirectPath || "/notes");
-    } else {
-      setError("Email ou senha inválidos");
+    try {
+      if (!email.trim()) {
+        throw new Error("Email é obrigatório");
+      }
+      if (!password.trim()) {
+        throw new Error("Senha é obrigatória");
+      }
+      const response = await loginUser(email.trim(), password.trim());
+      if (response.tokens) {
+        login(response.tokens); // Atualiza o estado de autenticação
+        sessionStorage.setItem("isLoggedIn", "true");
+        sessionStorage.setItem("userEmail", email.trim());
+        sessionStorage.setItem("userToken", response.tokens.accessToken);
+        // Verifica se há redirecionamento pendente
+        const redirectPath = sessionStorage.getItem("redirectAfterLogin");
+        navigate(redirectPath || "/notes");
+        sessionStorage.removeItem("redirectAfterLogin");
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        setError(error.message);
+      }
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   };
+
+  //   // Supondo que a resposta contenha um token ou indicador de sucesso
+  //   if (response.token) {
+  //     login(response.token); // Atualiza o estado de autenticação
+
+  //   // Verifica se há redirecionamento pendente
+  //   const redirectPath = sessionStorage.getItem("redirectAfterLogin");
+  //   sessionStorage.removeItem("redirectAfterLogin");
+
+  //   navigate(redirectPath || "/notes");
+  // } else {
+  //   setError("Email ou senha inválidos");
+  // }
+
+  // setIsLoading(false);
+  //   };
+  // }
 
   return (
     <section className="login">
