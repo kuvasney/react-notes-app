@@ -1,3 +1,5 @@
+@use "../../../styles/variables" as *;
+
 .notes-content {
   .notes-list {
     display: flex;
@@ -10,13 +12,21 @@
     border-radius: 5px;
     border: 2px solid var(--border-color);
     padding: 10px;
-    min-width: 250px;
-    max-width: 50%;
-    max-height: 500px;
     overflow: auto;
     line-height: 1.4;
     color: #333;
     position: relative;
+    width: 95vw;
+    max-width: 95vw;
+    margin-inline: auto;
+
+    @include respond-to("tablet") {
+      width: auto;
+      min-width: 250px;
+      max-width: 50%;
+      max-height: 500px;
+      margin-inline: 0;
+    }
 
     .buttons-wrapper {
       position: absolute;
