@@ -1,13 +1,13 @@
 [
-    {
-        "_id": "ObjectId('1234545455')",
-        "username": "Rafael Teste",
-        "email": "admin@admin",
-        "password": "hash",
-        "ativo": true,
-        "emailVerificado": false,
-        "dataCriacao": "2025-10-31T23:12:32.641+00:00",
-        "dataUltimaAtualizacao": "2025-10-31T23:12:32.641+00:00",
-        "__v": 0
-    }
+  {
+    "_id": "ObjectId('1234545455')",
+    "username": "Rafael Teste",
+    "email": "admin@admin",
+    "password": "$2b$12$lRMw5KqmuUKvjwYi7V5qre79r4AG5DOBciViNOP6FIlfZW5ttZuwG",
+    "ativo": true,
+    "emailVerificado": false,
+    "dataCriacao": "2025-10-31T23:12:32.641+00:00",
+    "dataUltimaAtualizacao": "2025-10-31T23:12:32.641+00:00",
+    "__v": 0
+  }
 ]

@@ -102,7 +102,7 @@ export default function Navigator() {
           >
             <FiPlusCircle />
           </button>
-          <button onClick={refetchNotes} title=" Reload Notes">
+          <button onClick={() => refetchNotes(!isNotes)} title=" Reload Notes">
             <FiRefreshCw />
           </button>
           <button onClick={logout}>

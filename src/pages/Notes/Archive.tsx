@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useNotesStore } from "@/stores/notesStore";
 import { useNotesApi } from "@/hooks/useNotesApi";
 import NotesContent from "./components/NotesContent";
@@ -7,8 +8,13 @@ export default function Archive() {
   // Usar a store
   const { getArchivedNotes, loading } = useNotesStore();
 
-  // Carregar dados da API (SEMPRE executar)
-  useNotesApi();
+  // Carregar dados da API com filtro de arquivadas
+  const { fetchNotes } = useNotesApi();
+
+  // Carregar notas arquivadas ao montar o componente
+  useEffect(() => {
+    fetchNotes(true); // archived = true
+  }, []);
 
   // Obter notas arquivadas
   const archivedNotes = getArchivedNotes();

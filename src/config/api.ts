@@ -9,6 +9,7 @@ export const API_CONFIG: ApiConfig = {
   timeout: parseInt(import.meta.env.VITE_API_TIMEOUT || "10000"),
   headers: {
     "Content-Type": "application/json",
+    Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
   },
 };
 

@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useNotesStore } from "@/stores/notesStore";
 import { useNotesApi } from "@/hooks/useNotesApi";
 import NotesContent from "./components/NotesContent";
@@ -8,7 +9,11 @@ export default function Notes() {
   const { getActiveNotes, loading } = useNotesStore();
 
   // Carregar dados da API (SEMPRE executar)
-  useNotesApi();
+  const { fetchNotes } = useNotesApi();
+
+  useEffect(() => {
+    fetchNotes();
+  }, []);
 
   // Obter notas ativas
   const activeNotes = getActiveNotes();

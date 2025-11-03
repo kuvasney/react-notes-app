@@ -20,7 +20,7 @@ export const useNotesApi = () => {
     initialized,
   } = useNotesStore();
 
-  const fetchNotes = async () => {
+  const fetchNotes = async (archived = false) => {
     try {
       setLoading(true);
       setError(null);
@@ -29,9 +29,13 @@ export const useNotesApi = () => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
 
-      const response = await fetch(buildApiUrl(API_ENDPOINTS.notes), {
-        signal: controller.signal,
-      });
+      const response = await fetch(
+        buildApiUrl(API_ENDPOINTS.notes + `?archived=${archived}`),
+        {
+          headers: API_CONFIG.headers,
+          signal: controller.signal,
+        }
+      );
 
       clearTimeout(timeoutId);
 
@@ -59,6 +63,16 @@ export const useNotesApi = () => {
 
       if (error instanceof Error && error.name === "AbortError") {
         setError("Timeout na requisição - API não respondeu");
+      } else if (
+        error instanceof Error &&
+        error.message === "Erro ao carregar notas: 401"
+      ) {
+        alert(
+          "Seu tempo de sessão expirou. Clique em OK para retornar à tela inicial."
+        );
+        localStorage.removeItem("isLoggedIn");
+        window.location.href = "/";
+        setError("token inválido ou expirado");
       } else {
         setError(error instanceof Error ? error.message : "Erro desconhecido");
       }
