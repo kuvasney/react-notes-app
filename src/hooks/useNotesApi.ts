@@ -7,6 +7,7 @@ import {
   transformMongoNote,
   transformNoteForMongo,
 } from "@/utils/apiTransforms";
+import { useAuth } from "./useAuth";
 
 export const useNotesApi = () => {
   const {
@@ -19,6 +20,8 @@ export const useNotesApi = () => {
     setError,
     initialized,
   } = useNotesStore();
+
+  const { isLoggedIn } = useAuth();
 
   const fetchNotes = async (archived = false) => {
     try {
@@ -67,11 +70,13 @@ export const useNotesApi = () => {
         error instanceof Error &&
         error.message === "Erro ao carregar notas: 401"
       ) {
-        alert(
-          "Seu tempo de sessão expirou. Clique em OK para retornar à tela inicial."
-        );
-        localStorage.removeItem("isLoggedIn");
-        window.location.href = "/";
+        if (isLoggedIn) {
+          alert(
+            "Seu tempo de sessão expirou. Clique em OK para retornar à tela inicial."
+          );
+          localStorage.removeItem("isLoggedIn");
+          window.location.href = "/";
+        }
         setError("token inválido ou expirado");
       } else {
         setError(error instanceof Error ? error.message : "Erro desconhecido");
