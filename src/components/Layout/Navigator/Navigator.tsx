@@ -17,6 +17,7 @@ import {
 export default function Navigator() {
   const location = useLocation();
   const navigate = useNavigate();
+  const { fetchNotes } = useNotesApi();
 
   const [isHomePage, setIsHomePage] = useState(location.pathname === "/");
   const [isNotes, setIsNotes] = useState(location.pathname === "/notes");
@@ -26,25 +27,33 @@ export default function Navigator() {
     return window.matchMedia("(prefers-color-scheme: dark)").matches;
   });
 
-  const { refetch: refetchNotes } = useNotesApi();
+  // // Só chama useNotesApi se não estiver na Home
+  // const notesApi = !isHomePage ? useNotesApi() : { refetch: () => {} };
+  // const refetchNotes = notesApi.refetch;
+
   const { isLoggedIn, logout: authLogout } = useAuth();
 
   // Verificação extra para garantir sincronização
   const isAuthenticated =
     isLoggedIn || localStorage.getItem("isLoggedIn") === "true";
 
+  let archived = false;
+  if (location.pathname === "/notes/archive") {
+    archived = true;
+  }
+
   // Atualizar estados quando a rota mudar
   useEffect(() => {
     setIsHomePage(location.pathname === "/");
     setIsNotes(location.pathname === "/notes");
 
-    // Debug
-    console.log("Navigator - Route changed:", {
-      pathname: location.pathname,
-      isHomePage: location.pathname === "/",
-      isNotes: location.pathname === "/notes",
-      isLoggedIn,
-    });
+    // // Debug
+    // console.log("Navigator - Route changed:", {
+    //   pathname: location.pathname,
+    //   isHomePage: location.pathname === "/",
+    //   isNotes: location.pathname === "/notes",
+    //   isLoggedIn,
+    // });
   }, [location.pathname, isLoggedIn]);
 
   useEffect(() => {
@@ -55,6 +64,10 @@ export default function Navigator() {
   }, [darkMode]);
 
   const changeLight = () => setDarkMode(!darkMode);
+
+  const refetchNotes = (archived: boolean) => {
+    fetchNotes(archived);
+  };
 
   const logout = () => {
     try {

@@ -7,6 +7,7 @@ import NotesSearch from "./NotesSearch";
 import { useNotesStore } from "@/stores/notesStore";
 import { useNotesApi } from "@/hooks/useNotesApi";
 import { FiTrash2, FiEdit2, FiStar, FiArchive } from "react-icons/fi";
+import { useLocation } from "react-router-dom";
 
 interface NotesContentProps {
   notes: Note[];
@@ -24,7 +25,15 @@ export default function NotesContent({
   const [searchTerm, setSearchTerm] = useState("");
   const [filterByTag, setFilterByTag] = useState(false);
 
-  const { removeNote, reorderNotes, editNote: updateNoteApi } = useNotesApi();
+  const {
+    removeNote,
+    reorderNotes,
+    editNote: updateNoteApi,
+    refetch,
+  } = useNotesApi();
+
+  const location = useLocation();
+  const isArchivePage = location.pathname.includes("notes/archive");
 
   if (loading) return <div>Carregando...</div>;
 
@@ -109,7 +118,7 @@ export default function NotesContent({
     e.preventDefault();
   };
 
-  const dropOverHandler = (e: React.DragEvent<HTMLDivElement>) => {
+  const dropOverHandler = async (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
 
     if (
@@ -134,15 +143,23 @@ export default function NotesContent({
       // Remove o elemento da posição original
       const [draggedNote] = allNotes.splice(realDraggedIndex, 1);
 
-      // Insere o elemento na nova posição
-      allNotes.splice(realTargetIndex, 0, draggedNote);
+      // Ajusta o índice de destino se necessário
+      // Se arrastar de cima para baixo, o índice diminui após remover
+      const adjustedTargetIndex =
+        realDraggedIndex < realTargetIndex
+          ? realTargetIndex - 1
+          : realTargetIndex;
 
-      console.log(
-        `Movendo nota do índice ${draggedElement} para ${draggedOverElement}`
-      );
+      // Insere o elemento na nova posição
+      allNotes.splice(adjustedTargetIndex, 0, draggedNote);
+
+      const notesIndex = allNotes
+        .map((note) => note._id)
+        .filter((id): id is string => id !== undefined);
 
       // Atualiza o estado com a nova ordem
-      reorderNotes(allNotes);
+      await reorderNotes(notesIndex);
+      await refetch(isArchivePage);
 
       // Reset das variáveis
       draggedElement = null;

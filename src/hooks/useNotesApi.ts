@@ -15,13 +15,13 @@ export const useNotesApi = () => {
     addNote,
     updateNote,
     deleteNote,
-    reorderNotes,
+    setIndexNotes,
     setLoading,
     setError,
     initialized,
   } = useNotesStore();
 
-  const { isLoggedIn } = useAuth();
+  // const { isLoggedIn } = useAuth();
 
   const fetchNotes = async (archived = false) => {
     try {
@@ -57,27 +57,32 @@ export const useNotesApi = () => {
         : [];
 
       setNotes(transformedNotes); // Isso automaticamente marca como initialized: true
-      console.log("Notas carregadas da API:", {
-        total: data.pagination?.total || notes.length,
-        notes: transformedNotes,
-      });
+
+      // criar o array de indexNotes
+      const notesIds: string[] = transformedNotes.map((note) => note.id);
+      setIndexNotes(notesIds);
+
+      // console.log("Notas carregadas da API:", {
+      //   total: data.pagination?.total || notes.length,
+      //   notes: transformedNotes,
+      // });
     } catch (error) {
       console.error("Erro ao buscar notas:", error);
 
       if (error instanceof Error && error.name === "AbortError") {
         setError("Timeout na requisição - API não respondeu");
-      } else if (
-        error instanceof Error &&
-        error.message === "Erro ao carregar notas: 401"
-      ) {
-        if (isLoggedIn) {
-          alert(
-            "Seu tempo de sessão expirou. Clique em OK para retornar à tela inicial."
-          );
-          localStorage.removeItem("isLoggedIn");
-          window.location.href = "/";
-        }
-        setError("token inválido ou expirado");
+        // } else if (
+        //   error instanceof Error &&
+        //   error.message === "Erro ao carregar notas: 401"
+        // ) {
+        // if (isLoggedIn) {
+        //   alert(
+        //     "Seu tempo de sessão expirou. Clique em OK para retornar à tela inicial."
+        //   );
+        //   localStorage.removeItem("isLoggedIn");
+        //   window.location.href = "/";
+        // }
+        // setError("token inválido ou expirado");
       } else {
         setError(error instanceof Error ? error.message : "Erro desconhecido");
       }
@@ -164,6 +169,27 @@ export const useNotesApi = () => {
       setError(error instanceof Error ? error.message : "Erro desconhecido");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const reorderNotes = async (newIndexNotes: string[]) => {
+    setIndexNotes(newIndexNotes);
+
+    try {
+      const response = await fetch(buildApiUrl(API_ENDPOINTS.reorder), {
+        method: "POST",
+        headers: API_CONFIG.headers,
+        body: JSON.stringify({ noteIds: newIndexNotes }), // Apenas o array
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao reordenar notas");
+      }
+
+      console.log("Notas reordenadas com sucesso");
+    } catch (error) {
+      console.error("Erro ao reordenar notas:", error);
+      setError(error instanceof Error ? error.message : "Erro ao reordenar");
     }
   };
 

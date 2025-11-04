@@ -10,14 +10,15 @@ interface NotesState {
   initialized: boolean;
   showCreateForm: boolean;
   editingNote: Note | null;
+  indexNotes: string[];
 
   // Ações
   setNotes: (notes: Note[]) => void;
   setInitialized: (initialized: boolean) => void;
+  setIndexNotes: (indexNotes: string[]) => void;
   addNote: (note: Note) => void;
   updateNote: (id: string, updatedNote: Partial<Note>) => void;
   deleteNote: (id: string) => void;
-  reorderNotes: (reorderedNotes: Note[]) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
   setShowCreateForm: (show: boolean) => void;
@@ -44,6 +45,7 @@ export const useNotesStore = create<NotesState>()(
       // Ações
       setNotes: (notes) => set({ notes, initialized: true }),
       setInitialized: (initialized) => set({ initialized }),
+      setIndexNotes: (indexNotes) => set({ indexNotes }),
 
       addNote: (note) =>
         set((state) => ({
@@ -67,8 +69,6 @@ export const useNotesStore = create<NotesState>()(
         set((state) => ({
           notes: state.notes.filter((note) => note.id !== id),
         })),
-
-      reorderNotes: (reorderedNotes) => set({ notes: reorderedNotes }),
 
       setLoading: (loading) => set({ loading }),
       setError: (error) => set({ error }),

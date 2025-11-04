@@ -17,6 +17,7 @@ export interface EnvironmentConfig {
 export interface ApiEndpoints {
   notes: string;
   auth: string;
+  reorder: string;
   register: string;
 }
 

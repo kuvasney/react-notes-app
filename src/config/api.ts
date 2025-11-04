@@ -16,6 +16,7 @@ export const API_CONFIG: ApiConfig = {
 // Endpoints da API
 export const API_ENDPOINTS: ApiEndpoints = {
   notes: "/api/notes",
+  reorder: "/api/notes/reorder",
   auth: "/api/users/login",
   register: "/api/users/register",
 };

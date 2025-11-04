@@ -17,6 +17,7 @@ export interface Note {
   pinned: boolean;
   lembretes: Reminder[];
   colaboradores: string[];
+  order: number;
 }
 
 // Types utilitários para o app de notas
