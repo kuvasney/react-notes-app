@@ -4,6 +4,8 @@ import { renderTextWithBreaks } from "@/utils/utils";
 import "./NotesContent.scss";
 import NotesForm from "./NotesForm";
 import NotesSearch from "./NotesSearch";
+import AddCollaborator from "@/components/AddCollaborator";
+import NotesCollaborators from "./NotesCollaborators";
 import { useNotesStore } from "@/stores/notesStore";
 import { useNotesApi } from "@/hooks/useNotesApi";
 import { FiTrash2, FiEdit2, FiStar, FiArchive } from "react-icons/fi";
@@ -253,7 +255,11 @@ export default function NotesContent({
                 onDrop={dropOverHandler}
                 style={{ backgroundColor: note.cor || "transparent" }}
               >
-                <div className="wrapper-buttons">
+                <div
+                  className="wrapper-buttons"
+                  onMouseDown={(e) => e.stopPropagation()}
+                >
+                  <AddCollaborator note={note} />
                   <button
                     title="Pin this note"
                     className={`pin-icon no-button ${
@@ -292,7 +298,10 @@ export default function NotesContent({
                   <em>Last edited:</em>{" "}
                   {new Date(note.dataUltimaEdicao).toLocaleDateString()}
                 </p>
-                <div className="wrapper-buttons">
+                <div
+                  className="wrapper-buttons"
+                  onMouseDown={(e) => e.stopPropagation()}
+                >
                   <button className="edit-button" onClick={editNote(note)}>
                     <FiEdit2 />
                   </button>
@@ -304,6 +313,7 @@ export default function NotesContent({
                     <FiTrash2 />
                   </button>
                 </div>
+                <NotesCollaborators note={note} />
               </div>
             ))
           )}

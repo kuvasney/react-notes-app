@@ -12,6 +12,7 @@ export default function Notes() {
   const { fetchNotes } = useNotesApi();
 
   useEffect(() => {
+    console.log("Notes page mounted, fetching active notes");
     fetchNotes();
   }, []);
 

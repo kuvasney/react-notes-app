@@ -23,6 +23,9 @@ $light-box-color: #ccc;
 $light-border-color: #242424;
 $light-border-hover-color: #646cff;
 
+$error: #ff4d4d;
+$success: #374ed3;
+
 @use "sass:map";
 
 $breakpoints: (

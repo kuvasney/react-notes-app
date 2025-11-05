@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useUserApi } from "@/hooks/useUserApi";
-import { FiAlertCircle, FiCheckCircle, FiEye, FiEyeOff } from "react-icons/fi";
+import { FiAlertCircle, FiCheckCircle } from "react-icons/fi";
 import ToggleVisibility from "@/components/ToggleVisibility/ToggleVisibility";
 import "./RegisterForm.scss";
 

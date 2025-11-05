@@ -1,6 +1,5 @@
-import { useEffect } from "react";
 import { useNotesStore } from "@/stores/notesStore";
-import { buildApiUrl, API_ENDPOINTS, API_CONFIG } from "@/config/api";
+import { buildApiUrl, API_ENDPOINTS, getAuthHeaders } from "@/config/api";
 import type { Note } from "@/types/Note";
 import {
   transformMongoNotes,
@@ -21,7 +20,7 @@ export const useNotesApi = () => {
     initialized,
   } = useNotesStore();
 
-  // const { isLoggedIn } = useAuth();
+  const { isLoggedIn } = useAuth();
 
   const fetchNotes = async (archived = false) => {
     try {
@@ -35,7 +34,7 @@ export const useNotesApi = () => {
       const response = await fetch(
         buildApiUrl(API_ENDPOINTS.notes + `?archived=${archived}`),
         {
-          headers: API_CONFIG.headers,
+          headers: getAuthHeaders(),
           signal: controller.signal,
         }
       );
@@ -71,18 +70,15 @@ export const useNotesApi = () => {
 
       if (error instanceof Error && error.name === "AbortError") {
         setError("Timeout na requisição - API não respondeu");
-        // } else if (
-        //   error instanceof Error &&
-        //   error.message === "Erro ao carregar notas: 401"
-        // ) {
-        // if (isLoggedIn) {
-        //   alert(
-        //     "Seu tempo de sessão expirou. Clique em OK para retornar à tela inicial."
-        //   );
-        //   localStorage.removeItem("isLoggedIn");
-        //   window.location.href = "/";
-        // }
-        // setError("token inválido ou expirado");
+      } else if (
+        error instanceof Error &&
+        error.message === "Erro ao carregar notas: 401"
+      ) {
+        if (isLoggedIn) {
+          localStorage.removeItem("isLoggedIn");
+          window.location.href = "/";
+        }
+        setError("token inválido ou expirado");
       } else {
         setError(error instanceof Error ? error.message : "Erro desconhecido");
       }
@@ -101,7 +97,7 @@ export const useNotesApi = () => {
 
       const response = await fetch(buildApiUrl(API_ENDPOINTS.notes), {
         method: "POST",
-        headers: API_CONFIG.headers,
+        headers: getAuthHeaders(),
         body: JSON.stringify(transformNoteForMongo(newNote)),
       });
 
@@ -131,7 +127,7 @@ export const useNotesApi = () => {
         buildApiUrl(`${API_ENDPOINTS.notes}/${newNote.id}`),
         {
           method: "PUT",
-          headers: API_CONFIG.headers,
+          headers: getAuthHeaders(),
           body: JSON.stringify(transformNoteForMongo(newNote)),
         }
       );
@@ -157,6 +153,7 @@ export const useNotesApi = () => {
         buildApiUrl(`${API_ENDPOINTS.notes}/${noteId}`),
         {
           method: "DELETE",
+          headers: getAuthHeaders(),
         }
       );
 
@@ -178,27 +175,101 @@ export const useNotesApi = () => {
     try {
       const response = await fetch(buildApiUrl(API_ENDPOINTS.reorder), {
         method: "POST",
-        headers: API_CONFIG.headers,
+        headers: getAuthHeaders(),
         body: JSON.stringify({ noteIds: newIndexNotes }), // Apenas o array
       });
 
       if (!response.ok) {
         throw new Error("Erro ao reordenar notas");
       }
-
-      console.log("Notas reordenadas com sucesso");
     } catch (error) {
       console.error("Erro ao reordenar notas:", error);
       setError(error instanceof Error ? error.message : "Erro ao reordenar");
     }
   };
 
-  // Carregar notas apenas se não foi inicializado
-  useEffect(() => {
-    if (!initialized) {
-      fetchNotes();
+  const addcollaborator = async (payload: {
+    email: string;
+    noteId?: string;
+  }) => {
+    try {
+      const response = await fetch(
+        buildApiUrl(API_ENDPOINTS.notes + "/addcollaborator"),
+        {
+          method: "PUT",
+          headers: getAuthHeaders(),
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!response.ok) {
+        // Tenta extrair a mensagem de erro do corpo da resposta
+        const errorData = await response.json().catch(() => ({}));
+
+        // Cria um erro customizado com status e mensagem
+        const error = new Error(
+          errorData.message ||
+            errorData.error ||
+            "Erro ao adicionar colaborador"
+        ) as Error & { status: number; data: any };
+        error.status = response.status;
+        error.data = errorData;
+
+        throw error;
+      }
+
+      return await response.json(); // Retorna os dados de sucesso
+    } catch (error) {
+      console.error("Erro ao adicionar colaborador:", error);
+      // Re-lança o erro para o componente tratar
+      throw error;
     }
-  }, [initialized]); // ← Remove 'loading' das dependências
+  };
+
+  const removecollaborator = async (payload: {
+    email: string;
+    noteId?: string;
+  }) => {
+    try {
+      const response = await fetch(
+        buildApiUrl(API_ENDPOINTS.notes + "/removecollaborator"),
+        {
+          method: "DELETE",
+          headers: getAuthHeaders(),
+          body: JSON.stringify(payload),
+        }
+      );
+
+      if (!response.ok) {
+        // Tenta extrair a mensagem de erro do corpo da resposta
+        const errorData = await response.json().catch(() => ({}));
+
+        // Cria um erro customizado com status e mensagem
+        const error = new Error(
+          errorData.message || errorData.error || "Erro ao remover colaborador"
+        ) as Error & { status: number; data: any };
+        error.status = response.status;
+        error.data = errorData;
+
+        throw error;
+      }
+
+      return await response.json(); // Retorna os dados de sucesso
+    } catch (error) {
+      console.error("Erro ao remover colaborador:", error);
+      // Re-lança o erro para o componente tratar
+      throw error;
+    }
+  };
+
+  // // Carregar notas apenas se não foi inicializado
+  // useEffect(() => {
+  //   console.log("useNotesApi - checking initialization:", { initialized });
+  //   if (!initialized) {
+  //     console.log("useNotesApi - checking initialization:", { initialized });
+  //     fetchNotes();
+  //   }
+  // }, [initialized]); // ← Remove 'loading' das dependências
 
   return {
     fetchNotes,
@@ -207,6 +278,8 @@ export const useNotesApi = () => {
     editNote,
     removeNote,
     reorderNotes,
+    addcollaborator,
+    removecollaborator,
     isInitialized: initialized,
   };
 };

@@ -80,11 +80,14 @@ export default function User() {
               />
             </div>
             <div className="input-container">
-              <label>Change Password:</label>
-              <ToggleVisibility
-                isVisible={isPasswordVisible}
-                onToggle={setIsPasswordVisible}
-              />
+              <label>
+                Change Password:
+                <ToggleVisibility
+                  isVisible={isPasswordVisible}
+                  onToggle={setIsPasswordVisible}
+                />
+              </label>
+
               <input
                 type={isPasswordVisible ? "text" : "password"}
                 value={password}

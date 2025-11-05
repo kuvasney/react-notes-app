@@ -1,4 +1,4 @@
-import { buildApiUrl, API_ENDPOINTS, API_CONFIG } from "@/config/api";
+import { buildApiUrl, API_ENDPOINTS, getAuthHeaders } from "@/config/api";
 import { User } from "../types";
 
 export const useUserApi = () => {
@@ -11,7 +11,7 @@ export const useUserApi = () => {
       buildApiUrl(API_ENDPOINTS.users + "/register"),
       {
         method: "POST",
-        headers: API_CONFIG.headers,
+        headers: getAuthHeaders(),
         body: JSON.stringify({ username, email, password }),
       }
     );
@@ -26,7 +26,7 @@ export const useUserApi = () => {
   const loginUser = async (email: string, password: string) => {
     const response = await fetch(buildApiUrl(API_ENDPOINTS.auth), {
       method: "POST",
-      headers: API_CONFIG.headers,
+      headers: getAuthHeaders(),
       body: JSON.stringify({ email, password }),
     });
 
@@ -42,7 +42,7 @@ export const useUserApi = () => {
       buildApiUrl(`${API_ENDPOINTS.users}/${userId}`),
       {
         method: "PUT",
-        headers: API_CONFIG.headers,
+        headers: getAuthHeaders(),
         body: JSON.stringify(data),
       }
     );

@@ -13,6 +13,7 @@ export default function Archive() {
 
   // Carregar notas arquivadas ao montar o componente
   useEffect(() => {
+    console.log("Archive page mounted, fetching archived notes");
     fetchNotes(true); // archived = true
   }, []);
 

@@ -9,8 +9,16 @@ export const API_CONFIG: ApiConfig = {
   timeout: parseInt(import.meta.env.VITE_API_TIMEOUT || "10000"),
   headers: {
     "Content-Type": "application/json",
-    Authorization: `Bearer ${sessionStorage.getItem("userToken")}`,
   },
+};
+
+// Função para obter headers com token dinâmico
+export const getAuthHeaders = (): HeadersInit => {
+  const token = sessionStorage.getItem("userToken");
+  return {
+    "Content-Type": "application/json",
+    ...(token && { Authorization: `Bearer ${token}` }),
+  };
 };
 
 // Endpoints da API

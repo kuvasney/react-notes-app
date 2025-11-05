@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
-import { FiAlertCircle, FiCheckCircle } from "react-icons/fi";
+import { FiAlertCircle } from "react-icons/fi";
 import { useUserApi } from "@/hooks/useUserApi";
 import { useUserStore } from "@/stores/userStore";
 import ToggleVisibility from "@/components/ToggleVisibility/ToggleVisibility";
@@ -14,17 +14,10 @@ export default function LoginForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const navigate = useNavigate();
-  const { login, isLoggedIn } = useAuth();
+  const { login } = useAuth();
 
   const { loginUser } = useUserApi();
   const { setUser } = useUserStore();
-
-  // Redireciona se já estiver logado
-  useEffect(() => {
-    if (isLoggedIn) {
-      navigate("/notes", { replace: true });
-    }
-  }, [isLoggedIn, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -41,12 +34,13 @@ export default function LoginForm() {
       const response = await loginUser(email.trim(), password.trim());
       if (response.tokens) {
         login(response.tokens); // Atualiza o estado de autenticação
-        sessionStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("isLoggedIn", "true");
         sessionStorage.setItem("user", JSON.stringify(response.user));
         setUser(response.user);
         sessionStorage.setItem("userToken", response.tokens.accessToken);
         // Verifica se há redirecionamento pendente
         const redirectPath = sessionStorage.getItem("redirectAfterLogin");
+        console.log("Redirecting to:", redirectPath);
         navigate(redirectPath || "/notes");
         sessionStorage.removeItem("redirectAfterLogin");
       }

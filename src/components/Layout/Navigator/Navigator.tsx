@@ -16,7 +16,6 @@ import {
 } from "react-icons/fi";
 
 import UserName from "../../UserName";
-import User from "../../../pages/User";
 
 export default function Navigator() {
   const location = useLocation();
@@ -31,10 +30,6 @@ export default function Navigator() {
   const [darkMode, setDarkMode] = useState(() => {
     return window.matchMedia("(prefers-color-scheme: dark)").matches;
   });
-
-  // // Só chama useNotesApi se não estiver na Home
-  // const notesApi = !isHomePage ? useNotesApi() : { refetch: () => {} };
-  // const refetchNotes = notesApi.refetch;
 
   const { isLoggedIn, logout: authLogout } = useAuth();
 
@@ -70,9 +65,9 @@ export default function Navigator() {
 
   const changeLight = () => setDarkMode(!darkMode);
 
-  const refetchNotes = (archived: boolean) => {
+  function refetchNotes(archived: boolean) {
     fetchNotes(archived);
-  };
+  }
 
   const logout = () => {
     try {

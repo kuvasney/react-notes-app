@@ -26,12 +26,11 @@ export const useAuth = () => {
     localStorage.setItem("isLoggedIn", "true");
     localStorage.setItem("userEmail", email);
     setIsLoggedIn(true);
-    console.log("useAuth - Login executado:", { email, isLoggedIn: true });
   };
 
   const logout = () => {
-    localStorage.removeItem("isLoggedIn");
-    localStorage.removeItem("userEmail");
+    sessionStorage.clear();
+    localStorage.clear();
     setIsLoggedIn(false);
   };
 

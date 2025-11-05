@@ -91,6 +91,10 @@ body {
   }
 }
 
+ul {
+  list-style: none;
+}
+
 .hwr {
   font-family: "Indie Flower", cursive;
   font-weight: 400;
@@ -208,8 +212,24 @@ button:focus-visible {
   }
 
   label {
-    color: #000;
+    display: block;
+    margin-bottom: 0.5em;
   }
+}
+
+.error {
+  color: $error;
+}
+
+.success {
+  color: $success;
+}
+
+p.error, p.success {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: small;
 }
 
 .wrapper-buttons {
@@ -217,6 +237,12 @@ button:focus-visible {
   gap: 10px;
 }
 
+.add-collaborator {
+
+  h2 {
+    margin-block: .5em;
+  }
+}
 // Gradient background vertical suave: 80% button-color, 20% border-color
 .gradient-background {
   background: linear-gradient(
