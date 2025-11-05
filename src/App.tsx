@@ -7,6 +7,7 @@ import Header from "./components/Layout/Header";
 import Register from "./pages/Register";
 import Archive from "./pages/Notes/Archive";
 import ProtectedRoute from "./components/ProtectedRoute";
+import User from "./pages/User";
 
 function App() {
   return (
@@ -29,6 +30,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <Archive />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/user"
+            element={
+              <ProtectedRoute>
+                <User />
               </ProtectedRoute>
             }
           />

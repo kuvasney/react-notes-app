@@ -1,4 +1,5 @@
 import { buildApiUrl, API_ENDPOINTS, API_CONFIG } from "@/config/api";
+import { User } from "../types";
 
 export const useUserApi = () => {
   const registerUser = async (
@@ -6,11 +7,14 @@ export const useUserApi = () => {
     email: string,
     password: string
   ) => {
-    const response = await fetch(buildApiUrl(API_ENDPOINTS.register), {
-      method: "POST",
-      headers: API_CONFIG.headers,
-      body: JSON.stringify({ username, email, password }),
-    });
+    const response = await fetch(
+      buildApiUrl(API_ENDPOINTS.users + "/register"),
+      {
+        method: "POST",
+        headers: API_CONFIG.headers,
+        body: JSON.stringify({ username, email, password }),
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to register user");
@@ -33,5 +37,22 @@ export const useUserApi = () => {
     return response.json();
   };
 
-  return { registerUser, loginUser };
+  const updateUser = async (userId: string, data: Partial<User>) => {
+    const response = await fetch(
+      buildApiUrl(`${API_ENDPOINTS.users}/${userId}`),
+      {
+        method: "PUT",
+        headers: API_CONFIG.headers,
+        body: JSON.stringify(data),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to update user");
+    }
+
+    return response.json();
+  };
+
+  return { registerUser, loginUser, updateUser };
 };

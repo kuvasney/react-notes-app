@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useNotesStore } from "@/stores/notesStore";
+import { useUserStore } from "@/stores/userStore";
 import { useNotesApi } from "@/hooks/useNotesApi";
 import { useAuth } from "@/hooks/useAuth";
 import { NavLink } from "react-router-dom";
@@ -14,6 +15,9 @@ import {
   FiLogOut,
 } from "react-icons/fi";
 
+import UserName from "../../UserName";
+import User from "../../../pages/User";
+
 export default function Navigator() {
   const location = useLocation();
   const navigate = useNavigate();
@@ -23,6 +27,7 @@ export default function Navigator() {
   const [isNotes, setIsNotes] = useState(location.pathname === "/notes");
 
   const { reset, setShowCreateForm } = useNotesStore();
+  const { getUser } = useUserStore();
   const [darkMode, setDarkMode] = useState(() => {
     return window.matchMedia("(prefers-color-scheme: dark)").matches;
   });
@@ -84,6 +89,11 @@ export default function Navigator() {
 
   return (
     <div className="wrapper-buttons">
+      <div className="user-info">
+        <NavLink to="/user" className="button-link user-link">
+          <UserName />
+        </NavLink>
+      </div>
       <button
         className="change-light"
         onClick={changeLight}

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useUserApi } from "@/hooks/useUserApi";
 import { FiAlertCircle, FiCheckCircle, FiEye, FiEyeOff } from "react-icons/fi";
+import ToggleVisibility from "@/components/ToggleVisibility/ToggleVisibility";
 import "./RegisterForm.scss";
 
 export default function RegisterForm() {
@@ -11,10 +12,6 @@ export default function RegisterForm() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-
-  const togglePasswordVisibility = () => {
-    setIsPasswordVisible((prev) => !prev);
-  };
 
   const { registerUser } = useUserApi();
 
@@ -89,9 +86,10 @@ export default function RegisterForm() {
       <div className="input-container">
         <label htmlFor="password">
           Password
-          <span className="toggle-password" onClick={togglePasswordVisibility}>
-            {isPasswordVisible ? <FiEyeOff /> : <FiEye />}
-          </span>
+          <ToggleVisibility
+            isVisible={isPasswordVisible}
+            onToggle={setIsPasswordVisible}
+          />
         </label>
         <input
           type={isPasswordVisible ? "text" : "password"}

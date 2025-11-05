@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { FiAlertCircle, FiCheckCircle } from "react-icons/fi";
 import { useUserApi } from "@/hooks/useUserApi";
+import { useUserStore } from "@/stores/userStore";
+import ToggleVisibility from "@/components/ToggleVisibility/ToggleVisibility";
 import "./LoginForm.scss";
 
 export default function LoginForm() {
@@ -10,10 +12,12 @@ export default function LoginForm() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const navigate = useNavigate();
   const { login, isLoggedIn } = useAuth();
 
   const { loginUser } = useUserApi();
+  const { setUser } = useUserStore();
 
   // Redireciona se já estiver logado
   useEffect(() => {
@@ -38,7 +42,8 @@ export default function LoginForm() {
       if (response.tokens) {
         login(response.tokens); // Atualiza o estado de autenticação
         sessionStorage.setItem("isLoggedIn", "true");
-        sessionStorage.setItem("userEmail", email.trim());
+        sessionStorage.setItem("user", JSON.stringify(response.user));
+        setUser(response.user);
         sessionStorage.setItem("userToken", response.tokens.accessToken);
         // Verifica se há redirecionamento pendente
         const redirectPath = sessionStorage.getItem("redirectAfterLogin");
@@ -86,8 +91,12 @@ export default function LoginForm() {
         </div>
 
         <div className="input-container">
+          <ToggleVisibility
+            isVisible={isPasswordVisible}
+            onToggle={setIsPasswordVisible}
+          />
           <input
-            type="password"
+            type={isPasswordVisible ? "text" : "password"}
             placeholder="Senha"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
