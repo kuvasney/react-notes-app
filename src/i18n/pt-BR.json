@@ -1,0 +1,141 @@
+{
+  "common": {
+    "loading": "Carregando...",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "delete": "Excluir",
+    "edit": "Editar",
+    "close": "Fechar",
+    "add": "Adicionar",
+    "search": "Buscar",
+    "clear": "Limpar",
+    "guest": "Convidado"
+  },
+  "auth": {
+    "login": {
+      "title": "Entrar",
+      "email": "Email",
+      "password": "Senha",
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Senha",
+      "loginButton": "Entrar",
+      "loggingIn": "Entrando...",
+      "emailRequired": "Email é obrigatório",
+      "passwordRequired": "Senha é obrigatória",
+      "noAccount": "Não tem uma conta?",
+      "registerLink": "Registre-se aqui"
+    },
+    "register": {
+      "title": "Crie sua conta Take Note",
+      "name": "Nome",
+      "email": "Email",
+      "password": "Senha",
+      "registerButton": "Registrar",
+      "registering": "Registrando usuário...",
+      "success": "Usuário registrado com sucesso!",
+      "hasAccount": "Já tem uma conta?",
+      "loginLink": "Faça login aqui"
+    },
+    "logout": "Sair"
+  },
+  "notes": {
+    "title": "Notas",
+    "archivedTitle": "Notas Arquivadas",
+    "createNote": "Criar Nova Nota",
+    "editNote": "Editar Nota",
+    "deleteNote": "Excluir nota",
+    "deleteConfirm": "Tem certeza que deseja excluir esta nota?",
+    "deleteError": "Erro ao deletar a nota. Tente novamente.",
+    "emptyState": "Nenhuma nota encontrada. Crie sua primeira nota!",
+    "noNotes": "Nenhuma nota disponível",
+    "noNotesFound": "Nenhuma nota encontrada",
+    "form": {
+      "title": "Título",
+      "titlePlaceholder": "Título",
+      "titleRequired": "Título é obrigatório",
+      "content": "Conteúdo",
+      "contentPlaceholder": "Sua nota aqui",
+      "contentRequired": "Conteúdo é obrigatório",
+      "color": "Cor da nota:",
+      "tags": "Tags:",
+      "tagsPlaceholder": "Coloque suas tags aqui separadas por vírgulas",
+      "saveError": "Erro ao salvar nota",
+      "saving": "Salvando...",
+      "updateButton": "Atualizar Nota",
+      "createButton": "Criar Nota"
+    },
+    "colors": {
+      "yellow": "🟡 Amarelo (Padrão)",
+      "blue": "🔵 Azul",
+      "green": "🟢 Verde",
+      "red": "🔴 Vermelho",
+      "purple": "🟣 Roxo",
+      "gray": "⚪ Cinza"
+    },
+    "search": {
+      "placeholder": "🔍 Buscar por uma nota...",
+      "clearSearch": "Limpar busca",
+      "results": "resultados",
+      "returned": "retornou",
+      "searchBy": "Sua busca por:",
+      "filterByTag": "Filtro por tag:"
+    },
+    "actions": {
+      "pin": "Fixar esta nota",
+      "unpin": "Desafixar esta nota",
+      "archive": "Arquivar esta nota",
+      "unarchive": "Desarquivar esta nota",
+      "reload": "Recarregar Notas",
+      "created": "Criado:",
+      "lastEdited": "Última edição:"
+    }
+  },
+  "user": {
+    "page": {
+      "title": "esta é a sua página",
+      "guestTitle": "Página do Usuário"
+    },
+    "form": {
+      "name": "Nome:",
+      "email": "Email:",
+      "changePassword": "Alterar Senha:",
+      "editButton": "Editar usuário",
+      "saving": "Salvando...",
+      "updating": "Atualizando usuário...",
+      "success": "Usuário atualizado com sucesso!",
+      "noInfo": "Nenhuma informação de usuário disponível."
+    }
+  },
+  "navigation": {
+    "notes": "Notas ativas",
+    "archivedNotes": "Notas Arquivadas",
+    "createNote": "Criar Nova Nota",
+    "reloadNotes": "Recarregar Notas",
+    "userPage": "Página do usuário",
+    "themeToggle": "Mudar para modo {{mode}}",
+    "light": "claro",
+    "dark": "escuro"
+  },
+  "modal": {
+    "close": "Fechar Modal"
+  },
+  "collaborators": {
+    "title": "Convidar Colaboradores",
+    "add": "Adicionar colaboradores",
+    "emailLabel": "Email do colaborador:",
+    "addButton": "Adicionar",
+    "remove": "Remover colaborador",
+    "success": "Usuário {{email}} adicionado com sucesso!",
+    "errors": {
+      "userNotFound": "Não foi possível encontrar o email \"{{email}}\". Você pode convidar esta pessoa!",
+      "noteNotFound": "Nota não encontrada.",
+      "resourceNotFound": "Recurso não encontrado.",
+      "alreadyCollaborator": "Este usuário já é um colaborador.",
+      "addError": "Erro ao adicionar colaborador."
+    }
+  },
+  "errors": {
+    "generic": "Ocorreu um erro",
+    "tryAgain": "Tente novamente"
+  }
+}

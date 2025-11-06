@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useUserApi } from "@/hooks/useUserApi";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { FiAlertCircle, FiCheckCircle } from "react-icons/fi";
 import ToggleVisibility from "@/components/ToggleVisibility/ToggleVisibility";
 import "./RegisterForm.scss";
@@ -14,6 +15,7 @@ export default function RegisterForm() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const { registerUser } = useUserApi();
+  const { t } = useLanguage();
 
   const handleCreateUser = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -25,13 +27,13 @@ export default function RegisterForm() {
     try {
       // Validações básicas
       if (!name.trim()) {
-        throw new Error("Name is required");
+        throw new Error(t("auth.register.nameRequired"));
       }
       if (!email.trim()) {
-        throw new Error("Email is required");
+        throw new Error(t("auth.login.emailRequired"));
       }
       if (!password.trim() || password.length < 6) {
-        throw new Error("Password must be at least 6 characters long");
+        throw new Error(t("auth.register.passwordMinLength"));
       }
 
       const userObject = {
@@ -62,7 +64,7 @@ export default function RegisterForm() {
   return (
     <form className="register-form" onSubmit={handleCreateUser}>
       <div className="input-container">
-        <label htmlFor="name">Name</label>
+        <label htmlFor="name">{t("auth.register.name")}</label>
         <input
           type="text"
           id="name"
@@ -73,7 +75,7 @@ export default function RegisterForm() {
         />
       </div>
       <div className="input-container">
-        <label htmlFor="email">Email</label>
+        <label htmlFor="email">{t("auth.register.email")}</label>
         <input
           type="email"
           id="email"
@@ -85,7 +87,7 @@ export default function RegisterForm() {
       </div>
       <div className="input-container">
         <label htmlFor="password">
-          Password
+          {t("auth.register.password")}
           <ToggleVisibility
             isVisible={isPasswordVisible}
             onToggle={setIsPasswordVisible}
@@ -100,8 +102,8 @@ export default function RegisterForm() {
           onChange={(e) => setPassword(e.target.value)}
         />
       </div>
-      <button type="submit">Register</button>
-      {isLoading && <p>Registering user...</p>}
+      <button type="submit">{t("auth.register.registerButton")}</button>
+      {isLoading && <p>{t("auth.register.registering")}</p>}
       {error && (
         <p className="error-message">
           <FiAlertCircle /> {error}
@@ -109,7 +111,7 @@ export default function RegisterForm() {
       )}
       {isSuccess && (
         <p className="success-message">
-          <FiCheckCircle /> User registered successfully!
+          <FiCheckCircle /> {t("auth.register.success")}
         </p>
       )}
     </form>

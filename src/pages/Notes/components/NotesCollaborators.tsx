@@ -1,7 +1,8 @@
 import { Note } from "@/types/Note";
 import { useNotesApi } from "@/hooks/useNotesApi";
 import { useUserStore } from "@/stores/userStore";
-import { FiUser, FiUserMinus, FiUsers } from "react-icons/fi";
+import { useLanguage } from "@/contexts/LanguageContext";
+import { FiUserMinus, FiUsers } from "react-icons/fi";
 
 export default function NotesCollaborators({ note }: { note: Note }) {
   const collaborators = note.colaboradores || [];
@@ -9,6 +10,7 @@ export default function NotesCollaborators({ note }: { note: Note }) {
 
   const { removecollaborator, fetchNotes } = useNotesApi();
   const { user } = useUserStore();
+  const { t } = useLanguage();
 
   async function handleRemovecollaborator(email: string) {
     if (noteId) {
@@ -31,7 +33,7 @@ export default function NotesCollaborators({ note }: { note: Note }) {
             {user?.email !== collaborator && (
               <button
                 className="no-button"
-                title="Remove collaborator"
+                title={t("collaborators.remove")}
                 onClick={() => handleRemovecollaborator(collaborator)}
               >
                 <FiUserMinus />

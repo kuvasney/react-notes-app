@@ -1,6 +1,7 @@
 import { useEffect } from "react";
 import { useNotesStore } from "@/stores/notesStore";
 import { useNotesApi } from "@/hooks/useNotesApi";
+import { useLanguage } from "@/contexts/LanguageContext";
 import NotesContent from "./components/NotesContent";
 import NotesContentSkeleton from "./components/NotesContentSkeleton";
 
@@ -10,6 +11,7 @@ export default function Notes() {
 
   // Carregar dados da API (SEMPRE executar)
   const { fetchNotes } = useNotesApi();
+  const { t } = useLanguage();
 
   useEffect(() => {
     console.log("Notes page mounted, fetching active notes");
@@ -29,7 +31,7 @@ export default function Notes() {
 
   return (
     <div className="content-wrapper">
-      <h1 className="hwr">Notes</h1>
+      <h1 className="hwr">{t("notes.title")}</h1>
 
       <section className="notes-list">
         {loading ? (

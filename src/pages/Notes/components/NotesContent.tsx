@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Note } from "@/types";
 import { renderTextWithBreaks } from "@/utils/utils";
+import { useLanguage } from "@/contexts/LanguageContext";
 import "./NotesContent.scss";
 import NotesForm from "./NotesForm";
 import NotesSearch from "./NotesSearch";
@@ -34,10 +35,12 @@ export default function NotesContent({
     refetch,
   } = useNotesApi();
 
+  const { t } = useLanguage();
+
   const location = useLocation();
   const isArchivePage = location.pathname.includes("notes/archive");
 
-  if (loading) return <div>Carregando...</div>;
+  if (loading) return <div>{t("common.loading")}</div>;
 
   // Função para iniciar edição de uma nota
   const editNote = (note: Note) => () => {
@@ -51,12 +54,11 @@ export default function NotesContent({
   };
 
   const handleDelete = async (noteId: string) => {
-    if (confirm("Tem certeza que deseja excluir esta nota?")) {
+    if (confirm(t("notes.deleteConfirm"))) {
       try {
         await removeNote(noteId);
       } catch (error) {
-        console.error("Erro ao deletar nota:", error);
-        alert("Erro ao deletar a nota. Tente novamente.");
+        alert(t("notes.deleteError"));
       }
     }
   };
@@ -203,7 +205,7 @@ export default function NotesContent({
       {showCreateForm && (
         <div>
           <div className="form-header">
-            <h3>Create New Note</h3>
+            <h3>{t("notes.createNote")}</h3>
           </div>
           <NotesForm onSave={hideCreateForm} onCancel={hideCreateForm} />
         </div>
@@ -212,7 +214,7 @@ export default function NotesContent({
       {editingNote && (
         <div>
           <div className="form-header">
-            <h3>Edit Note</h3>
+            <h3>{t("notes.editNote")}</h3>
           </div>
           <NotesForm
             note={editingNote}
@@ -226,22 +228,25 @@ export default function NotesContent({
         {/* Lista de notas */}
         {searchTerm.length > 0 && (
           <p className="search-result">
-            {filterByTag ? "Filtro por tag:" : "Sua busca por:"}{" "}
+            {filterByTag
+              ? t("notes.search.filterByTag")
+              : t("notes.search.searchBy")}{" "}
             <span className={`${filterByTag ? "tag" : ""}`}>{searchTerm}</span>{" "}
-            retornou {filteredNotes.length} resultados{" "}
-            <button onClick={() => handleSearchChange("")}>Limpar busca</button>
+            {t("notes.search.returned")} {filteredNotes.length}{" "}
+            {t("notes.search.results")}
+            <button onClick={() => handleSearchChange("")}>
+              {t("notes.search.clearSearch")}
+            </button>
           </p>
         )}
         <div className="notes-list">
           {notes.length === 0 ? (
             <div className="empty-state">
-              <p>Nenhuma nota encontrada. Crie sua primeira nota!</p>
+              <p>{t("notes.list.empty")}</p>
             </div>
           ) : filteredNotes.length === 0 ? (
             <div className="no-notes">
-              {searchTerm
-                ? "Nenhuma nota encontrada"
-                : "Nenhuma nota disponível"}
+              {searchTerm ? t("notes.list.noResults") : t("notes.list.noNotes")}
             </div>
           ) : (
             filteredNotes.map((note, index) => (
@@ -261,7 +266,11 @@ export default function NotesContent({
                 >
                   <AddCollaborator note={note} />
                   <button
-                    title="Pin this note"
+                    title={
+                      note.pinned
+                        ? t("notes.actions.unpin")
+                        : t("notes.actions.pin")
+                    }
                     className={`pin-icon no-button ${
                       note.pinned ? "active" : ""
                     }`}
@@ -270,7 +279,11 @@ export default function NotesContent({
                     <FiStar />
                   </button>
                   <button
-                    title="Archive this note"
+                    title={
+                      note.archived
+                        ? t("notes.actions.unarchive")
+                        : t("notes.actions.archive")
+                    }
                     className={`archive-icon no-button ${
                       note.archived ? "active" : ""
                     }`}
@@ -293,22 +306,27 @@ export default function NotesContent({
                   ))}
                 </div>
                 <p className="date">
-                  <em>Created:</em>{" "}
+                  <em>{t("notes.actions.created")}</em>{" "}
                   {new Date(note.dataCriacao).toLocaleDateString()}; &nbsp;
-                  <em>Last edited:</em>{" "}
+                  <em>{t("notes.actions.lastEdited")}</em>{" "}
                   {new Date(note.dataUltimaEdicao).toLocaleDateString()}
                 </p>
                 <div
                   className="wrapper-buttons"
                   onMouseDown={(e) => e.stopPropagation()}
                 >
-                  <button className="edit-button" onClick={editNote(note)}>
+                  <button
+                    className="edit-button"
+                    title={t("notes.editNote")}
+                    onClick={editNote(note)}
+                  >
                     <FiEdit2 />
                   </button>
                   <button
                     onClick={() => handleDelete(note.id)}
                     className="delete-button"
-                    aria-label="Excluir nota"
+                    title={t("notes.deleteNote")}
+                    aria-label={t("notes.deleteNote")}
                   >
                     <FiTrash2 />
                   </button>

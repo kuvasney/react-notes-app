@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useUserApi } from "@/hooks/useUserApi";
+import { useLanguage } from "@/contexts/LanguageContext";
 import ToggleVisibility from "@/components/ToggleVisibility/ToggleVisibility";
 import { FiAlertCircle, FiCheckCircle } from "react-icons/fi";
 import { useUserStore } from "../../stores/userStore";
@@ -16,6 +17,7 @@ export default function User() {
 
   const { updateUser } = useUserApi();
   const { setUser } = useUserStore();
+  const { t } = useLanguage();
 
   const handleUserUpdate = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -59,12 +61,14 @@ export default function User() {
 
   return (
     <div>
-      <h1 className="hwr">{user ? user.username : "User"}'s page</h1>
+      <h2 className="hwr">
+        {user.username} {t("user.page.title")}
+      </h2>
       {user ? (
         <div className="wrapper-form">
           <form className="form-user" onSubmit={handleUserUpdate}>
             <div className="input-container">
-              <label>Name:</label>
+              <label>{t("user.form.name")}</label>
               <input
                 type="text"
                 value={name}
@@ -72,7 +76,7 @@ export default function User() {
               />
             </div>
             <div className="input-container">
-              <label>Email:</label>
+              <label>{t("user.form.email")}</label>
               <input
                 type="email"
                 value={email}
@@ -80,8 +84,8 @@ export default function User() {
               />
             </div>
             <div className="input-container">
-              <label>
-                Change Password:
+              <label className="input-password">
+                {t("user.form.changePassword")}
                 <ToggleVisibility
                   isVisible={isPasswordVisible}
                   onToggle={setIsPasswordVisible}
@@ -96,24 +100,24 @@ export default function User() {
             </div>
             <div className="wrapper-buttons">
               <button type="submit" disabled={isLoading}>
-                {isLoading ? "Saving..." : "Edit user"}
+                {isLoading ? t("common.saving") : t("user.form.editButton")}
               </button>
-              {isLoading && <p>Updating user...</p>}
+              {isLoading && <p>{t("user.form.updating")}</p>}
               {error && (
-                <p className="error-message">
+                <p className="error">
                   <FiAlertCircle /> {error}
                 </p>
               )}
               {isSuccess && (
-                <p className="success-message">
-                  <FiCheckCircle /> User updated successfully!
+                <p className="success">
+                  <FiCheckCircle /> {t("user.form.success")}
                 </p>
               )}
             </div>
           </form>
         </div>
       ) : (
-        <p>No user information available.</p>
+        <p>{t("user.form.noInfo")}</p>
       )}
     </div>
   );

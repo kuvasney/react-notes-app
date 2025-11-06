@@ -1,0 +1,141 @@
+{
+  "common": {
+    "loading": "Loading...",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "close": "Close",
+    "add": "Add",
+    "search": "Search",
+    "clear": "Clear",
+    "guest": "Guest"
+  },
+  "auth": {
+    "login": {
+      "title": "Login",
+      "email": "Email",
+      "password": "Password",
+      "emailPlaceholder": "Email",
+      "passwordPlaceholder": "Password",
+      "loginButton": "Login",
+      "loggingIn": "Logging in...",
+      "emailRequired": "Email is required",
+      "passwordRequired": "Password is required",
+      "noAccount": "Don't have an account?",
+      "registerLink": "Register here"
+    },
+    "register": {
+      "title": "Create your Take Note Account",
+      "name": "Name",
+      "email": "Email",
+      "password": "Password",
+      "registerButton": "Register",
+      "registering": "Registering user...",
+      "success": "User registered successfully!",
+      "hasAccount": "Already have an account?",
+      "loginLink": "Login here"
+    },
+    "logout": "Logout"
+  },
+  "notes": {
+    "title": "Notes",
+    "archivedTitle": "Archived Notes",
+    "createNote": "Create New Note",
+    "editNote": "Edit Note",
+    "deleteNote": "Delete note",
+    "deleteConfirm": "Are you sure you want to delete this note?",
+    "deleteError": "Error deleting note. Please try again.",
+    "emptyState": "No notes found. Create your first note!",
+    "noNotes": "No notes available",
+    "noNotesFound": "No notes found",
+    "form": {
+      "title": "Title",
+      "titlePlaceholder": "Title",
+      "titleRequired": "Title is required",
+      "content": "Content",
+      "contentPlaceholder": "Your note here",
+      "contentRequired": "Content is required",
+      "color": "Note color:",
+      "tags": "Tags:",
+      "tagsPlaceholder": "Put your tags here separated by commas",
+      "saveError": "Error saving note",
+      "saving": "Saving...",
+      "updateButton": "Update Note",
+      "createButton": "Create Note"
+    },
+    "colors": {
+      "yellow": "🟡 Yellow (Default)",
+      "blue": "🔵 Blue",
+      "green": "🟢 Green",
+      "red": "🔴 Red",
+      "purple": "🟣 Purple",
+      "gray": "⚪ Gray"
+    },
+    "search": {
+      "placeholder": "🔍 Search for a note...",
+      "clearSearch": "Clear search",
+      "results": "results",
+      "returned": "returned",
+      "searchBy": "Your search for:",
+      "filterByTag": "Filter by tag:"
+    },
+    "actions": {
+      "pin": "Pin this note",
+      "unpin": "Unpin this note",
+      "archive": "Archive this note",
+      "unarchive": "Unarchive this note",
+      "reload": "Reload Notes",
+      "created": "Created:",
+      "lastEdited": "Last edited:"
+    }
+  },
+  "user": {
+    "page": {
+      "title": "this is your page",
+      "guestTitle": "User's page"
+    },
+    "form": {
+      "name": "Name:",
+      "email": "Email:",
+      "changePassword": "Change Password:",
+      "editButton": "Edit user",
+      "saving": "Saving...",
+      "updating": "Updating user...",
+      "success": "User updated successfully!",
+      "noInfo": "No user information available."
+    }
+  },
+  "navigation": {
+    "notes": "Active notes",
+    "archivedNotes": "Archived Notes",
+    "createNote": "Create New Note",
+    "reloadNotes": "Reload Notes",
+    "userPage": "User page",
+    "themeToggle": "Switch to {{mode}} mode",
+    "light": "light",
+    "dark": "dark"
+  },
+  "modal": {
+    "close": "Close Modal"
+  },
+  "collaborators": {
+    "title": "Invite Collaborators",
+    "add": "Add collaborators",
+    "emailLabel": "Collaborator email:",
+    "addButton": "Add",
+    "remove": "Remove collaborator",
+    "success": "User {{email}} added successfully!",
+    "errors": {
+      "userNotFound": "Can't find email \"{{email}}\". You can invite this person!",
+      "noteNotFound": "Note not found.",
+      "resourceNotFound": "Resource not found.",
+      "alreadyCollaborator": "This user is already a collaborator.",
+      "addError": "Error adding collaborator."
+    }
+  },
+  "errors": {
+    "generic": "An error occurred",
+    "tryAgain": "Try again"
+  }
+}

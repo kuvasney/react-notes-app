@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useNotesStore } from "@/stores/notesStore";
-import { useUserStore } from "@/stores/userStore";
 import { useNotesApi } from "@/hooks/useNotesApi";
 import { useAuth } from "@/hooks/useAuth";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { NavLink } from "react-router-dom";
 import {
   FiRefreshCw,
@@ -16,17 +16,18 @@ import {
 } from "react-icons/fi";
 
 import UserName from "../../UserName";
+import LangSelector from "../../LangSelector";
 
 export default function Navigator() {
   const location = useLocation();
   const navigate = useNavigate();
   const { fetchNotes } = useNotesApi();
+  const { t } = useLanguage();
 
   const [isHomePage, setIsHomePage] = useState(location.pathname === "/");
   const [isNotes, setIsNotes] = useState(location.pathname === "/notes");
 
   const { reset, setShowCreateForm } = useNotesStore();
-  const { getUser } = useUserStore();
   const [darkMode, setDarkMode] = useState(() => {
     return window.matchMedia("(prefers-color-scheme: dark)").matches;
   });
@@ -36,11 +37,6 @@ export default function Navigator() {
   // Verificação extra para garantir sincronização
   const isAuthenticated =
     isLoggedIn || localStorage.getItem("isLoggedIn") === "true";
-
-  let archived = false;
-  if (location.pathname === "/notes/archive") {
-    archived = true;
-  }
 
   // Atualizar estados quando a rota mudar
   useEffect(() => {
@@ -88,11 +84,14 @@ export default function Navigator() {
         <NavLink to="/user" className="button-link user-link">
           <UserName />
         </NavLink>
+        <LangSelector />
       </div>
       <button
         className="change-light"
         onClick={changeLight}
-        title={`Switch to ${darkMode ? "light" : "dark"} mode`}
+        title={t("navigation.switchTheme", {
+          mode: darkMode ? t("navigation.light") : t("navigation.dark"),
+        })}
       >
         {darkMode ? <FiSun /> : <FiMoon />}
       </button>
@@ -102,12 +101,16 @@ export default function Navigator() {
           <NavLink
             to="/notes/archive"
             className="button-link"
-            title="Archived Notes"
+            title={t("navigation.archivedNotes")}
           >
             <FiArchive />
           </NavLink>
         ) : (
-          <NavLink to="/notes" className="button-link" title="Active notes">
+          <NavLink
+            to="/notes"
+            className="button-link"
+            title={t("navigation.activeNotes")}
+          >
             <FiFileText />
           </NavLink>
         ))}
@@ -116,11 +119,14 @@ export default function Navigator() {
           <button
             className="create-note-button"
             onClick={() => setShowCreateForm(true)}
-            title="Create New Note"
+            title={t("navigation.createNote")}
           >
             <FiPlusCircle />
           </button>
-          <button onClick={() => refetchNotes(!isNotes)} title=" Reload Notes">
+          <button
+            onClick={() => refetchNotes(!isNotes)}
+            title={t("navigation.reloadNotes")}
+          >
             <FiRefreshCw />
           </button>
           <button onClick={logout}>

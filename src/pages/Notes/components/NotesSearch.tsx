@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useEscapeKey } from "@/hooks/useEscapeKey";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface NotesSearchProps {
   onSearchChange: (searchTerm: string) => void;
@@ -7,6 +8,7 @@ interface NotesSearchProps {
 
 export default function NotesSearch({ onSearchChange }: NotesSearchProps) {
   const [search, setSearch] = useState("");
+  const { t } = useLanguage();
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,7 +40,7 @@ export default function NotesSearch({ onSearchChange }: NotesSearchProps) {
         <div className="input-container">
           <input
             type="text"
-            placeholder="🔍 Search for a note..."
+            placeholder={t("notes.search.placeholder")}
             value={search}
             onChange={handleInputChange}
           />
@@ -47,7 +49,7 @@ export default function NotesSearch({ onSearchChange }: NotesSearchProps) {
               type="button"
               className="clear-button"
               onClick={clearSearch}
-              aria-label="Clear search"
+              aria-label={t("notes.search.clearSearch")}
             >
               ✕
             </button>

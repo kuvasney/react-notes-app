@@ -214,6 +214,13 @@ button:focus-visible {
   label {
     display: block;
     margin-bottom: 0.5em;
+
+    &.input-password {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+
+    }
   }
 }
 
@@ -235,6 +242,7 @@ p.error, p.success {
 .wrapper-buttons {
   display: flex;
   gap: 10px;
+  align-items: center;
 }
 
 .add-collaborator {

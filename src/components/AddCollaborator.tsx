@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNotesApi } from "../hooks/useNotesApi";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Note } from "@/types";
 import { FiUserPlus, FiAlertCircle, FiCheckCircle } from "react-icons/fi";
 import Modal from "@/components/Modal/Modal";
@@ -12,6 +13,7 @@ export default function AddCollaborator({ note }: { note?: Note }) {
   const [email, setEmail] = useState("");
   const { addcollaborator } = useNotesApi();
   const { user } = useUserStore();
+  const { t } = useLanguage();
   const userEmail = user?.email || "";
 
   async function addUser(event: React.FormEvent<HTMLFormElement>) {
@@ -37,18 +39,18 @@ export default function AddCollaborator({ note }: { note?: Note }) {
           error.message?.includes("User not found") ||
           error.data?.error === "User not found"
         ) {
-          setErrorMessage(
-            `Can't find email "${email}". You can invite this person!`
-          );
+          setErrorMessage(t("collaborators.errors.userNotFound", { email }));
         } else if (error.message?.includes("Note not found")) {
-          setErrorMessage("Note not found.");
+          setErrorMessage(t("collaborators.errors.noteNotFound"));
         } else {
-          setErrorMessage(error.message || "Resource not found.");
+          setErrorMessage(
+            error.message || t("collaborators.errors.resourceNotFound")
+          );
         }
       } else if (error.status === 409) {
-        setErrorMessage("This user is already a collaborator.");
+        setErrorMessage(t("collaborators.errors.alreadyCollaborator"));
       } else {
-        setErrorMessage(error.message || "Error adding collaborator.");
+        setErrorMessage(error.message || t("collaborators.errors.addError"));
       }
     }
   }
@@ -59,17 +61,21 @@ export default function AddCollaborator({ note }: { note?: Note }) {
 
   return (
     <>
-      <button className="no-button" onClick={() => setShowModal(true)}>
+      <button
+        className="no-button"
+        title={t("collaborators.add")}
+        onClick={() => setShowModal(true)}
+      >
         <FiUserPlus />
       </button>
       <Modal show={showModal} onClose={() => setShowModal(false)}>
         <div className="add-collaborator">
           <h2 className="hwr">
-            <FiUserPlus /> Add collaborators
+            <FiUserPlus /> {t("collaborators.title")}
           </h2>
           <form onSubmit={(e) => addUser(e)}>
             <div className="input-container">
-              <label>Collaborator email:</label>
+              <label>{t("collaborators.emailLabel")}</label>
               <input
                 type="email"
                 name="email"
@@ -78,7 +84,7 @@ export default function AddCollaborator({ note }: { note?: Note }) {
               />
             </div>
             <div className="input-container">
-              <button type="submit">Add</button>
+              <button type="submit">{t("collaborators.addButton")}</button>
             </div>
             {errorMessage && (
               <p className="error">
@@ -87,7 +93,7 @@ export default function AddCollaborator({ note }: { note?: Note }) {
             )}
             {isSuccess && (
               <p className="success">
-                <FiCheckCircle /> User {email} added successfully!
+                <FiCheckCircle /> {t("collaborators.success", { email })}
               </p>
             )}
           </form>

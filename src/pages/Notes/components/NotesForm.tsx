@@ -1,6 +1,7 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useEscapeKey } from "@/hooks/useEscapeKey";
 import { useNotesApi } from "@/hooks/useNotesApi";
+import { useLanguage } from "@/contexts/LanguageContext";
 import { Note } from "@/types";
 import "./NotesContent.scss";
 
@@ -19,6 +20,7 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
   const [isLoading, setIsLoading] = useState(false);
 
   const { saveNote, editNote } = useNotesApi();
+  const { t } = useLanguage();
 
   // Detectar se estamos editando ou criando
   const isEditing = Boolean(note?.id);
@@ -31,11 +33,11 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
     try {
       // Validações básicas
       if (!title.trim()) {
-        throw new Error("Título é obrigatório");
+        throw new Error(t("notes.form.titleRequired"));
       }
 
       if (!content.trim()) {
-        throw new Error("Conteúdo é obrigatório");
+        throw new Error(t("notes.form.contentRequired"));
       }
 
       // Processar tags (separadas por vírgula)
@@ -99,7 +101,7 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
       // Chamar callback de sucesso se fornecido
       onSave?.();
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Erro ao salvar nota");
+      setError(err instanceof Error ? err.message : t("notes.form.saveError"));
     } finally {
       setIsLoading(false);
     }
@@ -124,7 +126,7 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
         <div className="input-container">
           <input
             type="text"
-            placeholder="Title"
+            placeholder={t("notes.form.titlePlaceholder")}
             className="note-title"
             value={title}
             onChange={(e) => setTitle(e.target.value)}
@@ -135,7 +137,7 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
 
         <div className="input-container">
           <textarea
-            placeholder="Your note here"
+            placeholder={t("notes.form.contentPlaceholder")}
             value={content}
             onChange={(e) => setContent(e.target.value)}
             required
@@ -144,27 +146,27 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
         </div>
 
         <div className="input-container">
-          <label htmlFor="color-select">Note color:</label>
+          <label htmlFor="color-select">{t("notes.form.color")}</label>
           <select
             value={color}
             onChange={(e) => setColor(e.target.value)}
             disabled={isLoading}
             id="color-select"
           >
-            <option value="#fff475">🟡 Amarelo (Padrão)</option>
-            <option value="#aecbfa">🔵 Azul</option>
-            <option value="#ccff90">🟢 Verde</option>
-            <option value="#f28b82">🔴 Vermelho</option>
-            <option value="#d7aefb">🟣 Roxo</option>
-            <option value="#e8eaed">⚪ Cinza</option>
+            <option value="#fff475">{t("notes.colors.yellow")}</option>
+            <option value="#aecbfa">{t("notes.colors.blue")}</option>
+            <option value="#ccff90">{t("notes.colors.green")}</option>
+            <option value="#f28b82">{t("notes.colors.red")}</option>
+            <option value="#d7aefb">{t("notes.colors.purple")}</option>
+            <option value="#e8eaed">{t("notes.colors.gray")}</option>
           </select>
         </div>
 
         <div className="input-container">
-          <label htmlFor="tags">Tags:</label>
+          <label htmlFor="tags">{t("notes.form.tags")}</label>
           <input
             type="text"
-            placeholder="Put your tags here separated by commas"
+            placeholder={t("notes.form.tagsPlaceholder")}
             value={tags}
             onChange={(e) => setTags(e.target.value)}
             disabled={isLoading}
@@ -175,7 +177,11 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
         {error && <div className="error">{error}</div>}
 
         <button type="submit" disabled={isLoading}>
-          {isLoading ? "Saving..." : isEditing ? "Update Note" : "Create Note"}
+          {isLoading
+            ? t("common.saving")
+            : isEditing
+            ? t("notes.form.updateButton")
+            : t("notes.form.createButton")}
         </button>
       </form>
     </div>

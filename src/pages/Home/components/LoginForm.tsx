@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "@/hooks/useAuth";
 import { FiAlertCircle } from "react-icons/fi";
 import { useUserApi } from "@/hooks/useUserApi";
 import { useUserStore } from "@/stores/userStore";
+import { useLanguage } from "@/contexts/LanguageContext";
 import ToggleVisibility from "@/components/ToggleVisibility/ToggleVisibility";
 import "./LoginForm.scss";
 
@@ -15,7 +16,7 @@ export default function LoginForm() {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
-
+  const { t } = useLanguage();
   const { loginUser } = useUserApi();
   const { setUser } = useUserStore();
 
@@ -26,10 +27,10 @@ export default function LoginForm() {
 
     try {
       if (!email.trim()) {
-        throw new Error("Email é obrigatório");
+        throw new Error(t("auth.login.emailRequired"));
       }
       if (!password.trim()) {
-        throw new Error("Senha é obrigatória");
+        throw new Error(t("auth.login.passwordRequired"));
       }
       const response = await loginUser(email.trim(), password.trim());
       if (response.tokens) {
@@ -76,7 +77,7 @@ export default function LoginForm() {
         <div className="input-container">
           <input
             type="email"
-            placeholder="Email"
+            placeholder={t("auth.login.emailPlaceholder")}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -91,7 +92,7 @@ export default function LoginForm() {
           />
           <input
             type={isPasswordVisible ? "text" : "password"}
-            placeholder="Senha"
+            placeholder={t("auth.login.passwordPlaceholder")}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -107,7 +108,7 @@ export default function LoginForm() {
         </div>
 
         <button type="submit" disabled={isLoading}>
-          {isLoading ? "Entrando..." : "Entrar"}
+          {isLoading ? t("auth.login.loggingIn") : t("auth.login.loginButton")}
         </button>
       </form>
     </section>

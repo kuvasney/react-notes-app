@@ -1,0 +1,141 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "save": "Guardar",
+    "cancel": "Cancelar",
+    "delete": "Eliminar",
+    "edit": "Editar",
+    "close": "Cerrar",
+    "add": "Añadir",
+    "search": "Buscar",
+    "clear": "Limpiar",
+    "guest": "Invitado"
+  },
+  "auth": {
+    "login": {
+      "title": "Iniciar sesión",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "emailPlaceholder": "Correo electrónico",
+      "passwordPlaceholder": "Contraseña",
+      "loginButton": "Entrar",
+      "loggingIn": "Iniciando sesión...",
+      "emailRequired": "El correo electrónico es obligatorio",
+      "passwordRequired": "La contraseña es obligatoria",
+      "noAccount": "¿No tienes una cuenta?",
+      "registerLink": "Regístrate aquí"
+    },
+    "register": {
+      "title": "Crea tu cuenta Take Note",
+      "name": "Nombre",
+      "email": "Correo electrónico",
+      "password": "Contraseña",
+      "registerButton": "Registrarse",
+      "registering": "Registrando usuario...",
+      "success": "¡Usuario registrado exitosamente!",
+      "hasAccount": "¿Ya tienes una cuenta?",
+      "loginLink": "Inicia sesión aquí"
+    },
+    "logout": "Cerrar sesión"
+  },
+  "notes": {
+    "title": "Notas",
+    "archivedTitle": "Notas Archivadas",
+    "createNote": "Crear Nueva Nota",
+    "editNote": "Editar Nota",
+    "deleteNote": "Eliminar nota",
+    "deleteConfirm": "¿Estás seguro de que quieres eliminar esta nota?",
+    "deleteError": "Error al eliminar la nota. Por favor, inténtalo de nuevo.",
+    "emptyState": "No se encontraron notas. ¡Crea tu primera nota!",
+    "noNotes": "No hay notas disponibles",
+    "noNotesFound": "No se encontraron notas",
+    "form": {
+      "title": "Título",
+      "titlePlaceholder": "Título",
+      "titleRequired": "El título es obligatorio",
+      "content": "Contenido",
+      "contentPlaceholder": "Tu nota aquí",
+      "contentRequired": "El contenido es obligatorio",
+      "color": "Color de la nota:",
+      "tags": "Etiquetas:",
+      "tagsPlaceholder": "Pon tus etiquetas aquí separadas por comas",
+      "saveError": "Error al guardar la nota",
+      "saving": "Guardando...",
+      "updateButton": "Actualizar Nota",
+      "createButton": "Crear Nota"
+    },
+    "colors": {
+      "yellow": "🟡 Amarillo (Predeterminado)",
+      "blue": "🔵 Azul",
+      "green": "🟢 Verde",
+      "red": "🔴 Rojo",
+      "purple": "🟣 Morado",
+      "gray": "⚪ Gris"
+    },
+    "search": {
+      "placeholder": "🔍 Buscar una nota...",
+      "clearSearch": "Limpiar búsqueda",
+      "results": "resultados",
+      "returned": "devolvió",
+      "searchBy": "Tu búsqueda de:",
+      "filterByTag": "Filtrar por etiqueta:"
+    },
+    "actions": {
+      "pin": "Fijar esta nota",
+      "unpin": "Desfijar esta nota",
+      "archive": "Archivar esta nota",
+      "unarchive": "Desarchivar esta nota",
+      "reload": "Recargar Notas",
+      "created": "Creado:",
+      "lastEdited": "Última edición:"
+    }
+  },
+  "user": {
+    "page": {
+      "title": "esta es tu página",
+      "guestTitle": "Página del Usuario"
+    },
+    "form": {
+      "name": "Nombre:",
+      "email": "Correo electrónico:",
+      "changePassword": "Cambiar Contraseña:",
+      "editButton": "Editar usuario",
+      "saving": "Guardando...",
+      "updating": "Actualizando usuario...",
+      "success": "¡Usuario actualizado exitosamente!",
+      "noInfo": "No hay información de usuario disponible."
+    }
+  },
+  "navigation": {
+    "notes": "Notas activas",
+    "archivedNotes": "Notas Archivadas",
+    "createNote": "Crear Nueva Nota",
+    "reloadNotes": "Recargar Notas",
+    "userPage": "Página de usuario",
+    "themeToggle": "Cambiar a modo {{mode}}",
+    "light": "claro",
+    "dark": "oscuro"
+  },
+  "modal": {
+    "close": "Cerrar Modal"
+  },
+  "collaborators": {
+    "title": "Invitar Colaboradores",
+    "add": "Añadir colaboradores",
+    "emailLabel": "Correo del colaborador:",
+    "addButton": "Añadir",
+    "remove": "Eliminar colaborador",
+    "success": "¡Usuario {{email}} añadido exitosamente!",
+    "errors": {
+      "userNotFound": "No se puede encontrar el correo \"{{email}}\". ¡Puedes invitar a esta persona!",
+      "noteNotFound": "Nota no encontrada.",
+      "resourceNotFound": "Recurso no encontrado.",
+      "alreadyCollaborator": "Este usuario ya es un colaborador.",
+      "addError": "Error al añadir colaborador."
+    }
+  },
+  "errors": {
+    "generic": "Ocurrió un error",
+    "tryAgain": "Inténtalo de nuevo"
+  }
+}
