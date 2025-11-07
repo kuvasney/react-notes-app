@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Note } from "@/types";
-import { renderTextWithBreaks } from "@/utils/utils";
 import { useLanguage } from "@/contexts/LanguageContext";
 import "./NotesContent.scss";
 import NotesForm from "./NotesForm";
@@ -17,6 +16,13 @@ interface NotesContentProps {
   loading?: boolean;
 }
 
+interface EditingNote {
+  title: string;
+  content: string;
+  tags: string;
+  color: string;
+}
+
 export default function NotesContent({
   notes,
   loading = false,
@@ -27,6 +33,12 @@ export default function NotesContent({
 
   const [searchTerm, setSearchTerm] = useState("");
   const [filterByTag, setFilterByTag] = useState(false);
+  const [editingNoteTitle, setEditingNoteTitle] = useState("");
+  const [editingNoteContent, setEditingNoteContent] = useState("");
+  const [editingTags, setEditingTags] = useState("");
+  const [editingColor, setEditingColor] = useState("");
+  const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     removeNote,
@@ -37,6 +49,19 @@ export default function NotesContent({
 
   const { t } = useLanguage();
 
+  // Converter texto com quebras de linha para HTML
+  const textToHtml = (text: string): string => {
+    if (!text) return "";
+    return text.replace(/\n/g, "<br>");
+  };
+
+  let noteObject: EditingNote = {
+    title: editingNoteTitle,
+    content: editingNoteContent,
+    tags: editingTags,
+    color: editingColor,
+  };
+
   const location = useLocation();
   const isArchivePage = location.pathname.includes("notes/archive");
 
@@ -44,8 +69,14 @@ export default function NotesContent({
 
   // Função para iniciar edição de uma nota
   const editNote = (note: Note) => () => {
+    console.log("note editing", note);
     setEditingNote(note);
+    // Inicializar estados com os valores da nota
+    setEditingNoteTitle(note.titulo);
+    setEditingNoteContent(note.conteudo);
+    setEditingTags(note.tags.join(", "));
     setShowCreateForm(false); // Esconder formulário de criação
+    console.log("editingNote", editingNote);
   };
 
   // Função para cancelar edição
@@ -199,6 +230,71 @@ export default function NotesContent({
     }
   };
 
+  const updateNote = async (note: Note) => {
+    setError("");
+    setIsLoading(true);
+
+    try {
+      // Validações básicas
+      if (!noteObject.title.trim()) {
+        throw new Error(t("notes.form.titleRequired"));
+      }
+
+      if (!noteObject.content.trim()) {
+        throw new Error(t("notes.form.contentRequired"));
+      }
+
+      // Processar tags (separadas por vírgula)
+      const processedTags = noteObject.tags
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter((tag) => tag.length > 0);
+
+      // Criar/atualizar objeto da nota
+      const noteData: Partial<Note> = {
+        id: note.id,
+        titulo: noteObject.title.trim(),
+        conteudo: noteObject.content.trim(),
+        dataUltimaEdicao: new Date().toISOString(),
+        cor: noteObject.color,
+        tags: processedTags,
+      };
+
+      // if (isEditing) {
+      //   // Editando: manter todos os campos existentes e ID
+      //   Object.assign(noteData, {
+      //     id: note!.id,
+      //     _id: note!._id,
+      //     dataCriacao: note!.dataCriacao,
+      //     archived: note!.archived,
+      //     pinned: note!.pinned,
+      //     lembretes: note!.lembretes,
+      //     colaboradores: note!.colaboradores,
+      //   });
+      // } else {
+      //   // Criando: definir valores padrão, mas NÃO definir ID
+      //   Object.assign(noteData, {
+      //     dataCriacao: new Date().toISOString(),
+      //     archived: false,
+      //     pinned: false,
+      //     lembretes: [],
+      //     colaboradores: [],
+      //   });
+      //   // ID será gerado pelo MongoDB
+      // }
+
+      // Salvar nota (criar ou atualizar)
+
+      await updateNoteApi(noteData as Note);
+
+      // Chamar callback de sucesso se fornecido
+    } catch (err) {
+      setError(err instanceof Error ? err.message : t("notes.form.saveError"));
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <>
       {/* Formulário de criação */}
@@ -242,7 +338,7 @@ export default function NotesContent({
         <div className="notes-list">
           {notes.length === 0 ? (
             <div className="empty-state">
-              <p>{t("notes.list.empty")}</p>
+              <p>{t("notes.emptyState")}</p>
             </div>
           ) : filteredNotes.length === 0 ? (
             <div className="no-notes">
@@ -292,19 +388,85 @@ export default function NotesContent({
                     <FiArchive />
                   </button>
                 </div>
-                <h3>{note.titulo}</h3>
-                <p>{renderTextWithBreaks(note.conteudo)}</p>
-                <div className="tags">
-                  {note.tags.map((tag) => (
-                    <span
-                      key={tag}
-                      className="tag"
-                      onClick={() => handleSearchByTagChange(tag)}
-                    >
-                      {tag}
-                    </span>
-                  ))}
-                </div>
+                <h3>
+                  <input
+                    type="text"
+                    value={
+                      editingNote?._id === note._id
+                        ? editingNoteTitle
+                        : note.titulo
+                    }
+                    id={`note-title-${index}`}
+                    readOnly={editingNote?._id !== note._id}
+                    onChange={(e) => setEditingNoteTitle(e.target.value)}
+                  />
+                </h3>
+                <div
+                  className="note-content"
+                  contentEditable={editingNote?._id === note._id}
+                  onInput={(e) =>
+                    setEditingNoteContent(e.currentTarget.innerHTML || "")
+                  }
+                  dangerouslySetInnerHTML={{
+                    __html:
+                      editingNote?._id === note._id
+                        ? editingNoteContent
+                        : textToHtml(note.conteudo),
+                  }}
+                  suppressContentEditableWarning
+                />
+                {editingNote?._id !== note._id && (
+                  <>
+                    <div className="tags">
+                      {note.tags.map((tag) => (
+                        <span
+                          key={tag}
+                          className="tag"
+                          onClick={() => handleSearchByTagChange(tag)}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  </>
+                )}
+                {editingNote?._id === note._id && (
+                  <>
+                    <div className="input-container">
+                      <input
+                        type="text"
+                        id={`tags-${index}`}
+                        value={editingTags}
+                        className="tag"
+                        onChange={(e) => setEditingTags(e.target.value)}
+                      />
+                    </div>
+                    <div className="input-container">
+                      <select
+                        value={editingColor}
+                        onChange={(e) => setEditingColor(e.target.value)}
+                        id="color-select"
+                      >
+                        <option value="#fff475">
+                          {t("notes.colors.yellow")}
+                        </option>
+                        <option value="#aecbfa">
+                          {t("notes.colors.blue")}
+                        </option>
+                        <option value="#ccff90">
+                          {t("notes.colors.green")}
+                        </option>
+                        <option value="#f28b82">{t("notes.colors.red")}</option>
+                        <option value="#d7aefb">
+                          {t("notes.colors.purple")}
+                        </option>
+                        <option value="#e8eaed">
+                          {t("notes.colors.gray")}
+                        </option>
+                      </select>
+                    </div>
+                  </>
+                )}
                 <p className="date">
                   <em>{t("notes.actions.created")}</em>{" "}
                   {new Date(note.dataCriacao).toLocaleDateString()}; &nbsp;
@@ -322,6 +484,7 @@ export default function NotesContent({
                   >
                     <FiEdit2 />
                   </button>
+                  <button onClick={() => updateNote(note)}>Save Note</button>
                   <button
                     onClick={() => handleDelete(note.id)}
                     className="delete-button"
