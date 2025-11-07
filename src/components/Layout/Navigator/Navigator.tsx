@@ -84,7 +84,6 @@ export default function Navigator() {
         <NavLink to="/user" className="button-link user-link">
           <UserName />
         </NavLink>
-        <LangSelector />
       </div>
       <button
         className="change-light"
@@ -134,6 +133,7 @@ export default function Navigator() {
           </button>
         </>
       )}
+      <LangSelector />
     </div>
   );
 }

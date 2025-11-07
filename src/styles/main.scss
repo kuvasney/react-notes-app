@@ -118,6 +118,21 @@ a:hover {
   margin-bottom: 0.5rem;
 }
 
+.language-selector {
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-color);
+  padding: 0.3em;
+  border-radius: 4px;
+  font-size: .75em;
+  cursor: pointer;
+
+  option {
+    background: var(--bg-color);
+    color: var(--text-color);
+  }
+}
+
 // Loading animation
 @keyframes loading {
   0% {

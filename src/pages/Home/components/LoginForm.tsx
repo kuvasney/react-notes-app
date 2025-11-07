@@ -86,10 +86,12 @@ export default function LoginForm() {
         </div>
 
         <div className="input-container">
-          <ToggleVisibility
-            isVisible={isPasswordVisible}
-            onToggle={setIsPasswordVisible}
-          />
+          <label className="password-label">
+            <ToggleVisibility
+              isVisible={isPasswordVisible}
+              onToggle={setIsPasswordVisible}
+            />
+          </label>
           <input
             type={isPasswordVisible ? "text" : "password"}
             placeholder={t("auth.login.passwordPlaceholder")}
