@@ -4,6 +4,7 @@ import { useNotesApi } from "@/hooks/useNotesApi";
 import { useLanguage } from "@/contexts/LanguageContext";
 import NotesContent from "./components/NotesContent";
 import NotesContentSkeleton from "./components/NotesContentSkeleton";
+import NotesNavigator from "../../components/NotesNavigator";
 
 export default function Archive() {
   // Usar a store
@@ -26,6 +27,7 @@ export default function Archive() {
     <div className="content-wrapper">
       <section className="notes-list">
         <h1 className="hwr">{t("notes.archivedTitle")}</h1>
+        <NotesNavigator />
         {loading ? (
           <NotesContentSkeleton />
         ) : (

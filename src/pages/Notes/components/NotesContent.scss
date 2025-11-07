@@ -28,11 +28,11 @@
       margin-inline: 0;
     }
 
-    .buttons-wrapper {
-      position: absolute;
-      top: 0;
-      right: 0;
-    }
+    // .wrapper-buttons {
+    //   position: absolute;
+    //   top: 0;
+    //   right: 0;
+    // }
 
     .no-button {
       color: #000;
@@ -171,7 +171,7 @@
 
   label {
     font-size: 0.8em;
-    color: #000
+    color: #000;
   }
 
   input[type="text"],
@@ -219,6 +219,16 @@
 
     button {
       font-size: 1.4em;
+    }
+  }
+}
+
+.notes-navigator {
+  .wrapper-buttons {
+    margin-block: 1em;
+
+    @include respond-to("tablet") {
+      float: right;
     }
   }
 }

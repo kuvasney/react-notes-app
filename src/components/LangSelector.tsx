@@ -16,7 +16,7 @@ export default function LangSelector() {
     >
       {availableLanguages.map((lang) => (
         <option key={lang.code} value={lang.code}>
-          {lang.name}
+          {lang.flag}
         </option>
       ))}
     </select>

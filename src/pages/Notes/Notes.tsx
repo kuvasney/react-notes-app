@@ -4,6 +4,7 @@ import { useNotesApi } from "@/hooks/useNotesApi";
 import { useLanguage } from "@/contexts/LanguageContext";
 import NotesContent from "./components/NotesContent";
 import NotesContentSkeleton from "./components/NotesContentSkeleton";
+import NotesNavigator from "../../components/NotesNavigator";
 
 export default function Notes() {
   // Usar a store
@@ -32,7 +33,7 @@ export default function Notes() {
   return (
     <div className="content-wrapper">
       <h1 className="hwr">{t("notes.title")}</h1>
-
+      <NotesNavigator />
       <section className="notes-list">
         {loading ? (
           <NotesContentSkeleton />

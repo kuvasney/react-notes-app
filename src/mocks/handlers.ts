@@ -1,10 +1,11 @@
 import { http, HttpResponse } from "msw";
 import mockNotes from "./mockNotes.json";
 import mockUsers from "./mockUsers.json";
+import mockLogin from "./mockLogin.json";
 
 export const handlers = [
   // GET /api/users/login
-  http.get("*/api/users/login", async () => {
+  http.post("*/api/users/login", async () => {
     // Simular delay de rede
     await new Promise((resolve) => setTimeout(resolve, 500));
 
@@ -13,7 +14,7 @@ export const handlers = [
       return new HttpResponse(null, { status: 500 });
     }
 
-    return HttpResponse.json(mockUsers);
+    return HttpResponse.json(mockLogin);
   }),
   // GET /api/notes
   // Simular latência e possíveis erros

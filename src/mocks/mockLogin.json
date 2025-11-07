@@ -1,0 +1,17 @@
+{
+    "message": "Login realizado com sucesso",
+    "user": {
+        "username": "Rafael Kuvasney Marcolin",
+        "email": "kuvasney@gmail.com",
+        "ativo": true,
+        "emailVerificado": false,
+        "dataCriacao": "2025-10-31T23:12:15.641Z",
+        "dataUltimaAtualizacao": "2025-11-06T18:38:35.210Z",
+        "id": "6905424fac1a8aa3e6e28cf3"
+    },
+    "tokens": {
+        "accessToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTA1NDI0ZmFjMWE4YWEzZTZlMjhjZjMiLCJlbWFpbCI6Imt1dmFzbmV5QGdtYWlsLmNvbSIsImlhdCI6MTc2MjUyNTY2MywiZXhwIjoxNzYyNjEyMDYzLCJhdWQiOiJub3Rlcy1hcHAiLCJpc3MiOiJub3Rlcy1hcGkifQ.GE7FhizB2tUNQkD12uHEDsnAmn7iACsZ-FHbfcuoEcI",
+        "refreshToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiI2OTA1NDI0ZmFjMWE4YWEzZTZlMjhjZjMiLCJlbWFpbCI6Imt1dmFzbmV5QGdtYWlsLmNvbSIsImlhdCI6MTc2MjUyNTY2MywiZXhwIjoxNzY1MTE3NjYzLCJhdWQiOiJub3Rlcy1hcHAiLCJpc3MiOiJub3Rlcy1hcGkifQ.alf4EquySHkkLaXphCE03pz56NXZODCjLEY-gIdYoe4",
+        "expiresIn": 86400
+    }
+}

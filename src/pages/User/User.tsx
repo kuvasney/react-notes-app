@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useUserApi } from "@/hooks/useUserApi";
 import { useLanguage } from "@/contexts/LanguageContext";
-import ToggleVisibility from "@/components/ToggleVisibility/ToggleVisibility";
 import { FiAlertCircle, FiCheckCircle } from "react-icons/fi";
 import { useUserStore } from "../../stores/userStore";
+import ToggleVisibility from "@/components/ToggleVisibility/ToggleVisibility";
+import NotesNavigator from "@/components/NotesNavigator";
 
 export default function User() {
   const user = JSON.parse(sessionStorage.getItem("user") || "null");
@@ -64,6 +65,7 @@ export default function User() {
       <h2 className="hwr">
         {user.username} {t("user.page.title")}
       </h2>
+      <NotesNavigator />
       {user ? (
         <div className="wrapper-form">
           <form className="form-user" onSubmit={handleUserUpdate}>
