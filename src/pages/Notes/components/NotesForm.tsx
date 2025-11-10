@@ -93,11 +93,6 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
         setTags("");
       }
 
-      console.log(
-        `Nota ${isEditing ? "atualizada" : "criada"} com sucesso:`,
-        noteData
-      );
-
       // Chamar callback de sucesso se fornecido
       onSave?.();
     } catch (err) {

@@ -70,7 +70,6 @@ export default function NotesContent({
 
   // Função para iniciar edição de uma nota
   const editNote = (note: Note) => () => {
-    console.log("note editing", note);
     setEditingNote(note);
     // Inicializar estados com os valores da nota
     setEditingNoteTitle(note.titulo);
@@ -78,7 +77,6 @@ export default function NotesContent({
     setEditingTags(note.tags.join(", "));
     setEditingColor(note.cor);
     setShowCreateForm(false); // Esconder formulário de criação
-    console.log("editingNote", editingNote);
   };
 
   // Função para cancelar edição
@@ -245,8 +243,6 @@ export default function NotesContent({
       if (!noteObject.content.trim()) {
         throw new Error(t("notes.form.contentRequired"));
       }
-
-      console.log("noteObje", noteObject);
 
       // Processar tags (separadas por vírgula)
       const processedTags = noteObject.tags

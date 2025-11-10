@@ -55,8 +55,6 @@ export default function AddCollaborator({ note }: { note?: Note }) {
     }
   }
 
-  console.log("note", note);
-
   if (note?.colaboradores.includes(userEmail)) {
     return null;
   }

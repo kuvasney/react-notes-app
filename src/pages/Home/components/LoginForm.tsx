@@ -41,7 +41,6 @@ export default function LoginForm() {
         sessionStorage.setItem("userToken", response.tokens.accessToken);
         // Verifica se há redirecionamento pendente
         const redirectPath = sessionStorage.getItem("redirectAfterLogin");
-        console.log("Redirecting to:", redirectPath);
         navigate(redirectPath || "/notes");
         sessionStorage.removeItem("redirectAfterLogin");
       }

@@ -15,7 +15,6 @@ export default function Notes() {
   const { t } = useLanguage();
 
   useEffect(() => {
-    console.log("Notes page mounted, fetching active notes");
     fetchNotes();
   }, []);
 
