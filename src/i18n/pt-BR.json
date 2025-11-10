@@ -137,5 +137,13 @@
   "errors": {
     "generic": "Ocorreu um erro",
     "tryAgain": "Tente novamente"
+  },
+  "error": {
+    "title": "Ops! Algo deu errado",
+    "message": "Desculpe, ocorreu um erro inesperado. Não se preocupe, seus dados estão seguros.",
+    "technicalDetails": "Detalhes técnicos (para desenvolvedores)",
+    "tryAgain": "Tentar novamente",
+    "goHome": "Voltar ao início",
+    "persistMessage": "Se o problema persistir, entre em contato com o suporte."
   }
 }

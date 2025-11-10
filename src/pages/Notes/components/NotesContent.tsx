@@ -75,6 +75,7 @@ export default function NotesContent({
     setEditingNoteTitle(note.titulo);
     setEditingNoteContent(note.conteudo);
     setEditingTags(note.tags.join(", "));
+    setEditingColor(note.cor);
     setShowCreateForm(false); // Esconder formulário de criação
     console.log("editingNote", editingNote);
   };
@@ -244,6 +245,8 @@ export default function NotesContent({
         throw new Error(t("notes.form.contentRequired"));
       }
 
+      console.log("noteObje", noteObject);
+
       // Processar tags (separadas por vírgula)
       const processedTags = noteObject.tags
         .split(",")
@@ -286,6 +289,7 @@ export default function NotesContent({
       // Salvar nota (criar ou atualizar)
 
       await updateNoteApi(noteData as Note);
+      setEditingNote(null);
 
       // Chamar callback de sucesso se fornecido
     } catch (err) {
@@ -304,19 +308,6 @@ export default function NotesContent({
             <h3>{t("notes.createNote")}</h3>
           </div>
           <NotesForm onSave={hideCreateForm} onCancel={hideCreateForm} />
-        </div>
-      )}
-      {/* Formulário de edição */}
-      {editingNote && (
-        <div>
-          <div className="form-header">
-            <h3>{t("notes.editNote")}</h3>
-          </div>
-          <NotesForm
-            note={editingNote}
-            onSave={cancelEdit}
-            onCancel={cancelEdit}
-          />
         </div>
       )}
       <NotesSearch onSearchChange={handleSearchChange} />
@@ -397,6 +388,7 @@ export default function NotesContent({
                         : note.titulo
                     }
                     id={`note-title-${index}`}
+                    className="input-title"
                     readOnly={editingNote?._id !== note._id}
                     onChange={(e) => setEditingNoteTitle(e.target.value)}
                   />

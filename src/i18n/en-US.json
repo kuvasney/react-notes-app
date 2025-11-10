@@ -137,5 +137,13 @@
   "errors": {
     "generic": "An error occurred",
     "tryAgain": "Try again"
+  },
+  "error": {
+    "title": "Oops! Something went wrong",
+    "message": "Sorry, an unexpected error occurred. Don't worry, your data is safe.",
+    "technicalDetails": "Technical details (for developers)",
+    "tryAgain": "Try again",
+    "goHome": "Go to home",
+    "persistMessage": "If the problem persists, please contact support."
   }
 }
