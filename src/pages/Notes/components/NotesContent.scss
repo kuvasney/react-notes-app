@@ -66,6 +66,32 @@
       }
     }
 
+    .note-content {
+      margin-bottom: 1em;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .note-content-textarea {
+      width: 100%;
+      min-height: 120px;
+      padding: 8px;
+      border: 1px solid rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+      font-family: inherit;
+      font-size: 1em;
+      resize: vertical;
+      background: rgba(255, 255, 255, 0.5);
+      color: #000;
+      margin-bottom: 1em;
+
+      &:focus {
+        outline: none;
+        border-color: rgba(0, 0, 0, 0.4);
+        background: rgba(255, 255, 255, 0.8);
+      }
+    }
+
     .tags {
       margin: 0.5em 0;
       display: flex;

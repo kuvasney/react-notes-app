@@ -1,6 +1,6 @@
 import { http, HttpResponse } from "msw";
 import mockNotes from "./mockNotes.json";
-import mockUsers from "./mockUsers.json";
+import mockNote from "./mockNote.json";
 import mockLogin from "./mockLogin.json";
 
 export const handlers = [
@@ -59,7 +59,7 @@ export const handlers = [
     }
 
     console.log(`Atualizando nota com ID: ${id}`);
-    return HttpResponse.json({ success: true, id }, { status: 200 });
+    return HttpResponse.json(mockNote, { status: 200 });
   }),
 
   // DELETE /api/notes/:id - Atualizar nota específica

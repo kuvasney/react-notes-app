@@ -1,0 +1,16 @@
+{
+  "_id": "690a9f647a466ab462492550",
+  "userId": "6905424fac1a8aa3e6e28cf3",
+  "order": 1,
+  "titulo": "Note test title",
+  "conteudo": "This is a test note content to be used in frontend development.",
+  "archived": false,
+  "cor": "#aecbfa",
+  "tags": ["Importante", "lembrete"],
+  "pinned": true,
+  "lembretes": [],
+  "colaboradores": [],
+  "dataCriacao": "2025-11-05T00:50:44.600Z",
+  "dataUltimaEdicao": "2025-11-10T13:39:22.062Z",
+  "__v": 0
+}

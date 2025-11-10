@@ -8,7 +8,14 @@ import AddCollaborator from "@/components/AddCollaborator";
 import NotesCollaborators from "./NotesCollaborators";
 import { useNotesStore } from "@/stores/notesStore";
 import { useNotesApi } from "@/hooks/useNotesApi";
-import { FiTrash2, FiEdit2, FiStar, FiArchive } from "react-icons/fi";
+import {
+  FiTrash2,
+  FiEdit2,
+  FiStar,
+  FiArchive,
+  FiSave,
+  FiX,
+} from "react-icons/fi";
 import { useLocation } from "react-router-dom";
 
 interface NotesContentProps {
@@ -48,12 +55,6 @@ export default function NotesContent({
   } = useNotesApi();
 
   const { t } = useLanguage();
-
-  // Converter texto com quebras de linha para HTML
-  const textToHtml = (text: string): string => {
-    if (!text) return "";
-    return text.replace(/\n/g, "<br>");
-  };
 
   let noteObject: EditingNote = {
     title: editingNoteTitle,
@@ -263,31 +264,6 @@ export default function NotesContent({
         tags: processedTags,
       };
 
-      // if (isEditing) {
-      //   // Editando: manter todos os campos existentes e ID
-      //   Object.assign(noteData, {
-      //     id: note!.id,
-      //     _id: note!._id,
-      //     dataCriacao: note!.dataCriacao,
-      //     archived: note!.archived,
-      //     pinned: note!.pinned,
-      //     lembretes: note!.lembretes,
-      //     colaboradores: note!.colaboradores,
-      //   });
-      // } else {
-      //   // Criando: definir valores padrão, mas NÃO definir ID
-      //   Object.assign(noteData, {
-      //     dataCriacao: new Date().toISOString(),
-      //     archived: false,
-      //     pinned: false,
-      //     lembretes: [],
-      //     colaboradores: [],
-      //   });
-      //   // ID será gerado pelo MongoDB
-      // }
-
-      // Salvar nota (criar ou atualizar)
-
       await updateNoteApi(noteData as Note);
       setEditingNote(null);
 
@@ -302,6 +278,7 @@ export default function NotesContent({
   return (
     <>
       {/* Formulário de criação */}
+      {isLoading && <div>{t("common.saving")}</div>}
       {showCreateForm && (
         <div>
           <div className="form-header">
@@ -341,7 +318,7 @@ export default function NotesContent({
                 key={note.id}
                 id={note.id}
                 className="note"
-                draggable="true"
+                draggable="false"
                 onDragStart={(e) => dragStartHandler(e, index)}
                 onDragOver={(e) => dragoverHandler(e, index)}
                 onDrop={dropOverHandler}
@@ -393,20 +370,23 @@ export default function NotesContent({
                     onChange={(e) => setEditingNoteTitle(e.target.value)}
                   />
                 </h3>
-                <div
-                  className="note-content"
-                  contentEditable={editingNote?._id === note._id}
-                  onInput={(e) =>
-                    setEditingNoteContent(e.currentTarget.innerHTML || "")
-                  }
-                  dangerouslySetInnerHTML={{
-                    __html:
-                      editingNote?._id === note._id
-                        ? editingNoteContent
-                        : textToHtml(note.conteudo),
-                  }}
-                  suppressContentEditableWarning
-                />
+                {editingNote?._id === note._id ? (
+                  <textarea
+                    className="note-content-textarea"
+                    value={editingNoteContent}
+                    onChange={(e) => setEditingNoteContent(e.target.value)}
+                    rows={6}
+                  />
+                ) : (
+                  <div className="note-content">
+                    {note.conteudo.split("\n").map((line, i) => (
+                      <React.Fragment key={i}>
+                        {line}
+                        {i < note.conteudo.split("\n").length - 1 && <br />}
+                      </React.Fragment>
+                    ))}
+                  </div>
+                )}
                 {editingNote?._id !== note._id && (
                   <>
                     <div className="tags">
@@ -469,14 +449,31 @@ export default function NotesContent({
                   className="wrapper-buttons"
                   onMouseDown={(e) => e.stopPropagation()}
                 >
-                  <button
-                    className="edit-button"
-                    title={t("notes.editNote")}
-                    onClick={editNote(note)}
-                  >
-                    <FiEdit2 />
-                  </button>
-                  <button onClick={() => updateNote(note)}>Save Note</button>
+                  {editingNote?._id !== note._id && (
+                    <button
+                      className="edit-button"
+                      title={t("notes.editNote")}
+                      onClick={editNote(note)}
+                    >
+                      <FiEdit2 />
+                    </button>
+                  )}
+                  {editingNote?._id === note._id && (
+                    <button
+                      onClick={() => updateNote(note)}
+                      title={t("common.save")}
+                    >
+                      <FiSave />
+                    </button>
+                  )}
+                  {editingNote?._id === note._id && (
+                    <button
+                      onClick={() => cancelEdit()}
+                      title={t("common.cancel")}
+                    >
+                      <FiX />
+                    </button>
+                  )}
                   <button
                     onClick={() => handleDelete(note.id)}
                     className="delete-button"
