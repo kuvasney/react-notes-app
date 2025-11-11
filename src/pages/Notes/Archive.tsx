@@ -26,7 +26,7 @@ export default function Archive() {
   return (
     <div className="content-wrapper">
       <section className="notes-list">
-        <h1 className="hwr">{t("notes.archivedTitle")}</h1>
+        <h2 className="section-title hwr">{t("notes.archivedTitle")}</h2>
         <NotesNavigator />
         {loading ? (
           <NotesContentSkeleton />

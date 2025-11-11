@@ -6,6 +6,8 @@ import { useUserApi } from "@/hooks/useUserApi";
 import { useUserStore } from "@/stores/userStore";
 import { useLanguage } from "@/contexts/LanguageContext";
 import ToggleVisibility from "@/components/ToggleVisibility/ToggleVisibility";
+import Modal from "@/components/Modal/Modal";
+import ResetPasswordForm from "./ResetPasswordForm";
 import "./LoginForm.scss";
 
 export default function LoginForm() {
@@ -14,6 +16,7 @@ export default function LoginForm() {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isPasswordModalOpen, setIsPasswordModalOpen] = useState(false);
   const navigate = useNavigate();
   const { login } = useAuth();
   const { t } = useLanguage();
@@ -74,6 +77,7 @@ export default function LoginForm() {
     <section className="login">
       <form onSubmit={handleSubmit}>
         <div className="input-container">
+          <label htmlFor="email">{t("auth.login.emailLabel")}</label>
           <input
             type="email"
             placeholder={t("auth.login.emailPlaceholder")}
@@ -85,7 +89,8 @@ export default function LoginForm() {
         </div>
 
         <div className="input-container">
-          <label className="password-label">
+          <label htmlFor="password" className="input-password">
+            {t("auth.login.passwordLabel")}
             <ToggleVisibility
               isVisible={isPasswordVisible}
               onToggle={setIsPasswordVisible}
@@ -101,6 +106,14 @@ export default function LoginForm() {
           />
         </div>
         <div className="input-container">
+          <p
+            className="forgot-password"
+            onClick={() => setIsPasswordModalOpen(true)}
+          >
+            {t("auth.resetPassword.passwordResetLink")}
+          </p>
+        </div>
+        <div className="input-container">
           {error && (
             <div className="error">
               <FiAlertCircle /> {error}
@@ -112,6 +125,14 @@ export default function LoginForm() {
           {isLoading ? t("auth.login.loggingIn") : t("auth.login.loginButton")}
         </button>
       </form>
+      <Modal
+        show={isPasswordModalOpen}
+        onClose={() => setIsPasswordModalOpen(false)}
+      >
+        <div className="password-reset-modal">
+          <ResetPasswordForm />
+        </div>
+      </Modal>
     </section>
   );
 }

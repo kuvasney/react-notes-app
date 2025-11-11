@@ -31,7 +31,7 @@ export default function Notes() {
 
   return (
     <div className="content-wrapper">
-      <h1 className="hwr">{t("notes.title")}</h1>
+      <h2 className="section-title hwr">{t("notes.title")}</h2>
       <NotesNavigator />
       <section className="notes-list">
         {loading ? (

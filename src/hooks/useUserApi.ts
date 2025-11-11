@@ -1,4 +1,9 @@
-import { buildApiUrl, API_ENDPOINTS, getAuthHeaders } from "@/config/api";
+import {
+  buildApiUrl,
+  API_ENDPOINTS,
+  getAuthHeaders,
+  apiFetch,
+} from "@/config/api";
 import { User } from "../types";
 
 export const useUserApi = () => {
@@ -7,7 +12,7 @@ export const useUserApi = () => {
     email: string,
     password: string
   ) => {
-    const response = await fetch(
+    const response = await apiFetch(
       buildApiUrl(API_ENDPOINTS.users + "/register"),
       {
         method: "POST",
@@ -24,7 +29,7 @@ export const useUserApi = () => {
   };
 
   const loginUser = async (email: string, password: string) => {
-    const response = await fetch(buildApiUrl(API_ENDPOINTS.auth), {
+    const response = await apiFetch(buildApiUrl(API_ENDPOINTS.auth), {
       method: "POST",
       headers: getAuthHeaders(),
       body: JSON.stringify({ email, password }),
@@ -38,7 +43,7 @@ export const useUserApi = () => {
   };
 
   const updateUser = async (userId: string, data: Partial<User>) => {
-    const response = await fetch(
+    const response = await apiFetch(
       buildApiUrl(`${API_ENDPOINTS.users}/${userId}`),
       {
         method: "PUT",
@@ -54,5 +59,37 @@ export const useUserApi = () => {
     return response.json();
   };
 
-  return { registerUser, loginUser, updateUser };
+  const passwordForgot = async (email: string) => {
+    const response = await apiFetch(
+      buildApiUrl(API_ENDPOINTS.users + "/forgot-password"),
+      {
+        method: "POST",
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ email }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to reset password");
+    }
+    return response.json();
+  };
+
+  const passwordReset = async (token: string, newPassword: string) => {
+    const response = await apiFetch(
+      buildApiUrl(API_ENDPOINTS.users + "/reset-password"),
+      {
+        method: "POST",
+        headers: getAuthHeaders(),
+        body: JSON.stringify({ token, newPassword }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error("Failed to reset password");
+    }
+    return response.json();
+  };
+
+  return { registerUser, loginUser, updateUser, passwordForgot, passwordReset };
 };

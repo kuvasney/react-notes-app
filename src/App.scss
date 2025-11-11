@@ -9,5 +9,9 @@
 .main-content {
   width: 100%;
   min-height: $main-height;
-  padding: 1em;
+  padding: 10px;
+
+  @include respond-to("desktop") {
+    padding: 20px;
+  }
 }

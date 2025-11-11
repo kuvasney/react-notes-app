@@ -7,7 +7,7 @@ export default function Register() {
 
   return (
     <div className="content-wrapper">
-      <h1 className="hwr">{t("auth.register.title")}</h1>
+      <h2 className="section-title hwr">{t("auth.register.title")}</h2>
       <RegisterForm />
       <p>
         {t("auth.login.noAccount")}{" "}

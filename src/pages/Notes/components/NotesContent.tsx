@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Note } from "@/types";
 import { useLanguage } from "@/contexts/LanguageContext";
-import "./NotesContent.scss";
+import { useEscapeKey } from "@/hooks/useEscapeKey";
 import NotesForm from "./NotesForm";
 import NotesSearch from "./NotesSearch";
 import AddCollaborator from "@/components/AddCollaborator";
@@ -15,8 +15,10 @@ import {
   FiArchive,
   FiSave,
   FiX,
+  FiUnlock,
 } from "react-icons/fi";
 import { useLocation } from "react-router-dom";
+import "./NotesContent.scss";
 
 interface NotesContentProps {
   notes: Note[];
@@ -28,6 +30,8 @@ interface EditingNote {
   content: string;
   tags: string;
   color: string;
+  isPublic: boolean;
+  shareToken: string;
 }
 
 export default function NotesContent({
@@ -44,6 +48,7 @@ export default function NotesContent({
   const [editingNoteContent, setEditingNoteContent] = useState("");
   const [editingTags, setEditingTags] = useState("");
   const [editingColor, setEditingColor] = useState("");
+  const [editingIsPublic, setEditingIsPublic] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -52,6 +57,7 @@ export default function NotesContent({
     reorderNotes,
     editNote: updateNoteApi,
     refetch,
+    regenerateShareToken,
   } = useNotesApi();
 
   const { t } = useLanguage();
@@ -61,10 +67,18 @@ export default function NotesContent({
     content: editingNoteContent,
     tags: editingTags,
     color: editingColor,
+    isPublic: editingIsPublic,
+    shareToken: editingNote?.shareToken || "",
   };
 
   const location = useLocation();
   const isArchivePage = location.pathname.includes("notes/archive");
+
+  // Detectar tecla Esc
+  useEscapeKey({
+    onEscape: setEditingNote.bind(null, null),
+    condition: Boolean(editingNote), // Só ativa se houver callback de cancelar
+  });
 
   if (loading) return <div>{t("common.loading")}</div>;
 
@@ -76,6 +90,7 @@ export default function NotesContent({
     setEditingNoteContent(note.conteudo);
     setEditingTags(note.tags.join(", "));
     setEditingColor(note.cor);
+    setEditingIsPublic(note.isPublic || false);
     setShowCreateForm(false); // Esconder formulário de criação
   };
 
@@ -234,6 +249,8 @@ export default function NotesContent({
     setError("");
     setIsLoading(true);
 
+    const isShareableNote = note.isPublic && note.shareToken;
+
     try {
       // Validações básicas
       if (!noteObject.title.trim()) {
@@ -250,6 +267,10 @@ export default function NotesContent({
         .map((tag) => tag.trim())
         .filter((tag) => tag.length > 0);
 
+      if (noteObject.isPublic && !isShareableNote) {
+        const shareResponse = await regenerateShareToken(note.id);
+      }
+
       // Criar/atualizar objeto da nota
       const noteData: Partial<Note> = {
         id: note.id,
@@ -258,6 +279,7 @@ export default function NotesContent({
         dataUltimaEdicao: new Date().toISOString(),
         cor: noteObject.color,
         tags: processedTags,
+        isPublic: noteObject.isPublic,
       };
 
       await updateNoteApi(noteData as Note);
@@ -285,20 +307,26 @@ export default function NotesContent({
       )}
       <NotesSearch onSearchChange={handleSearchChange} />
       <div className="notes-content">
-        {/* Lista de notas */}
         {searchTerm.length > 0 && (
-          <p className="search-result">
-            {filterByTag
-              ? t("notes.search.filterByTag")
-              : t("notes.search.searchBy")}{" "}
-            <span className={`${filterByTag ? "tag" : ""}`}>{searchTerm}</span>{" "}
-            {t("notes.search.returned")} {filteredNotes.length}{" "}
-            {t("notes.search.results")}
-            <button onClick={() => handleSearchChange("")}>
-              {t("notes.search.clearSearch")}
-            </button>
-          </p>
+          <>
+            <p className="search-result">
+              {filterByTag
+                ? t("notes.search.filterByTag")
+                : t("notes.search.searchBy")}{" "}
+              <span className={`${filterByTag ? "tag" : ""}`}>
+                {searchTerm}
+              </span>{" "}
+              {t("notes.search.returned")} {filteredNotes.length}{" "}
+              {t("notes.search.results")}
+            </p>
+            <div className="input-container">
+              <button onClick={() => handleSearchChange("")}>
+                {t("notes.search.clearSearch")}
+              </button>
+            </div>
+          </>
         )}
+
         <div className="notes-list">
           {notes.length === 0 ? (
             <div className="empty-state">
@@ -313,18 +341,23 @@ export default function NotesContent({
               <div
                 key={note.id}
                 id={note.id}
-                className="note"
+                className={`note ${note.isPublic ? "public-note" : ""}`}
                 draggable="false"
                 onDragStart={(e) => dragStartHandler(e, index)}
                 onDragOver={(e) => dragoverHandler(e, index)}
                 onDrop={dropOverHandler}
                 style={{ backgroundColor: note.cor || "transparent" }}
               >
+                {note.isPublic && (
+                  <div className="public-label">
+                    <FiUnlock /> {t("notes.public")}
+                  </div>
+                )}
                 <div
                   className="wrapper-buttons"
                   onMouseDown={(e) => e.stopPropagation()}
                 >
-                  <AddCollaborator note={note} />
+                  {!note.isPublic && <AddCollaborator note={note} />}
                   <button
                     title={
                       note.pinned
@@ -434,6 +467,19 @@ export default function NotesContent({
                       </select>
                     </div>
                   </>
+                )}
+                {editingNote?._id === note._id && (
+                  <div className="input-container inline-container">
+                    <label htmlFor="public-note">
+                      {t("notes.form.isPublic")}
+                    </label>
+                    <input
+                      type="checkbox"
+                      id="public-note"
+                      checked={editingIsPublic}
+                      onChange={(e) => setEditingIsPublic(e.target.checked)}
+                    />
+                  </div>
                 )}
                 <p className="date">
                   <em>{t("notes.actions.created")}</em>{" "}

@@ -16,6 +16,8 @@
     "login": {
       "title": "Iniciar sesión",
       "email": "Correo electrónico",
+      "emailLabel": "Tu correo electrónico:",
+      "passwordLabel": "Tu contraseña:",
       "password": "Contraseña",
       "emailPlaceholder": "Correo electrónico",
       "passwordPlaceholder": "Contraseña",
@@ -25,6 +27,26 @@
       "passwordRequired": "La contraseña es obligatoria",
       "noAccount": "¿No tienes una cuenta?",
       "registerLink": "Regístrate aquí"
+    },
+    "resetPassword": {
+      "title": "Restablecer Contraseña",
+      "submit": "Restablecer Contraseña",
+      "emailInstruction": "Ingresa tu correo electrónico para recibir un enlace de restablecimiento de contraseña.",
+      "emailSent": "Se ha enviado un correo de restablecimiento de contraseña, verifica tu bandeja de entrada.",
+      "instruction": "Ingresa tu nueva contraseña a continuación.",
+      "emailRequired": "El correo electrónico es obligatorio",
+      "email": "Ingresa tu correo electrónico",
+      "loading": "Enviando correo de restablecimiento...",
+      "backToLogin": "Volver al inicio de sesión",
+      "passwordResetLink": "¿Olvidaste tu contraseña?",
+      "password": "Nueva Contraseña",
+      "passwordRetype": "Ingresa la nueva contraseña nuevamente",
+      "passwordRequired": "La contraseña es obligatoria",
+      "passwordMinLength": "La contraseña debe tener al menos 6 caracteres",
+      "passwordsMustMatch": "Las contraseñas deben coincidir",
+      "success": "¡Contraseña restablecida con éxito!",
+      "error": "Error al restablecer la contraseña. El enlace puede haber expirado o ser inválido.",
+      "error2": "Haz clic aquí para solicitar un nuevo enlace de restablecimiento de contraseña."
     },
     "register": {
       "title": "Crea tu cuenta Take Note",
@@ -49,6 +71,7 @@
     "deleteError": "Error al eliminar la nota. Por favor, inténtalo de nuevo.",
     "emptyState": "No se encontraron notas. ¡Crea tu primera nota!",
     "noNotes": "No hay notas disponibles",
+    "public": "Nota Pública",
     "noNotesFound": "No se encontraron notas",
     "form": {
       "title": "Título",
@@ -59,6 +82,8 @@
       "contentRequired": "El contenido es obligatorio",
       "color": "Color de la nota:",
       "tags": "Etiquetas:",
+      "isPublic": "¿Nota Pública?",
+      "isPublicLabel": "Permitir que cualquier persona con el enlace vea esta nota",
       "tagsPlaceholder": "Pon tus etiquetas aquí separadas por comas",
       "saveError": "Error al guardar la nota",
       "saving": "Guardando...",

@@ -39,7 +39,12 @@ export default function Modal({ show, onClose, children }: ModalProps) {
       <button className="modal-close" title="Close Modal" onClick={onClose}>
         <FiXCircle />
       </button>
-      <div className="modal-content">{children}</div>
+      <div className="modal-content">
+        <button className="modal-close" title="Close Modal" onClick={onClose}>
+          <FiXCircle />
+        </button>
+        {children}
+      </div>
     </div>,
     document.body
   );

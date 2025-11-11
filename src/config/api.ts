@@ -21,6 +21,35 @@ export const getAuthHeaders = (): HeadersInit => {
   };
 };
 
+export const handleUnauthorizedResponse = () => {
+  // Limpar dados de autenticação
+  sessionStorage.clear();
+  localStorage.clear();
+  // Redirecionar para a página de login
+  window.location.href = "/";
+};
+
+// Wrapper global para fetch com interceptação de 401
+export const apiFetch = async (
+  url: string,
+  options?: RequestInit
+): Promise<Response> => {
+  try {
+    const response = await fetch(url, options);
+
+    // Interceptar resposta 401 (Unauthorized)
+    if (response.status === 401) {
+      handleUnauthorizedResponse();
+      throw new Error("Unauthorized - Redirecting to login");
+    }
+
+    return response;
+  } catch (error) {
+    // Re-lançar o erro para que o código que chamou possa tratá-lo
+    throw error;
+  }
+};
+
 // Endpoints da API
 export const API_ENDPOINTS: ApiEndpoints = {
   notes: "/api/notes",

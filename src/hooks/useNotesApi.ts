@@ -1,12 +1,16 @@
 import { useNotesStore } from "@/stores/notesStore";
-import { buildApiUrl, API_ENDPOINTS, getAuthHeaders } from "@/config/api";
+import {
+  buildApiUrl,
+  API_ENDPOINTS,
+  getAuthHeaders,
+  apiFetch,
+} from "@/config/api";
 import type { Note } from "@/types/Note";
 import {
   transformMongoNotes,
   transformMongoNote,
   transformNoteForMongo,
 } from "@/utils/apiTransforms";
-import { useAuth } from "./useAuth";
 
 export const useNotesApi = () => {
   const {
@@ -20,8 +24,6 @@ export const useNotesApi = () => {
     initialized,
   } = useNotesStore();
 
-  const { isLoggedIn } = useAuth();
-
   const fetchNotes = async (archived = false) => {
     try {
       setLoading(true);
@@ -31,7 +33,7 @@ export const useNotesApi = () => {
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
 
-      const response = await fetch(
+      const response = await apiFetch(
         buildApiUrl(API_ENDPOINTS.notes + `?archived=${archived}`),
         {
           headers: getAuthHeaders(),
@@ -70,15 +72,6 @@ export const useNotesApi = () => {
 
       if (error instanceof Error && error.name === "AbortError") {
         setError("Timeout na requisição - API não respondeu");
-      } else if (
-        error instanceof Error &&
-        error.message === "Erro ao carregar notas: 401"
-      ) {
-        if (isLoggedIn) {
-          localStorage.removeItem("isLoggedIn");
-          window.location.href = "/";
-        }
-        setError("token inválido ou expirado");
       } else {
         setError(error instanceof Error ? error.message : "Erro desconhecido");
       }
@@ -90,12 +83,68 @@ export const useNotesApi = () => {
     }
   };
 
+  const getNoteById = async (noteId: string): Promise<Note | null> => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await apiFetch(
+        buildApiUrl(`${API_ENDPOINTS.notes}/${noteId}`),
+        {
+          headers: getAuthHeaders(),
+        }
+      );
+
+      if (!response.ok) {
+        throw new Error("Erro ao carregar nota da API");
+      }
+
+      const data = await response.json();
+
+      // Transforma dados do MongoDB (_id -> id) se necessário
+      const transformedNote = transformMongoNote(data);
+
+      return transformedNote;
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Erro desconhecido");
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const getPublicNoteById = async (noteId: string): Promise<Note | null> => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await apiFetch(
+        buildApiUrl(`${API_ENDPOINTS.notes}/public/${noteId}`)
+      );
+
+      if (!response.ok) {
+        throw new Error("Erro ao carregar nota pública da API");
+      }
+      const data = await response.json();
+
+      // Transforma dados do MongoDB (_id -> id) se necessário
+      const transformedNote = transformMongoNote(data);
+
+      return transformedNote;
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Erro desconhecido");
+      return null;
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const saveNote = async (newNote: Note) => {
     try {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(buildApiUrl(API_ENDPOINTS.notes), {
+      const response = await apiFetch(buildApiUrl(API_ENDPOINTS.notes), {
         method: "POST",
         headers: getAuthHeaders(),
         body: JSON.stringify(transformNoteForMongo(newNote)),
@@ -123,7 +172,7 @@ export const useNotesApi = () => {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(
+      const response = await apiFetch(
         buildApiUrl(`${API_ENDPOINTS.notes}/${newNote.id}`),
         {
           method: "PUT",
@@ -144,12 +193,36 @@ export const useNotesApi = () => {
     }
   };
 
+  const regenerateShareToken = async (noteId: string) => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const response = await apiFetch(
+        buildApiUrl(`${API_ENDPOINTS.notes}/${noteId}/regenerate-share-token`),
+        {
+          method: "POST",
+          headers: getAuthHeaders(),
+        }
+      );
+      if (!response.ok) {
+        throw new Error("Erro ao regenerar token de compartilhamento");
+      }
+
+      return await response.json();
+    } catch (error) {
+      setError(error instanceof Error ? error.message : "Erro desconhecido");
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const removeNote = async (noteId: string) => {
     try {
       setLoading(true);
       setError(null);
 
-      const response = await fetch(
+      const response = await apiFetch(
         buildApiUrl(`${API_ENDPOINTS.notes}/${noteId}`),
         {
           method: "DELETE",
@@ -173,7 +246,7 @@ export const useNotesApi = () => {
     setIndexNotes(newIndexNotes);
 
     try {
-      const response = await fetch(buildApiUrl(API_ENDPOINTS.reorder), {
+      const response = await apiFetch(buildApiUrl(API_ENDPOINTS.reorder), {
         method: "POST",
         headers: getAuthHeaders(),
         body: JSON.stringify({ noteIds: newIndexNotes }), // Apenas o array
@@ -193,7 +266,7 @@ export const useNotesApi = () => {
     noteId?: string;
   }) => {
     try {
-      const response = await fetch(
+      const response = await apiFetch(
         buildApiUrl(API_ENDPOINTS.notes + "/addcollaborator"),
         {
           method: "PUT",
@@ -231,7 +304,7 @@ export const useNotesApi = () => {
     noteId?: string;
   }) => {
     try {
-      const response = await fetch(
+      const response = await apiFetch(
         buildApiUrl(API_ENDPOINTS.notes + "/removecollaborator"),
         {
           method: "DELETE",
@@ -274,8 +347,11 @@ export const useNotesApi = () => {
   return {
     fetchNotes,
     refetch: fetchNotes,
+    getNoteById,
+    getPublicNoteById,
     saveNote,
     editNote,
+    regenerateShareToken,
     removeNote,
     reorderNotes,
     addcollaborator,

@@ -16,6 +16,8 @@
     "login": {
       "title": "Login",
       "email": "Email",
+      "emailLabel": "Your email:",
+      "passwordLabel": "Your password:",
       "password": "Password",
       "emailPlaceholder": "Email",
       "passwordPlaceholder": "Password",
@@ -25,6 +27,26 @@
       "passwordRequired": "Password is required",
       "noAccount": "Don't have an account?",
       "registerLink": "Register here"
+    },
+    "resetPassword": {
+      "title": "Reset Password",
+      "submit": "Reset Password",
+      "emailInstruction": "Enter your email to receive a password reset link.",
+      "emailSent": "A password reset email has been sent, check your inbox.",
+      "instruction": "Enter your new password below.",
+      "emailRequired": "Email is required",
+      "email": "Enter your Email",
+      "loading": "Sending reset email...",
+      "backToLogin": "Back to login",
+      "passwordResetLink": "Forgot your password?",
+      "password": "New Password",
+      "passwordRetype": "Enter the new password again",
+      "passwordRequired": "Password is required",
+      "passwordMinLength": "Password must be at least 6 characters",
+      "passwordsMustMatch": "Passwords must match",
+      "success": "Password reset successfully!",
+      "error": "Error resetting password. The link may have expired or be invalid.",
+      "error2": "Click here to request a new password reset link."
     },
     "register": {
       "title": "Create your Take Note Account",
@@ -49,6 +71,7 @@
     "deleteError": "Error deleting note. Please try again.",
     "emptyState": "No notes found. Create your first note!",
     "noNotes": "No notes available",
+    "public": "Public Note",
     "noNotesFound": "No notes found",
     "form": {
       "title": "Title",
@@ -59,6 +82,8 @@
       "contentRequired": "Content is required",
       "color": "Note color:",
       "tags": "Tags:",
+      "isPublic": "Public Note?",
+      "isPublicLabel": "Allow anyone with the link to view this note",
       "tagsPlaceholder": "Put your tags here separated by commas",
       "saveError": "Error saving note",
       "saving": "Saving...",

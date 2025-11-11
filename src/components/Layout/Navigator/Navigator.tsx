@@ -22,8 +22,7 @@ export default function Navigator() {
   const { isLoggedIn, logout: authLogout } = useAuth();
 
   // Verificação extra para garantir sincronização
-  const isAuthenticated =
-    isLoggedIn || localStorage.getItem("isLoggedIn") === "true";
+  const isAuthenticated = isLoggedIn;
 
   // Atualizar estados quando a rota mudar
   useEffect(() => {
@@ -46,20 +45,27 @@ export default function Navigator() {
   return (
     <div className="wrapper-buttons">
       {isAuthenticated && (
-        <div className="user-info">
-          <NavLink to="/user" className="button-link user-link">
-            <UserName />
-          </NavLink>
-        </div>
-      )}
-      <SwitchTheme />
-      {!isHomePage && (
         <>
-          <button onClick={logout}>
-            <FiLogOut />
-          </button>
+          <div className="user-info">
+            <NavLink to="/user" className="button-link user-link">
+              <UserName />
+            </NavLink>
+          </div>
+          {!isHomePage && (
+            <>
+              <button onClick={logout}>
+                <FiLogOut />
+              </button>
+            </>
+          )}
         </>
       )}
+      {!isAuthenticated && !isHomePage && (
+        <NavLink to="/" className="button-link">
+          {/* {t("layout.navigator.home")} */}Login
+        </NavLink>
+      )}
+      <SwitchTheme />
       <LangSelector />
     </div>
   );

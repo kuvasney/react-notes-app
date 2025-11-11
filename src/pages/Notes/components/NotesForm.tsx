@@ -14,8 +14,9 @@ interface NotesFormProps {
 export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
   const [title, setTitle] = useState(note?.titulo || "");
   const [content, setContent] = useState(note?.conteudo || "");
-  const [color, setColor] = useState(note?.cor || "#fff475"); // Cor padrão amarela
+  const [color, setColor] = useState(note?.cor || "#e8eaed");
   const [tags, setTags] = useState(note?.tags?.join(", ") || "");
+  const [isPublic, setIsPublic] = useState(note?.isPublic || false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
@@ -53,6 +54,7 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
         dataUltimaEdicao: new Date().toISOString(),
         cor: color,
         tags: processedTags,
+        isPublic: isPublic,
       };
 
       if (isEditing) {
@@ -65,6 +67,7 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
           pinned: note!.pinned,
           lembretes: note!.lembretes,
           colaboradores: note!.colaboradores,
+          isPublic: note!.isPublic,
         });
       } else {
         // Criando: definir valores padrão, mas NÃO definir ID
@@ -91,6 +94,7 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
         setContent("");
         setColor("#fff475");
         setTags("");
+        setIsPublic(false);
       }
 
       // Chamar callback de sucesso se fornecido
@@ -140,7 +144,7 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
           ></textarea>
         </div>
 
-        <div className="input-container">
+        <div className="input-container inline-container">
           <label htmlFor="color-select">{t("notes.form.color")}</label>
           <select
             value={color}
@@ -148,12 +152,12 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
             disabled={isLoading}
             id="color-select"
           >
-            <option value="#fff475">{t("notes.colors.yellow")}</option>
-            <option value="#aecbfa">{t("notes.colors.blue")}</option>
-            <option value="#ccff90">{t("notes.colors.green")}</option>
-            <option value="#f28b82">{t("notes.colors.red")}</option>
-            <option value="#d7aefb">{t("notes.colors.purple")}</option>
-            <option value="#e8eaed">{t("notes.colors.gray")}</option>
+            <option value="#fff475">🟡</option>
+            <option value="#aecbfa">🔵</option>
+            <option value="#ccff90">🟢</option>
+            <option value="#f28b82">🔴</option>
+            <option value="#d7aefb">🟣</option>
+            <option value="#e8eaed">⚪</option>
           </select>
         </div>
 
@@ -167,6 +171,18 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
             disabled={isLoading}
             id="tags"
           />
+        </div>
+        <div className="input-container inline-container">
+          <label htmlFor="public-note">
+            {t("notes.form.isPublic")}
+            <input
+              type="checkbox"
+              checked={isPublic}
+              onChange={(e) => setIsPublic(e.target.checked)}
+              disabled={isLoading}
+              id="public-note"
+            />
+          </label>
         </div>
 
         {error && <div className="error">{error}</div>}

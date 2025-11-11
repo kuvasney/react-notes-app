@@ -18,6 +18,8 @@ export interface Note {
   lembretes: Reminder[];
   colaboradores: string[];
   order: number;
+  isPublic?: boolean;
+  shareToken?: string;
 }
 
 // Types utilitários para o app de notas
