@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { useNotesApi } from "@/hooks/useNotesApi";
+import { usePageMeta } from "@/hooks/usePageMeta";
 import { Note } from "@/types";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { useParams } from "react-router-dom";
-import { FiUnlock } from "react-icons/fi";
 import "../Notes/components/NotesContent.scss";
 import PublicLabel from "../../components/PublicLabel";
 
@@ -12,6 +12,16 @@ export default function ViewPublicNote() {
   const { getPublicNoteById } = useNotesApi();
   const noteId = useParams().id;
   const [loadedNote, setLoadedNote] = useState<Note | null>(null);
+
+  // Atualizar meta tags quando a nota carregar
+  usePageMeta({
+    title: loadedNote
+      ? `${loadedNote.titulo} - Take Note`
+      : "Take Note - Public Note",
+    description: loadedNote
+      ? loadedNote.conteudo.substring(0, 155) + "..."
+      : "View public note shared on Take Note - Your notes, simple and secure.",
+  });
 
   if (!noteId) {
     return <div>{t("notes.note.notFound")}</div>;

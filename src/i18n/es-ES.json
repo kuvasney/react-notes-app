@@ -28,7 +28,8 @@
       "passwordRequired": "La contraseña es obligatoria",
       "noAccount": "¿No tienes una cuenta?",
       "registerLink": "Regístrate aquí",
-      "invalidCredentials": "Credenciales inválidas. Por favor, inténtalo de nuevo."
+      "invalidCredentials": "Credenciales inválidas. Por favor, inténtalo de nuevo.",
+      "description": "Organiza tus ideas con simplicidad y seguridad total. Tus notas, simples y seguras."
     },
     "resetPassword": {
       "title": "Restablecer Contraseña",
@@ -59,7 +60,8 @@
       "registering": "Registrando usuario...",
       "success": "¡Usuario registrado exitosamente!",
       "hasAccount": "¿Ya tienes una cuenta?",
-      "loginLink": "Inicia sesión aquí"
+      "loginLink": "Inicia sesión aquí",
+      "description": "Crea tu cuenta Take Note y comienza a organizar tus ideas con seguridad."
     },
     "logout": "Cerrar sesión"
   },

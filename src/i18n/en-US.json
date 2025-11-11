@@ -28,7 +28,8 @@
       "passwordRequired": "Password is required",
       "noAccount": "Don't have an account?",
       "registerLink": "Register here",
-      "invalidCredentials": "Invalid credentials. Please try again."
+      "invalidCredentials": "Invalid credentials. Please try again.",
+      "description": "Organize your ideas with simplicity and total security. Your notes, simple and secure."
     },
     "resetPassword": {
       "title": "Reset Password",
@@ -59,7 +60,8 @@
       "registering": "Registering user...",
       "success": "User registered successfully!",
       "hasAccount": "Already have an account?",
-      "loginLink": "Login here"
+      "loginLink": "Login here",
+      "description": "Create your Take Note account and start organizing your ideas securely."
     },
     "logout": "Logout"
   },
