@@ -19,6 +19,8 @@ import {
 } from "react-icons/fi";
 import { useLocation } from "react-router-dom";
 import "./NotesContent.scss";
+import Share from "../../../components/Share";
+import PublicLabel from "../../../components/PublicLabel";
 
 interface NotesContentProps {
   notes: Note[];
@@ -147,6 +149,8 @@ export default function NotesContent({
     setSearchTerm(search);
   };
 
+  /** Drag and Drop reorder ainda não está funcionando como deveria */
+
   let draggedElement: number | null = null;
   let draggedOverElement: number | null = null;
 
@@ -268,7 +272,7 @@ export default function NotesContent({
         .filter((tag) => tag.length > 0);
 
       if (noteObject.isPublic && !isShareableNote) {
-        const shareResponse = await regenerateShareToken(note.id);
+        await regenerateShareToken(note.id);
       }
 
       // Criar/atualizar objeto da nota
@@ -348,11 +352,7 @@ export default function NotesContent({
                 onDrop={dropOverHandler}
                 style={{ backgroundColor: note.cor || "transparent" }}
               >
-                {note.isPublic && (
-                  <div className="public-label">
-                    <FiUnlock /> {t("notes.public")}
-                  </div>
-                )}
+                {note.isPublic && <PublicLabel shareToken={note.shareToken} />}
                 <div
                   className="wrapper-buttons"
                   onMouseDown={(e) => e.stopPropagation()}

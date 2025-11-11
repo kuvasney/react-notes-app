@@ -1,12 +1,9 @@
 import { useState, useEffect } from "react";
 
 export const useAuth = () => {
-  // Inicializar diretamente do localStorage para evitar delay
-  console.log("Checking auth status from localStorage");
   const validateLogin =
     localStorage.getItem("isLoggedIn") === "true" &&
     sessionStorage.getItem("userToken") !== null;
-  console.log("Initial isLoggedIn:", validateLogin);
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
     return validateLogin;
   });

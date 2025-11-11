@@ -5,6 +5,7 @@ import { useLanguage } from "@/contexts/LanguageContext";
 import { useParams } from "react-router-dom";
 import { FiUnlock } from "react-icons/fi";
 import "../Notes/components/NotesContent.scss";
+import PublicLabel from "../../components/PublicLabel";
 
 export default function ViewPublicNote() {
   const { t } = useLanguage();
@@ -39,9 +40,7 @@ export default function ViewPublicNote() {
           className="note note-view-public"
           style={{ backgroundColor: loadedNote.cor || "transparent" }}
         >
-          <div className="public-label">
-            <FiUnlock /> {t("notes.public")}
-          </div>
+          <PublicLabel shareToken={loadedNote.shareToken} />
           <h3 className="note-title">{loadedNote.titulo}</h3>
           <div className="note-content">
             {loadedNote.conteudo.split("\n").map((line, i) => (

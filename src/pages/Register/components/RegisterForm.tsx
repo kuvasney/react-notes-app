@@ -105,14 +105,18 @@ export default function RegisterForm() {
       <button type="submit">{t("auth.register.registerButton")}</button>
       {isLoading && <p>{t("auth.register.registering")}</p>}
       {error && (
-        <p className="error-message">
-          <FiAlertCircle /> {error}
-        </p>
+        <div className="message-container">
+          <p className="error-message">
+            <FiAlertCircle /> {error}
+          </p>
+        </div>
       )}
       {isSuccess && (
-        <p className="success-message">
-          <FiCheckCircle /> {t("auth.register.success")}
-        </p>
+        <div className="message-container">
+          <p className="success">
+            <FiCheckCircle /> {t("auth.register.success")}
+          </p>
+        </div>
       )}
     </form>
   );

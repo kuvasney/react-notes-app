@@ -32,6 +32,10 @@
       margin-inline: 0;
     }
 
+    &.public-note {
+      padding-top: 20px;
+    }
+
     // .wrapper-buttons {
     //   position: absolute;
     //   top: 0;
@@ -67,6 +71,7 @@
         font-size: 1em;
         background: transparent;
         font-weight: bold;
+        width: 100%;
       }
     }
 
@@ -291,6 +296,7 @@
 
 .note-view-public {
   max-width: 95vw;
+  padding-top: 25px;
 
   @include respond-to("tablet") {
     max-width: 600px;

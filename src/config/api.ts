@@ -29,7 +29,15 @@ export const handleUnauthorizedResponse = () => {
   window.location.href = "/";
 };
 
-// Wrapper global para fetch com interceptação de 401
+// Wrapper para fetch SEM interceptação de 401 (para login, registro, etc.)
+export const publicFetch = async (
+  url: string,
+  options?: RequestInit
+): Promise<Response> => {
+  return fetch(url, options);
+};
+
+// Wrapper global para fetch com interceptação de 401 (para rotas autenticadas)
 export const apiFetch = async (
   url: string,
   options?: RequestInit

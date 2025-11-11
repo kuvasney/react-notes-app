@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Note } from "@/types";
 import { useLanguage } from "@/contexts/LanguageContext";
 import NotesCollaborators from "./components/NotesCollaborators";
+import PublicLabel from "../../components/PublicLabel";
 
 export default function ViewNote() {
   const { t } = useLanguage();

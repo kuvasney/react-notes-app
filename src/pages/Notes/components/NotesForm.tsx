@@ -3,6 +3,7 @@ import { useEscapeKey } from "@/hooks/useEscapeKey";
 import { useNotesApi } from "@/hooks/useNotesApi";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Note } from "@/types";
+import Tooltip from "@/components/Tooltip";
 import "./NotesContent.scss";
 
 interface NotesFormProps {
@@ -172,17 +173,16 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
             id="tags"
           />
         </div>
-        <div className="input-container inline-container">
-          <label htmlFor="public-note">
-            {t("notes.form.isPublic")}
-            <input
-              type="checkbox"
-              checked={isPublic}
-              onChange={(e) => setIsPublic(e.target.checked)}
-              disabled={isLoading}
-              id="public-note"
-            />
-          </label>
+        <div className="checkbox-container inline-container tooltip-container">
+          <label htmlFor="public-note">{t("notes.form.isPublic")}</label>
+          <input
+            type="checkbox"
+            checked={isPublic}
+            onChange={(e) => setIsPublic(e.target.checked)}
+            disabled={isLoading}
+            id="public-note"
+          />
+          <Tooltip>{t("notes.publicTooltip")}</Tooltip>
         </div>
 
         {error && <div className="error">{error}</div>}

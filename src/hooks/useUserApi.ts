@@ -3,6 +3,7 @@ import {
   API_ENDPOINTS,
   getAuthHeaders,
   apiFetch,
+  publicFetch,
 } from "@/config/api";
 import { User } from "../types";
 
@@ -12,7 +13,7 @@ export const useUserApi = () => {
     email: string,
     password: string
   ) => {
-    const response = await apiFetch(
+    const response = await publicFetch(
       buildApiUrl(API_ENDPOINTS.users + "/register"),
       {
         method: "POST",
@@ -29,7 +30,7 @@ export const useUserApi = () => {
   };
 
   const loginUser = async (email: string, password: string) => {
-    const response = await apiFetch(buildApiUrl(API_ENDPOINTS.auth), {
+    const response = await publicFetch(buildApiUrl(API_ENDPOINTS.auth), {
       method: "POST",
       headers: getAuthHeaders(),
       body: JSON.stringify({ email, password }),
@@ -60,7 +61,7 @@ export const useUserApi = () => {
   };
 
   const passwordForgot = async (email: string) => {
-    const response = await apiFetch(
+    const response = await publicFetch(
       buildApiUrl(API_ENDPOINTS.users + "/forgot-password"),
       {
         method: "POST",
@@ -76,7 +77,7 @@ export const useUserApi = () => {
   };
 
   const passwordReset = async (token: string, newPassword: string) => {
-    const response = await apiFetch(
+    const response = await publicFetch(
       buildApiUrl(API_ENDPOINTS.users + "/reset-password"),
       {
         method: "POST",

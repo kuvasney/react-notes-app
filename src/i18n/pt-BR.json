@@ -10,7 +10,8 @@
     "add": "Adicionar",
     "search": "Buscar",
     "clear": "Limpar",
-    "guest": "Convidado"
+    "guest": "Convidado",
+    "linkCopied": "Link copiado!"
   },
   "auth": {
     "login": {
@@ -26,7 +27,8 @@
       "emailRequired": "Email é obrigatório",
       "passwordRequired": "Senha é obrigatória",
       "noAccount": "Não tem uma conta?",
-      "registerLink": "Registre-se aqui"
+      "registerLink": "Registre-se aqui",
+      "invalidCredentials": "Credenciais inválidas. Por favor, tente novamente."
     },
     "resetPassword": {
       "title": "Redefinir Senha",
@@ -72,6 +74,7 @@
     "emptyState": "Nenhuma nota encontrada. Crie sua primeira nota!",
     "noNotes": "Nenhuma nota disponível",
     "public": "Nota Pública",
+    "publicTooltip": "Permitir que qualquer pessoa com o link visualize esta nota",
     "noNotesFound": "Nenhuma nota encontrada",
     "form": {
       "title": "Título",

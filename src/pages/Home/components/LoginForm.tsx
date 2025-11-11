@@ -49,7 +49,8 @@ export default function LoginForm() {
       }
     } catch (error) {
       if (error instanceof Error) {
-        setError(error.message);
+        console.error("Login error:", error);
+        setError(t("auth.login.invalidCredentials"));
       }
     } finally {
       setIsLoading(false);
@@ -113,11 +114,11 @@ export default function LoginForm() {
             {t("auth.resetPassword.passwordResetLink")}
           </p>
         </div>
-        <div className="input-container">
+        <div className="message-container">
           {error && (
-            <div className="error">
+            <p className="error">
               <FiAlertCircle /> {error}
-            </div>
+            </p>
           )}
         </div>
 

@@ -10,7 +10,8 @@
     "add": "Añadir",
     "search": "Buscar",
     "clear": "Limpiar",
-    "guest": "Invitado"
+    "guest": "Invitado",
+    "linkCopied": "¡Enlace copiado!"
   },
   "auth": {
     "login": {
@@ -26,7 +27,8 @@
       "emailRequired": "El correo electrónico es obligatorio",
       "passwordRequired": "La contraseña es obligatoria",
       "noAccount": "¿No tienes una cuenta?",
-      "registerLink": "Regístrate aquí"
+      "registerLink": "Regístrate aquí",
+      "invalidCredentials": "Credenciales inválidas. Por favor, inténtalo de nuevo."
     },
     "resetPassword": {
       "title": "Restablecer Contraseña",

@@ -10,7 +10,8 @@
     "add": "Add",
     "search": "Search",
     "clear": "Clear",
-    "guest": "Guest"
+    "guest": "Guest",
+    "linkCopied": "Link copied!"
   },
   "auth": {
     "login": {
@@ -26,7 +27,8 @@
       "emailRequired": "Email is required",
       "passwordRequired": "Password is required",
       "noAccount": "Don't have an account?",
-      "registerLink": "Register here"
+      "registerLink": "Register here",
+      "invalidCredentials": "Invalid credentials. Please try again."
     },
     "resetPassword": {
       "title": "Reset Password",
