@@ -232,6 +232,9 @@ button:focus-visible {
   animation: fadeInOut 3s forwards;
 }
 
+.public-note-container {
+  padding-bottom: 3em;
+}
 
 .tooltip-container {
   position: relative;
@@ -413,6 +416,8 @@ p.error, p.success {
   position: fixed;
   bottom: 20px;
   right: 20px;
+  background-color: var(--button-bg);
+  padding: .5em;
 
   a {
     font-weight: 700;

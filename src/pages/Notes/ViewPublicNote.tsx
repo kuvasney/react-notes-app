@@ -43,7 +43,7 @@ export default function ViewPublicNote() {
 
   return (
     <section className="notes-page">
-      <div className="">
+      <div className="public-note-container">
         <div
           key={loadedNote.id}
           id={loadedNote.id}
