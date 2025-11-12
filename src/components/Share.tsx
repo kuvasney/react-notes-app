@@ -2,7 +2,13 @@ import { useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { FiShare2 } from "react-icons/fi";
 
-export default function ({ link }: { link?: string }) {
+export default function ({
+  link,
+  shareToken: token,
+}: {
+  link?: string;
+  shareToken?: string;
+}) {
   const { t } = useLanguage();
   const [feedbackMessage, setFeedbackMessage] = useState("");
   const shareLink = async () => {
@@ -18,7 +24,7 @@ export default function ({ link }: { link?: string }) {
     } else {
       try {
         const input = document.getElementById(
-          "share-link-input"
+          `share-link-input-${token || ""}`
         ) as HTMLInputElement;
         input.select();
         input.setSelectionRange(0, 99999); // Para dispositivos móveis
@@ -49,7 +55,7 @@ export default function ({ link }: { link?: string }) {
         readOnly
         value={link || ""}
         style={{ position: "absolute", left: "-9999px" }}
-        id="share-link-input"
+        id={`share-link-input-${token || ""}`}
       />
     </>
   );

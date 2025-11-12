@@ -8,6 +8,7 @@ export default function ({ shareToken }: { shareToken?: string }) {
   return (
     <div className="public-label">
       <Share
+        shareToken={shareToken}
         link={
           shareToken
             ? `${window.location.origin}/public-note/${shareToken}`
