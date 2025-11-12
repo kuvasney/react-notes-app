@@ -16,10 +16,10 @@ export default function ViewPublicNote() {
   // Atualizar meta tags quando a nota carregar
   usePageMeta({
     title: loadedNote
-      ? `${loadedNote.titulo} - Take Note`
+      ? `${loadedNote.title} - Take Note`
       : "Take Note - Public Note",
     description: loadedNote
-      ? loadedNote.conteudo.substring(0, 155) + "..."
+      ? loadedNote.content.substring(0, 155) + "..."
       : "View public note shared on Take Note - Your notes, simple and secure.",
   });
 
@@ -48,15 +48,15 @@ export default function ViewPublicNote() {
           key={loadedNote.id}
           id={loadedNote.id}
           className="note note-view-public"
-          style={{ backgroundColor: loadedNote.cor || "transparent" }}
+          style={{ backgroundColor: loadedNote.color || "transparent" }}
         >
           <PublicLabel shareToken={loadedNote.shareToken} />
-          <h3 className="note-title">{loadedNote.titulo}</h3>
+          <h3 className="note-title">{loadedNote.title}</h3>
           <div className="note-content">
-            {loadedNote.conteudo.split("\n").map((line, i) => (
+            {loadedNote.content.split("\n").map((line, i) => (
               <React.Fragment key={i}>
                 {line}
-                {i < loadedNote.conteudo.split("\n").length - 1 && <br />}
+                {i < loadedNote.content.split("\n").length - 1 && <br />}
               </React.Fragment>
             ))}
           </div>
@@ -70,9 +70,12 @@ export default function ViewPublicNote() {
 
           <p className="date">
             <em>{t("notes.actions.created")}</em>{" "}
-            {new Date(loadedNote.dataCriacao).toLocaleDateString()}; &nbsp;
+            {loadedNote.createdAt &&
+              new Date(loadedNote.createdAt).toLocaleDateString()}
+            ; &nbsp;
             <em>{t("notes.actions.lastEdited")}</em>{" "}
-            {new Date(loadedNote.dataUltimaEdicao).toLocaleDateString()}
+            {loadedNote.updatedAt &&
+              new Date(loadedNote.updatedAt).toLocaleDateString()}
           </p>
         </div>
       </div>

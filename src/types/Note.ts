@@ -1,30 +1,40 @@
 export interface Reminder {
   id: string;
-  dataHora: string;
-  texto: string;
+  dateTime: string;
+  text: string;
 }
 
 export interface Note {
+  _id?: string; // MongoDB ID
   id: string;
-  _id?: string; // Para compatibilidade com MongoDB
-  titulo: string;
-  conteudo: string;
-  dataCriacao: string;
-  dataUltimaEdicao: string;
+  userId: string;
+  order: number;
+  title: string;
+  content: string;
+  createdAt?: Date;
+  updatedAt?: Date;
   archived: boolean;
-  cor: string;
+  color: string;
   tags: string[];
   pinned: boolean;
-  lembretes: Reminder[];
-  colaboradores: string[];
-  order: number;
-  isPublic?: boolean;
+  reminders: Reminder[];
+  collaborators: string[];
+  isPublic: boolean;
   shareToken?: string;
+
+  // Campos antigos para compatibilidade (serão removidos gradualmente)
+  titulo?: string;
+  conteudo?: string;
+  dataCriacao?: string;
+  dataUltimaEdicao?: string;
+  cor?: string;
+  lembretes?: Reminder[];
+  colaboradores?: string[];
 }
 
 // Types utilitários para o app de notas
 export type NoteStatus = "active" | "archived";
-export type NoteSortBy = "dataCriacao" | "dataUltimaEdicao" | "titulo";
+export type NoteSortBy = "createdAt" | "updatedAt" | "title";
 export type NoteSortOrder = "asc" | "desc";
 
 export interface NoteFilters {
@@ -36,14 +46,15 @@ export interface NoteFilters {
 }
 
 export interface CreateNoteDto {
-  titulo: string;
-  conteudo: string;
-  cor?: string;
+  title: string;
+  content: string;
+  color?: string;
   tags?: string[];
   pinned?: boolean;
+  isPublic?: boolean;
 }
 
 export interface UpdateNoteDto extends Partial<CreateNoteDto> {
   id: string;
-  dataUltimaEdicao: string;
+  updatedAt?: Date;
 }

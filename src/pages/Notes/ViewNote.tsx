@@ -35,12 +35,12 @@ export default function ViewNote() {
       key={loadedNote.id}
       id={loadedNote.id}
       className="note"
-      style={{ backgroundColor: loadedNote.cor || "transparent" }}
+      style={{ backgroundColor: loadedNote.color || "transparent" }}
     >
       <h3>
         <input
           type="text"
-          value={loadedNote.titulo}
+          value={loadedNote.title}
           id={`note-title`}
           className="input-title"
           readOnly
@@ -48,7 +48,7 @@ export default function ViewNote() {
       </h3>
       <textarea
         className="note-content-textarea"
-        value={loadedNote.conteudo}
+        value={loadedNote.content}
         rows={6}
       />
       <div className="tags">
@@ -61,9 +61,12 @@ export default function ViewNote() {
 
       <p className="date">
         <em>{t("notes.actions.created")}</em>{" "}
-        {new Date(loadedNote.dataCriacao).toLocaleDateString()}; &nbsp;
+        {loadedNote.createdAt &&
+          new Date(loadedNote.createdAt).toLocaleDateString()}
+        ; &nbsp;
         <em>{t("notes.actions.lastEdited")}</em>{" "}
-        {new Date(loadedNote.dataUltimaEdicao).toLocaleDateString()}
+        {loadedNote.updatedAt &&
+          new Date(loadedNote.updatedAt).toLocaleDateString()}
       </p>
       <NotesCollaborators note={loadedNote} />
     </div>

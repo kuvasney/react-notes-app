@@ -13,9 +13,9 @@ interface NotesFormProps {
 }
 
 export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
-  const [title, setTitle] = useState(note?.titulo || "");
-  const [content, setContent] = useState(note?.conteudo || "");
-  const [color, setColor] = useState(note?.cor || "#e8eaed");
+  const [title, setTitle] = useState(note?.title || "");
+  const [content, setContent] = useState(note?.content || "");
+  const [color, setColor] = useState(note?.color || "#e8eaed");
   const [tags, setTags] = useState(note?.tags?.join(", ") || "");
   const [isPublic, setIsPublic] = useState(note?.isPublic || false);
   const [error, setError] = useState("");
@@ -50,10 +50,10 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
 
       // Criar/atualizar objeto da nota
       const noteData: Partial<Note> = {
-        titulo: title.trim(),
-        conteudo: content.trim(),
-        dataUltimaEdicao: new Date().toISOString(),
-        cor: color,
+        title: title.trim(),
+        content: content.trim(),
+        updatedAt: new Date(),
+        color: color,
         tags: processedTags,
         isPublic: isPublic,
       };
@@ -63,21 +63,21 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
         Object.assign(noteData, {
           id: note!.id,
           _id: note!._id,
-          dataCriacao: note!.dataCriacao,
+          createdAt: note!.createdAt,
           archived: note!.archived,
           pinned: note!.pinned,
-          lembretes: note!.lembretes,
-          colaboradores: note!.colaboradores,
+          reminders: note!.reminders,
+          collaborators: note!.collaborators,
           isPublic: note!.isPublic,
         });
       } else {
         // Criando: definir valores padrão, mas NÃO definir ID
         Object.assign(noteData, {
-          dataCriacao: new Date().toISOString(),
+          createdAt: new Date(),
           archived: false,
           pinned: false,
-          lembretes: [],
-          colaboradores: [],
+          reminders: [],
+          collaborators: [],
         });
         // ID será gerado pelo MongoDB
       }

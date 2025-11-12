@@ -1,11 +1,11 @@
-import type { Note } from "@/types/Note";
+import type { Note, Reminder } from "@/types/Note";
 
 /**
- * Transforma dados do MongoDB para o formato esperado pelo frontend
- * Lida com ObjectId, datas do MongoDB e remove campos desnecessários
+ * Transforma dados do MongoDB (inglês) para o formato do frontend
+ * Suporta tanto o formato novo (inglês) quanto o antigo (português)
  */
 export const transformMongoNote = (mongoNote: any): Note => {
-  const { _id, __v, dataCriacao, dataUltimaEdicao, ...rest } = mongoNote;
+  const { _id, __v, ...rest } = mongoNote;
 
   // Extrair ID do formato MongoDB
   let id: string;
@@ -17,24 +17,63 @@ export const transformMongoNote = (mongoNote: any): Note => {
     id = _id?.toString() || rest.id; // Fallback
   }
 
-  // Extrair datas do formato MongoDB
-  const parseDateField = (dateField: any): string => {
+  // Função auxiliar para parsear datas
+  const parseDate = (dateField: any): Date | undefined => {
+    if (!dateField) return undefined;
     if (typeof dateField === "object" && dateField.$date) {
-      return dateField.$date; // Formato {"$date": "..."}
+      return new Date(dateField.$date);
     }
     if (typeof dateField === "string") {
-      return dateField; // Já é string ISO
+      return new Date(dateField);
     }
-    return new Date().toISOString(); // Fallback
+    return undefined;
   };
 
+  // Função auxiliar para transformar Reminders
+  const transformReminders = (reminders: any[]): Reminder[] => {
+    if (!reminders || !Array.isArray(reminders)) return [];
+    return reminders.map((r) => ({
+      id: r.id || r._id?.toString(),
+      dateTime: r.dateTime || r.dataHora || "",
+      text: r.text || r.texto || "",
+    }));
+  };
+
+  // Retorna objeto com campos novos (inglês) e compatibilidade com antigos (português)
   return {
-    ...rest,
+    _id: id,
     id,
-    _id: id, // Mantém referência para edições
-    dataCriacao: parseDateField(dataCriacao),
-    dataUltimaEdicao: parseDateField(dataUltimaEdicao),
-    // __v é removido automaticamente pela desestruturação
+    userId: rest.userId || "",
+    order: rest.order || 0,
+
+    // Campos principais (inglês)
+    title: rest.title || rest.titulo || "",
+    content: rest.content || rest.conteudo || "",
+    color: rest.color || rest.cor || "#fff475",
+    tags: rest.tags || [],
+    archived: rest.archived || false,
+    pinned: rest.pinned || false,
+    reminders: transformReminders(rest.reminders || rest.lembretes || []),
+    collaborators: rest.collaborators || rest.colaboradores || [],
+    isPublic: rest.isPublic || false,
+    shareToken: rest.shareToken,
+
+    // Datas
+    createdAt: parseDate(rest.createdAt || rest.dataCriacao),
+    updatedAt: parseDate(rest.updatedAt || rest.dataUltimaEdicao),
+
+    // Campos antigos para compatibilidade reversa
+    titulo: rest.title || rest.titulo || "",
+    conteudo: rest.content || rest.conteudo || "",
+    cor: rest.color || rest.cor || "#fff475",
+    lembretes: transformReminders(rest.reminders || rest.lembretes || []),
+    colaboradores: rest.collaborators || rest.colaboradores || [],
+    dataCriacao: (
+      parseDate(rest.createdAt || rest.dataCriacao) || new Date()
+    ).toISOString(),
+    dataUltimaEdicao: (
+      parseDate(rest.updatedAt || rest.dataUltimaEdicao) || new Date()
+    ).toISOString(),
   };
 };
 
@@ -47,28 +86,40 @@ export const transformMongoNotes = (mongoNotes: any[]): Note[] => {
 
 /**
  * Transforma dados do frontend para envio ao MongoDB
- * Remove campos que não devem ser enviados
+ * Converte campos em português para inglês se necessário
  */
 export const transformNoteForMongo = (note: Partial<Note>): any => {
-  const { _id, id, ...noteData } = note;
+  const {
+    _id,
+    id,
+    // Remover campos antigos que não devem ir para o backend
+    titulo,
+    conteudo,
+    cor,
+    lembretes,
+    colaboradores,
+    dataCriacao,
+    dataUltimaEdicao,
+    ...rest
+  } = note;
 
-  // Se tem _id (vem do MongoDB), use-o como identificador principal
+  // Preparar objeto para envio
+  const mongoNote: any = {
+    ...rest,
+    // Garantir que os campos estejam em inglês
+    title: note.title || note.titulo || "",
+    content: note.content || note.conteudo || "",
+    color: note.color || note.cor || "#fff475",
+    reminders: note.reminders || note.lembretes || [],
+    collaborators: note.collaborators || note.colaboradores || [],
+  };
+
+  // Adicionar _id se existir
   if (_id) {
-    return {
-      _id,
-      ...noteData,
-    };
+    mongoNote._id = _id;
+  } else if (id && /^[0-9a-fA-F]{24}$/.test(id)) {
+    mongoNote._id = id;
   }
 
-  // Se tem ID e parece ser do MongoDB (24 chars hex), use como _id
-  if (id && /^[0-9a-fA-F]{24}$/.test(id)) {
-    return {
-      _id: id,
-      ...noteData,
-    };
-  }
-
-  // Para novas notas ou IDs inválidos, não enviar ID
-  // Deixa o MongoDB gerar o _id automaticamente
-  return noteData;
+  return mongoNote;
 };

@@ -88,10 +88,10 @@ export default function NotesContent({
   const editNote = (note: Note) => () => {
     setEditingNote(note);
     // Inicializar estados com os valores da nota
-    setEditingNoteTitle(note.titulo);
-    setEditingNoteContent(note.conteudo);
+    setEditingNoteTitle(note.title);
+    setEditingNoteContent(note.content);
     setEditingTags(note.tags.join(", "));
-    setEditingColor(note.cor);
+    setEditingColor(note.color);
     setEditingIsPublic(note.isPublic || false);
     setShowCreateForm(false); // Esconder formulário de criação
   };
@@ -125,8 +125,8 @@ export default function NotesContent({
       return note.tags?.some((tag) => tag.toLowerCase().includes(searchLower));
     } else {
       return (
-        note.titulo.toLowerCase().includes(searchLower) ||
-        note.conteudo.toLowerCase().includes(searchLower) ||
+        note.title.toLowerCase().includes(searchLower) ||
+        note.content.toLowerCase().includes(searchLower) ||
         note.tags?.some((tag) => tag.toLowerCase().includes(searchLower))
       );
     }
@@ -225,7 +225,7 @@ export default function NotesContent({
     const updatedNote = {
       ...note,
       pinned: !note.pinned,
-      dataUltimaEdicao: new Date().toISOString(),
+      updatedAt: new Date(),
     };
 
     try {
@@ -239,7 +239,7 @@ export default function NotesContent({
     const updatedNote = {
       ...note,
       archived: !note.archived,
-      dataUltimaEdicao: new Date().toISOString(),
+      updatedAt: new Date(),
     };
 
     try {
@@ -350,7 +350,7 @@ export default function NotesContent({
                 onDragStart={(e) => dragStartHandler(e, index)}
                 onDragOver={(e) => dragoverHandler(e, index)}
                 onDrop={dropOverHandler}
-                style={{ backgroundColor: note.cor || "transparent" }}
+                style={{ backgroundColor: note.color || "transparent" }}
               >
                 {note.isPublic && <PublicLabel shareToken={note.shareToken} />}
                 <div
@@ -391,7 +391,7 @@ export default function NotesContent({
                     value={
                       editingNote?._id === note._id
                         ? editingNoteTitle
-                        : note.titulo
+                        : note.title
                     }
                     id={`note-title-${index}`}
                     className="input-title"
@@ -408,10 +408,10 @@ export default function NotesContent({
                   />
                 ) : (
                   <div className="note-content">
-                    {note.conteudo.split("\n").map((line, i) => (
+                    {note.content.split("\n").map((line, i) => (
                       <React.Fragment key={i}>
                         {line}
-                        {i < note.conteudo.split("\n").length - 1 && <br />}
+                        {i < note.content.split("\n").length - 1 && <br />}
                       </React.Fragment>
                     ))}
                   </div>
@@ -483,9 +483,12 @@ export default function NotesContent({
                 )}
                 <p className="date">
                   <em>{t("notes.actions.created")}</em>{" "}
-                  {new Date(note.dataCriacao).toLocaleDateString()}; &nbsp;
+                  {note.createdAt &&
+                    new Date(note.createdAt).toLocaleDateString()}
+                  ; &nbsp;
                   <em>{t("notes.actions.lastEdited")}</em>{" "}
-                  {new Date(note.dataUltimaEdicao).toLocaleDateString()}
+                  {note.updatedAt &&
+                    new Date(note.updatedAt).toLocaleDateString()}
                 </p>
                 <div
                   className="wrapper-buttons"
