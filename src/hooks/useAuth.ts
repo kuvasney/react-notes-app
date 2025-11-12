@@ -4,25 +4,33 @@ export const useAuth = () => {
   const validateLogin =
     localStorage.getItem("isLoggedIn") === "true" &&
     sessionStorage.getItem("userToken") !== null;
+
   const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
     return validateLogin;
   });
 
   useEffect(() => {
-    // Escutar mudanças no localStorage (útil para logout em outras abas)
-    const handleStorageChange = (event: StorageEvent) => {
-      if (event.key === "isLoggedIn") {
-        const authStatus = localStorage.getItem("isLoggedIn") === "true";
+    // Verificar periodicamente o estado de autenticação
+    const checkAuthStatus = () => {
+      const authStatus =
+        localStorage.getItem("isLoggedIn") === "true" &&
+        sessionStorage.getItem("userToken") !== null;
+
+      if (authStatus !== isLoggedIn) {
         setIsLoggedIn(authStatus);
       }
     };
 
-    window.addEventListener("storage", handleStorageChange);
+    // Verificar imediatamente
+    checkAuthStatus();
+
+    // Verificar a cada 100ms (bem rápido para garantir atualização)
+    const interval = setInterval(checkAuthStatus, 100);
 
     return () => {
-      window.removeEventListener("storage", handleStorageChange);
+      clearInterval(interval);
     };
-  }, []);
+  }, [isLoggedIn]);
 
   const login = (email: string) => {
     localStorage.setItem("isLoggedIn", "true");

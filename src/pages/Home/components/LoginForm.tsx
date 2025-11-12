@@ -37,11 +37,15 @@ export default function LoginForm() {
       }
       const response = await loginUser(email.trim(), password.trim());
       if (response.tokens) {
-        login(response.tokens); // Atualiza o estado de autenticação
+        // Armazenar dados de autenticação
         localStorage.setItem("isLoggedIn", "true");
         sessionStorage.setItem("user", JSON.stringify(response.user));
-        setUser(response.user);
         sessionStorage.setItem("userToken", response.tokens.accessToken);
+
+        // Atualizar stores
+        setUser(response.user);
+        login(email.trim()); // Atualiza o estado de autenticação
+
         // Verifica se há redirecionamento pendente
         const redirectPath = sessionStorage.getItem("redirectAfterLogin");
         navigate(redirectPath || "/notes");

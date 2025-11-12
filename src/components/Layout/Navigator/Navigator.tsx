@@ -62,7 +62,7 @@ export default function Navigator() {
       )}
       {!isAuthenticated && !isHomePage && (
         <NavLink to="/" className="button-link">
-          {/* {t("layout.navigator.home")} */}Login
+          Login
         </NavLink>
       )}
       <SwitchTheme />
