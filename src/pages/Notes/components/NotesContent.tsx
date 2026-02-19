@@ -156,7 +156,7 @@ export default function NotesContent({
 
   const dragStartHandler = (
     e: React.DragEvent<HTMLDivElement>,
-    index: number
+    index: number,
   ) => {
     draggedElement = index;
     // console.log("element", e, "index", index);
@@ -166,7 +166,7 @@ export default function NotesContent({
 
   const dragoverHandler = (
     e: React.DragEvent<HTMLDivElement>,
-    index: number
+    index: number,
   ) => {
     draggedOverElement = index;
     e.preventDefault();
@@ -188,10 +188,10 @@ export default function NotesContent({
       const targetNoteId = filteredNotes[draggedOverElement].id;
 
       const realDraggedIndex = allNotes.findIndex(
-        (note) => note.id === draggedNoteId
+        (note) => note.id === draggedNoteId,
       );
       const realTargetIndex = allNotes.findIndex(
-        (note) => note.id === targetNoteId
+        (note) => note.id === targetNoteId,
       );
 
       // Remove o elemento da posição original
@@ -294,6 +294,7 @@ export default function NotesContent({
       setError(err instanceof Error ? err.message : t("notes.form.saveError"));
     } finally {
       setIsLoading(false);
+      refetch(isArchivePage);
     }
   };
 
