@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom";
 import { ErrorBoundary } from "react-error-boundary";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type { ErrorInfo } from "react";
 
 import "./App.scss";
@@ -16,6 +17,14 @@ import User from "./pages/User";
 import { LanguageProvider } from "./contexts/LanguageContext";
 import { ErrorFallback } from "./components/ErrorBoundary";
 
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5,
+    },
+  },
+});
+
 function App() {
   const handleError = (error: Error, errorInfo: ErrorInfo) => {
     // Log do erro para serviço de monitoramento (Sentry, LogRocket, etc.)
@@ -30,57 +39,59 @@ function App() {
   };
 
   return (
-    <LanguageProvider>
-      <ErrorBoundary
-        FallbackComponent={ErrorFallback}
-        onError={handleError}
-        onReset={handleReset}
-      >
-        <div className="wrapper-content">
-          <Header />
-          <main className="main-content">
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/reset-password" element={<ResetPassword />} />
-              <Route
-                path="/note/:id"
-                element={
-                  <ProtectedRoute>
-                    <ViewNote />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="/public-note/:id" element={<ViewPublicNote />} />
-              <Route
-                path="/notes"
-                element={
-                  <ProtectedRoute>
-                    <Notes />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/notes/archive"
-                element={
-                  <ProtectedRoute>
-                    <Archive />
-                  </ProtectedRoute>
-                }
-              />
-              <Route
-                path="/user"
-                element={
-                  <ProtectedRoute>
-                    <User />
-                  </ProtectedRoute>
-                }
-              />
-            </Routes>
-          </main>
-        </div>
-      </ErrorBoundary>
-    </LanguageProvider>
+    <QueryClientProvider client={queryClient}>
+      <LanguageProvider>
+        <ErrorBoundary
+          FallbackComponent={ErrorFallback}
+          onError={handleError}
+          onReset={handleReset}
+        >
+          <div className="wrapper-content">
+            <Header />
+            <main className="main-content">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/reset-password" element={<ResetPassword />} />
+                <Route
+                  path="/note/:id"
+                  element={
+                    <ProtectedRoute>
+                      <ViewNote />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route path="/public-note/:id" element={<ViewPublicNote />} />
+                <Route
+                  path="/notes"
+                  element={
+                    <ProtectedRoute>
+                      <Notes />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/notes/archive"
+                  element={
+                    <ProtectedRoute>
+                      <Archive />
+                    </ProtectedRoute>
+                  }
+                />
+                <Route
+                  path="/user"
+                  element={
+                    <ProtectedRoute>
+                      <User />
+                    </ProtectedRoute>
+                  }
+                />
+              </Routes>
+            </main>
+          </div>
+        </ErrorBoundary>
+      </LanguageProvider>
+    </QueryClientProvider>
   );
 }
 

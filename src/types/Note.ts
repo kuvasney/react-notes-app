@@ -5,7 +5,7 @@ export interface Reminder {
 }
 
 export interface Note {
-  _id?: string; // MongoDB ID
+  _id: string; // MongoDB ID
   id: string;
   userId: string;
   order: number;

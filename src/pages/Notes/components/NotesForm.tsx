@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useEscapeKey } from "@/hooks/useEscapeKey";
-import { useNotesApi } from "@/hooks/useNotesApi";
+import { useNotesQueryApi } from "@/hooks/useNotesQueryApi";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { Note } from "@/types";
 import Tooltip from "@/components/Tooltip";
@@ -20,8 +20,7 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
   const [isPublic, setIsPublic] = useState(note?.isPublic || false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-
-  const { saveNote, editNote } = useNotesApi();
+  const { saveNote, editNote } = useNotesQueryApi();
   const { t } = useLanguage();
 
   // Detectar se estamos editando ou criando
@@ -191,8 +190,8 @@ export default function NotesForm({ note, onSave, onCancel }: NotesFormProps) {
           {isLoading
             ? t("common.saving")
             : isEditing
-            ? t("notes.form.updateButton")
-            : t("notes.form.createButton")}
+              ? t("notes.form.updateButton")
+              : t("notes.form.createButton")}
         </button>
       </form>
     </div>

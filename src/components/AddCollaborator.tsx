@@ -44,7 +44,7 @@ export default function AddCollaborator({ note }: { note?: Note }) {
           setErrorMessage(t("collaborators.errors.noteNotFound"));
         } else {
           setErrorMessage(
-            error.message || t("collaborators.errors.resourceNotFound")
+            error.message || t("collaborators.errors.resourceNotFound"),
           );
         }
       } else if (error.status === 409) {
@@ -55,7 +55,7 @@ export default function AddCollaborator({ note }: { note?: Note }) {
     }
   }
 
-  if (note?.colaboradores.includes(userEmail)) {
+  if (note?.collaborators.includes(userEmail)) {
     return null;
   }
 
