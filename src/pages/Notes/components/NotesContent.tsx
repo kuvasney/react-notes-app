@@ -8,6 +8,7 @@ import AddCollaborator from "@/components/AddCollaborator";
 import NotesCollaborators from "./NotesCollaborators";
 import { useNotesStore } from "@/stores/notesStore";
 import { useNotesApi } from "@/hooks/useNotesApi";
+import { useNotesQueryApi } from "@/hooks/useNotesQueryApi";
 import {
   FiTrash2,
   FiEdit2,
@@ -15,12 +16,11 @@ import {
   FiArchive,
   FiSave,
   FiX,
-  FiUnlock,
 } from "react-icons/fi";
 import { useLocation } from "react-router-dom";
 import "./NotesContent.scss";
-import Share from "../../../components/Share";
-import PublicLabel from "../../../components/PublicLabel";
+// import Share from "@/components/Share";
+import PublicLabel from "@/components/PublicLabel";
 
 interface NotesContentProps {
   notes: Note[];
@@ -54,13 +54,9 @@ export default function NotesContent({
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const {
-    removeNote,
-    reorderNotes,
-    editNote: updateNoteApi,
-    refetch,
-    regenerateShareToken,
-  } = useNotesApi();
+  const { reorderNotes, refetch, regenerateShareToken } = useNotesApi();
+
+  const { editNote, removeNote } = useNotesQueryApi();
 
   const { t } = useLanguage();
 
@@ -85,7 +81,7 @@ export default function NotesContent({
   if (loading) return <div>{t("common.loading")}</div>;
 
   // Função para iniciar edição de uma nota
-  const editNote = (note: Note) => () => {
+  const initializeNoteEditing = (note: Note) => () => {
     setEditingNote(note);
     // Inicializar estados com os valores da nota
     setEditingNoteTitle(note.title);
@@ -104,7 +100,7 @@ export default function NotesContent({
   const handleDelete = async (noteId: string) => {
     if (confirm(t("notes.deleteConfirm"))) {
       try {
-        await removeNote(noteId);
+        removeNote(noteId);
       } catch (error) {
         alert(t("notes.deleteError"));
       }
@@ -222,28 +218,29 @@ export default function NotesContent({
   };
 
   const setPinned = async (note: Note) => {
-    const updatedNote = {
+    console.log("note", note);
+    const noteToPin = {
       ...note,
       pinned: !note.pinned,
       updatedAt: new Date(),
     };
 
     try {
-      await updateNoteApi(updatedNote);
+      editNote(noteToPin);
     } catch (error) {
       console.error("Erro ao alterar status de fixação:", error);
     }
   };
 
   const setArchived = async (note: Note) => {
-    const updatedNote = {
+    const noteToArchive = {
       ...note,
       archived: !note.archived,
       updatedAt: new Date(),
     };
 
     try {
-      await updateNoteApi(updatedNote);
+      editNote(noteToArchive);
     } catch (error) {
       console.error("Error archiving note");
     }
@@ -277,7 +274,7 @@ export default function NotesContent({
 
       // Criar/atualizar objeto da nota
       const noteData: Partial<Note> = {
-        id: note.id,
+        _id: note._id,
         titulo: noteObject.title.trim(),
         conteudo: noteObject.content.trim(),
         dataUltimaEdicao: new Date().toISOString(),
@@ -286,7 +283,7 @@ export default function NotesContent({
         isPublic: noteObject.isPublic,
       };
 
-      await updateNoteApi(noteData as Note);
+      editNote(noteData as Note);
       setEditingNote(null);
 
       // Chamar callback de sucesso se fornecido
@@ -499,7 +496,7 @@ export default function NotesContent({
                     <button
                       className="edit-button"
                       title={t("notes.editNote")}
-                      onClick={editNote(note)}
+                      onClick={initializeNoteEditing(note)}
                     >
                       <FiEdit2 />
                     </button>
@@ -521,7 +518,7 @@ export default function NotesContent({
                     </button>
                   )}
                   <button
-                    onClick={() => handleDelete(note.id)}
+                    onClick={() => handleDelete(note._id)}
                     className="delete-button"
                     title={t("notes.deleteNote")}
                     aria-label={t("notes.deleteNote")}
